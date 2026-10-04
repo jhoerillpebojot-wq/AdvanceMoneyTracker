@@ -2627,7 +2627,7 @@ function closeSplash(){
 function showSplash(){
   // Set SPLASH_ONCE_PER_DAY=true to only show "Word for Today" the first time you get in each day.
   // (false = every time you open/unlock, with a different verse each time.)
-  const SPLASH_ONCE_PER_DAY=false;
+  const SPLASH_ONCE_PER_DAY=true;
   if(SPLASH_ONCE_PER_DAY){
     try{
       if(localStorage.getItem('finSplashDay')===today()){closeSplash();return;}
