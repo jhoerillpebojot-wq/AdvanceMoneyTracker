@@ -2916,6 +2916,8 @@ async function pushToCloud(force){
     await ensureProfile({id:cloudUser.uid});
     const {walletRows,incomeRows,expenseRows,loanRows,goalRows,now}=rowsForCloud();
     const uid=cloudUser.uid;
+    const profile={id:uid,username:packProfileUsername(),budget_limit:Number(state.budgetLimit)||0,hide_balances:!!state.hideBalances,terms_accepted:state.termsAccepted?.date||null};
+    let pr=await supabaseClient.from('profiles').upsert(profile,{onConflict:'id'});if(pr.error)throw pr.error;
     // Children first because income/expenses/loans reference wallets.
     for(const table of ['income','expenses','loans','savings_goals','wallets']){
       const {error}=await supabaseClient.from(table).delete().eq('user_id',uid);
@@ -2926,8 +2928,6 @@ async function pushToCloud(force){
     if(expenseRows.length){let r=await supabaseClient.from('expenses').insert(expenseRows);if(r.error)throw r.error;}
     if(loanRows.length){let r=await supabaseClient.from('loans').insert(loanRows);if(r.error)throw r.error;}
     if(goalRows.length){let r=await supabaseClient.from('savings_goals').insert(goalRows);if(r.error)throw r.error;}
-    const profile={id:uid,username:packProfileUsername(),budget_limit:Number(state.budgetLimit)||0,hide_balances:!!state.hideBalances,terms_accepted:state.termsAccepted?.date||null};
-    let pr=await supabaseClient.from('profiles').upsert(profile,{onConflict:'id'});if(pr.error)throw pr.error;
     lastCloudUpdatedAt=Date.parse(now)||Date.now();markCloudLinked(uid,lastCloudUpdatedAt);
   }catch(e){
     console.error('Supabase cloud sync failed',e);cloudPushPending=true;toast('Cloud sync failed - check your connection','error');
