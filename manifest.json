@@ -1,6 +1,6 @@
 {
-  "name": "FINUITY",
-  "short_name": "FINUITY",
+  "name": "FINLEDGER",
+  "short_name": "FINLEDGER",
   "description": "A private, on-device tracker for income, expenses, wallets, loans, and savings goals.",
   "start_url": "./index.html",
   "scope": "./",
