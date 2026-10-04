@@ -1,7 +1,7 @@
-/* FINUITY service worker
-   Caches only the app shell (this page + the Firebase SDK scripts it loads +
+/* FINLEDGER service worker
+   Caches only the app shell (this page + the Supabase JS script it loads +
    the manifest/icons) so the app can open with no connection at all.
-   It never touches Firestore/Auth network calls — those are left alone so
+   It never touches Supabase database/Auth network calls — those are left alone so
    cloud sync keeps working normally whenever you do have a connection.
 
    IMPORTANT: bump the number in CACHE_NAME any time you change index.html,
@@ -11,7 +11,7 @@
    CACHE_NAME — so an unchanged cache name means old, stale assets (icons
    included) can keep being served indefinitely even after you replace the
    underlying files. */
-const CACHE_NAME = 'finuity-shell-v23';
+const CACHE_NAME = 'finledger-shell-v24';
 
 const APP_SHELL = [
   './',
@@ -28,9 +28,7 @@ const APP_SHELL = [
   './virtual-pet/tour.css',
   './virtual-pet/tour-steps.js',
   './virtual-pet/tour.js',
-  'https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js',
-  'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js',
-  'https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js'
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
 ];
 
 self.addEventListener('install', event => {
@@ -54,7 +52,7 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return; // never touch writes (Firestore etc.)
+  if (event.request.method !== 'GET') return; // never touch writes (Supabase writes etc.)
 
   // Compare without the query string for our own files: the page links icons as "icon-192.png?v=2",
   // which never matched the plain entries in APP_SHELL, so those requests were never cached offline.
@@ -67,11 +65,11 @@ self.addEventListener('fetch', event => {
     try { return keyOf(shellUrl) === reqKey; }
     catch (e) { return false; }
   });
-  if (!isShellAsset) return; // let every other request (Firestore, Auth, images...) pass through untouched
+  if (!isShellAsset) return; // let every other request (Supabase, Auth, images...) pass through untouched
 
   // The page itself (index.html / the app's start URL) goes network-first so a
   // pushed update shows up on the very next open instead of needing two opens.
-  // Everything else in the shell (icons, manifest, Firebase SDK — rarely change)
+  // Everything else in the shell (icons, manifest, Supabase script — rarely change)
   // stays cache-first for an instant, offline-friendly load.
   const isPageRequest = event.request.mode === 'navigate' ||
     reqKey === keyOf('./') ||
@@ -107,4 +105,4 @@ self.addEventListener('fetch', event => {
       return cached || networkFetch; // instant load if cached, background-refreshed for next time
     })
   );
-}); 
+});
