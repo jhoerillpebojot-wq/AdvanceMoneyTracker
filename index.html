@@ -3060,7 +3060,7 @@ function doSignOut(){
 async function authLinkToGoogle(){
   if(!cloudUser||!cloudUser.isAnonymous)return;
   try{
-    const {error}=await supabaseClient.auth.linkIdentity({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});
+    const {error}=await supabaseClient.auth.linkIdentity({provider:'google',options:{redirectTo:'https://jhoerillpebojot-wq.github.io/AdvanceMoneyTracker/'}});
     if(error)throw error;
   }catch(e){
     console.error(e);
@@ -5624,12 +5624,12 @@ async function authEmailSubmit(){
 async function authForgotPassword(){
   const email=document.getElementById('login-email').value.trim(),errEl=document.getElementById('login-error');errEl.textContent='';errEl.style.color='';
   if(!email){errEl.textContent='Enter your email above first, then tap "Forgot password?"';return;}
-  try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});if(error)throw error;errEl.style.color='var(--accent)';errEl.textContent='Password reset email sent - check your inbox.';}
+  try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:'https://jhoerillpebojot-wq.github.io/AdvanceMoneyTracker/'});if(error)throw error;errEl.style.color='var(--accent)';errEl.textContent='Password reset email sent - check your inbox.';}
   catch(e){console.error('Password reset error:',e);errEl.textContent=e?.message||'Could not send password reset email.';}
 }
 async function authGoogleSignIn(){
   const errEl=document.getElementById('login-error');errEl.textContent='';
-  try{const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});if(error)throw error;}
+  try{const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://jhoerillpebojot-wq.github.io/AdvanceMoneyTracker/'}});if(error)throw error;}
   catch(e){console.error(e);errEl.textContent=e?.message||'Google sign-in is unavailable. Configure Google in Supabase Auth → Providers.';}
 }
 async function authAnonymousSignIn(){
