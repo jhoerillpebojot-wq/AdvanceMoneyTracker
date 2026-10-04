@@ -3082,7 +3082,7 @@ async function handleAuthState(user){
     showLoginScreen();
     return;
   }
-  await loadStateForUser(user);
+  await loadStateForUser(cloudUser);
   await migratePlaintextSecrets();
   if(!state.termsAccepted||state.termsAccepted.version!==LEGAL_VERSION){
     showTermsScreen();
