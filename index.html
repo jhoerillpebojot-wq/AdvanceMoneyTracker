@@ -5689,7 +5689,7 @@ async function authGoogleSignIn(){
 async function authAnonymousSignIn(){
   const errEl=document.getElementById('login-error');errEl.textContent='';
   try{const {error}=await supabaseClient.auth.signInAnonymously();if(error)throw error;}
-  catch(e){console.error(e);errEl.textContent=e?.message||'Guest sign-in is unavailable. Enable Anonymous sign-ins in Supabase Auth.';}
+  catch(e){console.error('Guest sign-in failed',e);const m=e?.message||'Guest sign-in is unavailable. Enable Anonymous sign-ins in Supabase Auth.';errEl.textContent=m;toast('Guest sign-in failed: '+m,'error');}
 }
 
 /* ── FIRST-TIME ONBOARDING (language · currency · where did you hear about us) ── */
