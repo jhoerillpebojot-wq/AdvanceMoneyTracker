@@ -5616,7 +5616,9 @@ async function authEmailSubmit(){
     if(msg.includes('invalid login credentials'))errEl.textContent='Incorrect email or password.';
     else if(msg.includes('already registered')||msg.includes('already been registered'))errEl.textContent='That email is already registered. Try Sign In instead.';
     else if(msg.includes('password'))errEl.textContent='Password must be at least 6 characters.';
-    else if(msg.includes('email'))errEl.textContent='That email address looks invalid.';
+    else if(msg.includes('rate limit'))errEl.textContent='Too many emails sent. Please wait a while and try again.';
+    else if(msg.includes('not confirmed'))errEl.textContent='Please confirm your email first - check your inbox.';
+    else if(msg.includes('invalid')&&msg.includes('email'))errEl.textContent='That email address looks invalid.';
     else errEl.textContent=e?.message||'Something went wrong. Please try again.';
   }
   btn.disabled=false;btn.textContent=isReg?'Sign Up':'Login';
