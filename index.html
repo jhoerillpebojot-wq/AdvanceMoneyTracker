@@ -3144,6 +3144,8 @@ async function authSetNewPassword(){
     const {error}=await supabaseClient.auth.updateUser({password:p1});
     if(error)throw error;
     recoveryActive=false;
+    const nb=document.getElementById('auth-newpw');if(nb)nb.style.display='none';
+    ['newpw-1','newpw-2'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
     try{history.replaceState(null,'',location.pathname);}catch(e){}
     toast('Password updated ✓');
     const {data}=await supabaseClient.auth.getSession();
@@ -3155,10 +3157,11 @@ async function authSetNewPassword(){
   btn.disabled=false;btn.textContent='Save New Password';
 }
 supabaseClient.auth.onAuthStateChange(function(event,session){
+  if(event==='SIGNED_OUT')recoveryActive=false;
   if(event==='PASSWORD_RECOVERY')recoveryActive=true;
   if(recoveryActive){
     // Hold off on loading the app until the new password is saved.
-    if(session)setTimeout(showNewPasswordScreen,0);
+    if(session&&event!=='USER_UPDATED')setTimeout(function(){if(recoveryActive)showNewPasswordScreen();},0);
     return;
   }
   // Do not perform Supabase reads/writes directly inside the auth callback.
