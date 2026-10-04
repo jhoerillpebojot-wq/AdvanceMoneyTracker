@@ -1066,47 +1066,13 @@ label.fa-row{cursor:pointer}
 .fa-sg{padding:10px 12px;border-radius:8px;font-size:13.5px;color:var(--text);cursor:pointer}
 .fa-sg:hover,.fa-sg.on{background:var(--accent-bg);color:var(--accent)}
 </style>
-<!-- Firebase (Cloud Sync) - compat SDK, no build step needed -->
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<!-- Supabase (Cloud Sync + Authentication) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBMkUBMpcKy7kMEReov933RIJsKMztB9NA",
-    authDomain: "moneythings-94584.firebaseapp.com",
-    projectId: "moneythings-94584",
-    storageBucket: "moneythings-94584.firebasestorage.app",
-    messagingSenderId: "851470533910",
-    appId: "1:851470533910:web:5fbd6961579f428f46fc37"
-  };
-  // Guarded: if the Firebase SDK scripts above failed to load (offline on
-  // first open, ad-blocker, firewall, gstatic.com unreachable, etc.), `firebase`
-  // is undefined and this used to throw a bare ReferenceError. Because this was
-  // plain top-level code, that error silently killed the *entire* rest of the
-  // app's main script (everything after fbAuth.onAuthStateChanged below), with
-  // no message to the user - just a blank, non-functional dashboard shell.
-  // Now we catch it, flag it, and let index.js show a real "can't connect"
-  // screen instead. fbAuth/fbDb are declared with `var` (not const) so later
-  // code can safely check them without a ReferenceError either way.
-  var fbAuth, fbDb;
-  window.firebaseInitFailed = false;
-  try{
-    firebase.initializeApp(firebaseConfig);
-    fbAuth = firebase.auth();
-    fbDb = firebase.firestore();
-    // Offline persistence: queues Firestore reads/writes locally while offline and
-    // auto-syncs the moment connectivity returns, instead of just failing silently.
-    fbDb.enablePersistence({synchronizeTabs:true}).catch(err=>{
-      if(err.code==='failed-precondition'){
-        console.warn('Firestore offline persistence: multiple tabs open, only one can host it.');
-      }else if(err.code==='unimplemented'){
-        console.warn('Firestore offline persistence not supported in this browser.');
-      }
-    });
-  }catch(err){
-    console.error('Firebase failed to initialize - running in connection-error mode.', err);
-    window.firebaseInitFailed = true;
-  }
+  const SUPABASE_URL = "https://smvjaorjuonxdplgmjdr.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_wBreCHA84TltwADdmPhN7w_CV0IpZJj";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  window.supabaseClient = supabaseClient;
 </script>
 <!-- Virtual pet companion ("Fin") - purely additive UI + JS, safe to remove
      by deleting this line, the two <script> tags near the end of <body>,
@@ -2854,75 +2820,128 @@ function save(){
   queueCloudPush();
 }
 
-// ── Cloud Sync (Firebase) ──────────────────────────────────
+// ── Cloud Sync (Supabase) ───────────────────────────────────
 let cloudUser=null;
 let cloudSyncTimer=null;
 let lastCloudUpdatedAt=0,cloudPushPending=false,cloudPushing=false,cloudPulling=false,lastCloudPullAt=0;
 
+const FIN_META_MARK='\u2063FINUITY_META:';
+function finMetaEncode(obj){
+  try{
+    const bytes=new TextEncoder().encode(JSON.stringify(obj||{}));
+    let bin='';for(let i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }catch(e){return '';}
+}
+function finMetaDecode(str){
+  try{
+    const bin=atob(str);const bytes=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+    return JSON.parse(new TextDecoder().decode(bytes))||{};
+  }catch(e){return {};}
+}
+function finPackMetaText(text,meta){
+  const base=String(text||'');
+  const keys=meta&&typeof meta==='object'?Object.keys(meta).filter(k=>meta[k]!==undefined):[];
+  if(!keys.length)return base;
+  const enc=finMetaEncode(meta);return enc?base+FIN_META_MARK+enc:base;
+}
+function finUnpackMetaText(text){
+  const raw=String(text||''),i=raw.indexOf(FIN_META_MARK);
+  if(i<0)return {text:raw,meta:{}};
+  return {text:raw.slice(0,i),meta:finMetaDecode(raw.slice(i+FIN_META_MARK.length))};
+}
+function finPackWalletLabel(w){
+  return finPackMetaText(w.label||'',{brand:w.brand||'',type:w.type||'',limit:Number(w.limit)||0,c1:w.c1||'',c2:w.c2||'',dark:!!w.dark,logo:w.logo||''});
+}
+function finUnpackWallet(row){
+  const p=finUnpackMetaText(row.label);
+  return {id:row.id,label:p.text,balance:Number(row.balance)||0,updated:today(),...p.meta};
+}
+function finUuid(){return (crypto&&crypto.randomUUID)?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16);});}
+function finIsUuid(v){return typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v);}
+function migrateWalletIdsForSupabase(){
+  const map={};
+  (state.wallets||[]).forEach(w=>{if(!finIsUuid(w.id)){const old=w.id;w.id=finUuid();map[old]=w.id;}});
+  if(!Object.keys(map).length)return;
+  const remap=id=>Object.prototype.hasOwnProperty.call(map,id)?map[id]:id;
+  (state.income||[]).forEach(x=>{if(x.wallet)x.wallet=remap(x.wallet);});
+  (state.expenses||[]).forEach(x=>{if(x.source)x.source=remap(x.source);});
+  (state.loans||[]).forEach(x=>{if(x.sourceWallet)x.sourceWallet=remap(x.sourceWallet);});
+  if(state.auto&&Array.isArray(state.auto.inc))state.auto.inc.forEach(x=>{if(x.wallet)x.wallet=remap(x.wallet);});
+}
 function queueCloudPush(){
   if(!cloudUser)return;
-  clearTimeout(cloudSyncTimer);
-  cloudPushPending=true;
+  clearTimeout(cloudSyncTimer);cloudPushPending=true;
   cloudSyncTimer=setTimeout(pushToCloud,800);
 }
-
-function setCloudSpinner(on){
-  const s=document.getElementById('cloud-sync-spinner');
-  if(s)s.style.display=on?'inline':'none';
-}
-
+function setCloudSpinner(on){const s=document.getElementById('cloud-sync-spinner');if(s)s.style.display=on?'inline':'none';}
 function stripUndefined(val){
-  if(Array.isArray(val)){
-    return val.map(stripUndefined);
-  }else if(val && typeof val==='object'){
-    const out={};
-    Object.keys(val).forEach(k=>{
-      const v=val[k];
-      if(v!==undefined)out[k]=stripUndefined(v);
-    });
-    return out;
-  }
+  if(Array.isArray(val))return val.map(stripUndefined);
+  if(val&&typeof val==='object'){const out={};Object.keys(val).forEach(k=>{if(val[k]!==undefined)out[k]=stripUndefined(val[k]);});return out;}
   return val;
 }
-
+function profileMetaFromState(){
+  return {avatar:state.avatar||'',spendDaysPerWeek:state.spendDaysPerWeek||7,spendDaysMin:state.spendDaysMin??state.spendDaysPerWeek??7,spendDaysMax:state.spendDaysMax??state.spendDaysPerWeek??7,spendMode:state.spendMode||'week',spendPlan:state.spendPlan||{},pinHash:state.pinHash||'',pinSalt:state.pinSalt||'',securityQuestion:state.securityQuestion||'',securityAnswerHash:state.securityAnswerHash||'',securityAnswerSalt:state.securityAnswerSalt||'',auto:state.auto||{},onboarding:state.onboarding||{}};
+}
+function packProfileUsername(){return finPackMetaText(state.username||'',profileMetaFromState());}
+function unpackProfile(row){
+  const p=finUnpackMetaText(row.username);
+  return {username:p.text,budgetLimit:Number(row.budget_limit)||0,hideBalances:!!row.hide_balances,termsAccepted:row.terms_accepted?{accepted:true,version:LEGAL_VERSION,date:row.terms_accepted}:null,...p.meta};
+}
+function rowsForCloud(){
+  migrateWalletIdsForSupabase();
+  const uid=cloudUser.uid, wallets=state.wallets||[];
+  const now=new Date().toISOString();
+  const walletRows=wallets.map(w=>({id:w.id,user_id:uid,label:finPackWalletLabel(w),balance:Number(w.balance)||0,updated_at:now}));
+  const incomeRows=(state.income||[]).map(e=>{const meta={};if(e.autoId!==undefined)meta.autoId=e.autoId;const n=finPackMetaText(e.note||'',meta);return {id:Number(e.id),user_id:uid,type:e.type||'',amount:Number(e.amount)||0,month:e.month||'',year:Number(e.year)||0,wallet_id:e.wallet||null,date_added:e.dateAdded||today(),note:n||null};});
+  const expenseRows=(state.expenses||[]).map(e=>{const meta={};if(e.recurringTemplateId!==undefined)meta.recurringTemplateId=e.recurringTemplateId;if(e.loanId!==undefined)meta.loanId=e.loanId;if(e.loanApplied!==undefined)meta.loanApplied=e.loanApplied;const n=finPackMetaText(e.note||'',meta);return {id:Number(e.id),user_id:uid,description:e.desc||'',amount:Number(e.amount)||0,category:e.cat||'other-exp',wallet_id:e.source||null,date:e.date||today(),note:n||null,recurring:!!e.recurring};});
+  const loanRows=(state.loans||[]).map(l=>{const meta={};if(l.sourceWallet)meta.sourceWallet=l.sourceWallet;const n=finPackMetaText(l.note||'',meta);return {id:Number(l.id),user_id:uid,name:l.name||'',amount:Number(l.amount)||0,type:l.type||'payable',due_date:l.due||null,wallet_id:l.sourceWallet||null,note:n||null,settled:!!l.settled};});
+  const goalRows=(state.goals||[]).map(g=>({id:Number(g.id),user_id:uid,name:g.name||'',target:Number(g.target)||0,saved:Number(g.saved)||0,note:g.note||null}));
+  return {walletRows,incomeRows,expenseRows,loanRows,goalRows,now};
+}
+async function ensureProfile(user){
+  const {data:existing,error:getErr}=await supabaseClient.from('profiles').select('id').eq('id',user.id).maybeSingle();
+  if(getErr)throw getErr;
+  if(!existing){
+    const {error}=await supabaseClient.from('profiles').insert({id:user.id,username:'',budget_limit:0,hide_balances:false});
+    if(error&&error.code!=='23505')throw error;
+  }
+}
 async function pushToCloud(force){
   if(!cloudUser)return;
-  // Never overwrite the cloud copy before we've compared with it (first sync failed/offline): that could
-  // replace newer data from another device with this device's stale copy. It is retried by pullCloudIfNewer().
   if(force!==true&&stateLoadedForUid!==cloudUser.uid){cloudPushPending=true;return;}
-  cloudPushPending=false;cloudPushing=true;
-  setCloudSpinner(true);
+  cloudPushPending=false;cloudPushing=true;setCloudSpinner(true);
   try{
-    const ts=Date.now();
-    await fbDb.collection('users').doc(cloudUser.uid).set({data:stripUndefined(state),updatedAt:ts});
-    lastCloudUpdatedAt=ts;
-    markCloudLinked(cloudUser.uid,ts);
+    await ensureProfile({id:cloudUser.uid});
+    const {walletRows,incomeRows,expenseRows,loanRows,goalRows,now}=rowsForCloud();
+    const uid=cloudUser.uid;
+    // Children first because income/expenses/loans reference wallets.
+    for(const table of ['income','expenses','loans','savings_goals','wallets']){
+      const {error}=await supabaseClient.from(table).delete().eq('user_id',uid);
+      if(error)throw error;
+    }
+    if(walletRows.length){let r=await supabaseClient.from('wallets').insert(walletRows);if(r.error)throw r.error;}
+    if(incomeRows.length){let r=await supabaseClient.from('income').insert(incomeRows);if(r.error)throw r.error;}
+    if(expenseRows.length){let r=await supabaseClient.from('expenses').insert(expenseRows);if(r.error)throw r.error;}
+    if(loanRows.length){let r=await supabaseClient.from('loans').insert(loanRows);if(r.error)throw r.error;}
+    if(goalRows.length){let r=await supabaseClient.from('savings_goals').insert(goalRows);if(r.error)throw r.error;}
+    const profile={id:uid,username:packProfileUsername(),budget_limit:Number(state.budgetLimit)||0,hide_balances:!!state.hideBalances,terms_accepted:state.termsAccepted?.date||null};
+    let pr=await supabaseClient.from('profiles').upsert(profile,{onConflict:'id'});if(pr.error)throw pr.error;
+    lastCloudUpdatedAt=Date.parse(now)||Date.now();markCloudLinked(uid,lastCloudUpdatedAt);
   }catch(e){
-    console.error('Cloud sync failed',e);
-    cloudPushPending=true;   // the change is still un-uploaded - don't let a later pull overwrite it
-    toast('Cloud sync failed - check your connection','error');
+    console.error('Supabase cloud sync failed',e);cloudPushPending=true;toast('Cloud sync failed - check your connection','error');
   }
-  cloudPushing=false;
-  setCloudSpinner(false);
+  cloudPushing=false;setCloudSpinner(false);
 }
-
 let stateLoadedForUid=null;
-
-/* Remember that THIS device's copy is already linked to a cloud account (and when it last matched),
-   so the "cloud vs device" question is only asked for a genuine first-time conflict. */
-function markCloudLinked(uid,at){
-  try{localStorage.setItem('finCloudLinked',JSON.stringify({uid:uid,at:at||Date.now()}));}catch(e){}
-}
-function getCloudLinked(uid){
-  try{const l=JSON.parse(localStorage.getItem('finCloudLinked')||'null');if(l&&l.uid===uid)return l;}catch(e){}
-  return null;
-}
+function markCloudLinked(uid,at){try{localStorage.setItem('finCloudLinked',JSON.stringify({uid:uid,at:at||Date.now()}));}catch(e){}}
+function getCloudLinked(uid){try{const l=JSON.parse(localStorage.getItem('finCloudLinked')||'null');if(l&&l.uid===uid)return l;}catch(e){}return null;}
 function clearCloudLinked(){try{localStorage.removeItem('finCloudLinked');}catch(e){}}
-
 let _cloudLoadP=null,_cloudLoadUid=null,cloudLoadInFlight=false;
 function loadStateForUser(user){
-  if(stateLoadedForUid===user.uid)return Promise.resolve(); // already synced this session, avoid re-prompting on token refresh
-  if(_cloudLoadP&&_cloudLoadUid===user.uid)return _cloudLoadP;   // never run two loads (and two prompts) at once
+  if(stateLoadedForUid===user.uid)return Promise.resolve();
+  if(_cloudLoadP&&_cloudLoadUid===user.uid)return _cloudLoadP;
   _cloudLoadUid=user.uid;cloudLoadInFlight=true;
   _cloudLoadP=_loadStateForUser(user).finally(()=>{_cloudLoadP=null;cloudLoadInFlight=false;});
   return _cloudLoadP;
@@ -2930,81 +2949,56 @@ function loadStateForUser(user){
 async function _loadStateForUser(user){
   setCloudSpinner(true);
   try{
-    const doc=await fbDb.collection('users').doc(user.uid).get();
-    if(doc.exists && doc.data().data){
-      const raw=doc.data().data;
-      const remote=(typeof raw==='string')?JSON.parse(raw):raw;
-      lastCloudUpdatedAt=doc.data().updatedAt||0;
-      const localHasData=!!state.username||(state.income&&state.income.length)||(state.expenses&&state.expenses.length)||(state.wallets||[]).some(w=>w.balance);
-      const remoteAt=doc.data().updatedAt||0;
-      const linked=getCloudLinked(user.uid);
-      let useRemote=true;
-      if(localHasData){
-        if(linked){
-          // Already connected to this account before: no question needed.
-          // Cloud newer (edited on another device) -> take it; otherwise keep this device's copy.
-          useRemote=remoteAt>linked.at;
-        }else{
-          useRemote=await showMergeChoice(remote,doc.data().updatedAt);
-        }
-      }
-      if(useRemote){
-        replaceState(remote);   // fills any missing fields + keeps nextId above every existing id
-        clearTimeout(cloudSyncTimer);cloudPushPending=false;
-        localStorage.setItem('kwentadoV1',JSON.stringify(state));
-        markCloudLinked(user.uid,remoteAt||Date.now());
-      }else{
-        await pushToCloud(true);
-      }
-    }else{
-      // brand-new account - seed the cloud with whatever's local (usually defaults)
-      await pushToCloud(true);
+    await ensureProfile(user);
+    const uid=user.uid;
+    const [pr,wr,ir,er,lr,gr]=await Promise.all([
+      supabaseClient.from('profiles').select('*').eq('id',uid).maybeSingle(),
+      supabaseClient.from('wallets').select('*').eq('user_id',uid).order('updated_at',{ascending:true}),
+      supabaseClient.from('income').select('*').eq('user_id',uid).order('id',{ascending:true}),
+      supabaseClient.from('expenses').select('*').eq('user_id',uid).order('id',{ascending:true}),
+      supabaseClient.from('loans').select('*').eq('user_id',uid).order('id',{ascending:true}),
+      supabaseClient.from('savings_goals').select('*').eq('user_id',uid).order('id',{ascending:true})
+    ]);
+    for(const x of [pr,wr,ir,er,lr,gr])if(x.error)throw x.error;
+    const remoteWallets=(wr.data||[]).map(finUnpackWallet);
+    const remoteIncome=(ir.data||[]).map(r=>{const p=finUnpackMetaText(r.note);return {id:Number(r.id),type:r.type,amount:Number(r.amount)||0,month:r.month,year:Number(r.year),wallet:r.wallet_id,dateAdded:r.date_added,note:p.text,...p.meta};});
+    const remoteExpenses=(er.data||[]).map(r=>{const p=finUnpackMetaText(r.note);return {id:Number(r.id),desc:r.description,amount:Number(r.amount)||0,cat:r.category,source:r.wallet_id,date:r.date,note:p.text,recurring:!!r.recurring,...p.meta};});
+    const remoteLoans=(lr.data||[]).map(r=>{const p=finUnpackMetaText(r.note);return {id:Number(r.id),name:r.name,amount:Number(r.amount)||0,type:r.type,due:r.due_date||'',sourceWallet:r.wallet_id||p.meta.sourceWallet||'',note:p.text,settled:!!r.settled};});
+    const remoteGoals=(gr.data||[]).map(r=>({id:Number(r.id),name:r.name,target:Number(r.target)||0,saved:Number(r.saved)||0,note:r.note||''}));
+    const p=pr.data?unpackProfile(pr.data):{};
+    const remote=normalizeState({...p,wallets:remoteWallets,income:remoteIncome,expenses:remoteExpenses,loans:remoteLoans,goals:remoteGoals});
+    const remoteAt=(wr.data||[]).reduce((m,w)=>Math.max(m,Date.parse(w.updated_at||0)||0),0);
+    lastCloudUpdatedAt=remoteAt;
+    const localHasData=!!state.username||(state.income&&state.income.length)||(state.expenses&&state.expenses.length)||(state.wallets||[]).some(w=>w.balance);
+    const linked=getCloudLinked(uid);let useRemote=true;
+    const hasRemote=remoteWallets.length||remoteIncome.length||remoteExpenses.length||remoteLoans.length||remoteGoals.length||remote.username;
+    if(localHasData&&!hasRemote){useRemote=false;await pushToCloud(true);}
+    else if(localHasData&&hasRemote){
+      if(linked)useRemote=remoteAt>linked.at;
+      else useRemote=await showMergeChoice(remote,remoteAt);
     }
-    stateLoadedForUid=user.uid;   // only after a REAL comparison with the cloud copy
-  }catch(e){
-    console.error('Cloud load failed',e);
-    toast('Could not reach cloud data - working offline for now','error');
-  }
+    if(useRemote){replaceState(remote);clearTimeout(cloudSyncTimer);cloudPushPending=false;localStorage.setItem('kwentadoV1',JSON.stringify(state));markCloudLinked(uid,remoteAt||Date.now());}
+    else await pushToCloud(true);
+    stateLoadedForUid=uid;
+  }catch(e){console.error('Supabase cloud load failed',e);toast('Could not reach cloud data - working offline for now','error');}
   setCloudSpinner(false);
 }
-
-/* Another phone/tablet may have saved newer data while this one sat open. Without this,
-   the stale copy would overwrite it on the next save. We re-check when the app comes
-   back to the foreground (throttled) and only pull when nothing local is waiting to upload. */
 async function pullCloudIfNewer(){
   if(!cloudUser)return;
-  if(stateLoadedForUid!==cloudUser.uid){
-    // The first sync never completed (app was opened offline). Retry it now that we're back.
-    if(cloudLoadInFlight||Date.now()-lastCloudPullAt<15000)return;
-    lastCloudPullAt=Date.now();
-    await loadStateForUser(cloudUser);
-    if(stateLoadedForUid===cloudUser.uid){render();updateSidebarUsername();}
-    return;
-  }
+  if(stateLoadedForUid!==cloudUser.uid){if(cloudLoadInFlight||Date.now()-lastCloudPullAt<15000)return;lastCloudPullAt=Date.now();await loadStateForUser(cloudUser);if(stateLoadedForUid===cloudUser.uid){render();updateSidebarUsername();}return;}
   if(cloudPushPending||cloudPushing||cloudPulling)return;
   if(Date.now()-lastCloudPullAt<15000)return;
   lastCloudPullAt=Date.now();cloudPulling=true;
   try{
-    const doc=await fbDb.collection('users').doc(cloudUser.uid).get();
-    if(doc.exists&&doc.data().data){
-      const at=doc.data().updatedAt||0;
-      if(at>lastCloudUpdatedAt&&!cloudPushPending&&!cloudPushing){
-        const raw=doc.data().data;
-        const remote=(typeof raw==='string')?JSON.parse(raw):raw;
-        replaceState(remote);
-        lastCloudUpdatedAt=at;
-        markCloudLinked(cloudUser.uid,at);
-        localStorage.setItem('kwentadoV1',JSON.stringify(state));
-        render();updateSidebarUsername();
-        toast('Updated with your latest data from another device ✓');
-      }
-    }
-  }catch(e){console.warn('Cloud refresh failed',e);}
+    const {data,error}=await supabaseClient.from('wallets').select('updated_at').eq('user_id',cloudUser.uid).order('updated_at',{ascending:false}).limit(1);
+    if(error)throw error;
+    const at=data&&data[0]?Date.parse(data[0].updated_at||0):0;
+    if(at>lastCloudUpdatedAt&&!cloudPushPending&&!cloudPushing){await loadStateForUser({...cloudUser,uid:cloudUser.uid});render();updateSidebarUsername();toast('Updated with your latest data from another device ✓');}
+  }catch(e){console.warn('Supabase cloud refresh failed',e);}
   cloudPulling=false;
 }
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pullCloudIfNewer();});
-window.addEventListener('online',pullCloudIfNewer);
-window.addEventListener('focus',pullCloudIfNewer);
+window.addEventListener('online',pullCloudIfNewer);window.addEventListener('focus',pullCloudIfNewer);
 
 function updateAccountSettingsUI(){
   updateSettingsHome();
@@ -3060,26 +3054,29 @@ function doSignOut(){
   localStorage.removeItem('kwentadoV1');
   localStorage.removeItem('mtTutDone');
   clearCloudLinked();bioClear();
-  fbAuth.signOut();
+  supabaseClient.auth.signOut();
 }
 
 async function authLinkToGoogle(){
   if(!cloudUser||!cloudUser.isAnonymous)return;
-  const provider=new firebase.auth.GoogleAuthProvider();
   try{
-    await cloudUser.linkWithPopup(provider);
-    updateAccountSettingsUI();
-    renderGuestBanner();
-    toast('Linked to Google - your data is now backed by a real account ✓');
+    const {error}=await supabaseClient.auth.linkIdentity({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});
+    if(error)throw error;
   }catch(e){
     console.error(e);
-    toast('Linking failed: '+authFriendlyError(e),'error');
+    toast('Linking failed: '+(e?.message||'Please configure Google in Supabase Auth.'),'error');
   }
 }
 
 /* ── CENTRAL AUTH CONTROLLER ── */
+function makeCloudUser(user){
+  if(!user)return null;
+  const meta=user.user_metadata||{};
+  const anonymous=!!(user.is_anonymous||user.app_metadata?.provider==='anonymous'||(user.identities||[]).some(i=>i.provider==='anonymous'));
+  return Object.assign({},user,{uid:user.id,displayName:meta.full_name||meta.name||meta.display_name||'',isAnonymous:anonymous});
+}
 async function handleAuthState(user){
-  cloudUser=user;
+  cloudUser=makeCloudUser(user);
   updateAccountSettingsUI();
   if(!user){
     showLoginScreen();
@@ -3114,18 +3111,12 @@ async function handleAuthState(user){
   if(!localStorage.getItem('mtTutDone')){showTutorial();}else{showSplash();}
 }
 
-if(window.firebaseInitFailed || typeof fbAuth==='undefined' || !fbAuth){
-  // Firebase never came up - show a clear, honest error instead of letting
-  // the rest of this script (150+ functions incl. render/show/toast) go
-  // undefined and leaving a blank-looking dashboard on screen.
-  document.addEventListener('DOMContentLoaded', showConnectionErrorScreen);
-  if(document.readyState!=='loading') showConnectionErrorScreen();
-}else{
-  fbAuth.onAuthStateChanged(function(user){
-    handleAuthState(user);
-  });
-}
+supabaseClient.auth.onAuthStateChange(function(event,session){
+  // Do not perform Supabase reads/writes directly inside the auth callback.
+  setTimeout(function(){handleAuthState(session&&session.user?session.user:null);},0);
+});
 function showConnectionErrorScreen(){
+
   const overlay=document.getElementById('auth-overlay');
   if(!overlay)return;
   overlay.style.display='flex';
@@ -3963,7 +3954,7 @@ function walSave(){
   const newBal=r2(credit?-Math.abs(num):num);
   if(!state.wallets)state.wallets=[];
   if(WD.mode==='add'){
-    const id='w'+Date.now();
+    const id=finUuid();
     state.wallets.push({id:id,label:name,balance:newBal,updated:today(),brand:WD.brand,type:WD.type,limit:limit,c1:WD.c1,c2:WD.c2,dark:WD.dark,logo:WD.logo});
     save();closeWalModal();render();toast(name+' added ✓');
     window.dispatchEvent(new CustomEvent('fin:wallet-added',{detail:{id:id,name:name}}));
@@ -5609,78 +5600,42 @@ function authFriendlyError(e){
 }
 
 async function authEmailSubmit(){
-  const isReg=authMode==='register';
-  const p=isReg?'signup':'login';
-  const email=document.getElementById(p+'-email').value.trim();
-  const pw=document.getElementById(p+'-password').value;
-  const errEl=document.getElementById(p+'-error');
+  const isReg=authMode==='register',p=isReg?'signup':'login';
+  const email=document.getElementById(p+'-email').value.trim(),pw=document.getElementById(p+'-password').value,errEl=document.getElementById(p+'-error');
   errEl.textContent='';errEl.style.color='';
   if(!email||!pw){errEl.textContent='Please enter both email and password.';return;}
   if(pw.length<6){errEl.textContent='Password should be at least 6 characters.';return;}
   if(isReg&&pw!==document.getElementById('signup-confirm').value){errEl.textContent='Passwords do not match.';return;}
-  pendingRegNameFromLogin=''; // name is collected on the next setup screen
-  const btn=document.getElementById(p+'-submit-btn');
-  btn.disabled=true;
+  pendingRegNameFromLogin='';const btn=document.getElementById(p+'-submit-btn');btn.disabled=true;btn.textContent=isReg?'Creating account…':'Signing in…';
   try{
-    if(isReg){
-      await fbAuth.createUserWithEmailAndPassword(email,pw);
-    }else{
-      await fbAuth.signInWithEmailAndPassword(email,pw);
-    }
-    // onAuthStateChanged picks up from here
+    const r=isReg?await supabaseClient.auth.signUp({email,password:pw}):await supabaseClient.auth.signInWithPassword({email,password:pw});
+    if(r.error)throw r.error;
+    if(isReg&&!r.data.session){errEl.style.color='var(--accent)';errEl.textContent='Account created. Check your email if confirmation is required.';}
   }catch(e){
-    console.error(e);
-    errEl.textContent=authFriendlyError(e);
+    console.error('Supabase authentication error:',e);const msg=(e?.message||'').toLowerCase();
+    if(msg.includes('invalid login credentials'))errEl.textContent='Incorrect email or password.';
+    else if(msg.includes('already registered')||msg.includes('already been registered'))errEl.textContent='That email is already registered. Try Sign In instead.';
+    else if(msg.includes('password'))errEl.textContent='Password must be at least 6 characters.';
+    else if(msg.includes('email'))errEl.textContent='That email address looks invalid.';
+    else errEl.textContent=e?.message||'Something went wrong. Please try again.';
   }
-  btn.disabled=false;
+  btn.disabled=false;btn.textContent=isReg?'Sign Up':'Login';
 }
-
 async function authForgotPassword(){
-  const email=document.getElementById('login-email').value.trim();
-  const errEl=document.getElementById('login-error');
+  const email=document.getElementById('login-email').value.trim(),errEl=document.getElementById('login-error');errEl.textContent='';errEl.style.color='';
   if(!email){errEl.textContent='Enter your email above first, then tap "Forgot password?"';return;}
-  try{
-    await fbAuth.sendPasswordResetEmail(email);
-    errEl.style.color='var(--accent)';
-    errEl.textContent='Password reset email sent - check your inbox.';
-  }catch(e){
-    errEl.style.color='';
-    errEl.textContent=authFriendlyError(e);
-  }
+  try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});if(error)throw error;errEl.style.color='var(--accent)';errEl.textContent='Password reset email sent - check your inbox.';}
+  catch(e){console.error('Password reset error:',e);errEl.textContent=e?.message||'Could not send password reset email.';}
 }
-
 async function authGoogleSignIn(){
-  const errEl=document.getElementById('login-error');
-  errEl.textContent='';
-  const provider=new firebase.auth.GoogleAuthProvider();
-  try{
-    if(cloudUser&&cloudUser.isAnonymous){
-      await cloudUser.linkWithPopup(provider);
-      toast('Account linked - your guest data is now saved to Google ✓');
-    }else{
-      await fbAuth.signInWithPopup(provider);
-    }
-  }catch(e){
-    console.error(e);
-    if(e.code==='auth/credential-already-in-use'){
-      // that Google account already has its own data - sign into it directly instead
-      try{ await fbAuth.signInWithPopup(provider); }
-      catch(e2){ errEl.textContent=authFriendlyError(e2); }
-    }else{
-      errEl.textContent=authFriendlyError(e);
-    }
-  }
+  const errEl=document.getElementById('login-error');errEl.textContent='';
+  try{const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});if(error)throw error;}
+  catch(e){console.error(e);errEl.textContent=e?.message||'Google sign-in is unavailable. Configure Google in Supabase Auth → Providers.';}
 }
-
 async function authAnonymousSignIn(){
-  const errEl=document.getElementById('login-error');
-  errEl.textContent='';
-  try{
-    await fbAuth.signInAnonymously();
-  }catch(e){
-    console.error(e);
-    errEl.textContent=authFriendlyError(e);
-  }
+  const errEl=document.getElementById('login-error');errEl.textContent='';
+  try{const {error}=await supabaseClient.auth.signInAnonymously();if(error)throw error;}
+  catch(e){console.error(e);errEl.textContent=e?.message||'Guest sign-in is unavailable. Enable Anonymous sign-ins in Supabase Auth.';}
 }
 
 /* ── FIRST-TIME ONBOARDING (language · currency · where did you hear about us) ── */
@@ -6167,7 +6122,7 @@ function authForgotPinReauth(){
   sessionStorage.removeItem('mtUnlocked');
   stateLoadedForUid=null;
   document.getElementById('auth-overlay').style.display='none';
-  fbAuth.signOut();
+  supabaseClient.auth.signOut();
 }
 
 async function verifySecurityAnswer(){
@@ -7016,23 +6971,16 @@ function acceptTermsAndContinue(){
 /* Right to erasure: delete cloud data, the account, and the local copy */
 async function deleteAccountAndData(){
   if(!cloudUser){toast('Not signed in','error');return;}
-  const ok=await mtConfirm('This permanently deletes your account, your cloud data and everything on this device. It cannot be undone. Download a backup first if you want to keep a copy.','🗑️','Delete Everything','var(--red)');
+  const ok=await mtConfirm('This permanently deletes your FINUITY data from the cloud and this device. Your Supabase login account itself must be removed from Supabase separately. Download a backup first if you want to keep a copy.','🗑️','Delete Everything','var(--red)');
   if(!ok)return;
-  const u=cloudUser;
-  clearTimeout(cloudSyncTimer);cloudPushPending=false;
+  const uid=cloudUser.uid;clearTimeout(cloudSyncTimer);cloudPushPending=false;
   try{
-    await fbDb.collection('users').doc(u.uid).delete();
-    await u.delete();
-  }catch(e){
-    console.error(e);
-    if(e.code==='auth/requires-recent-login'){toast('Cloud data removed. For security, sign out, sign back in, then tap Delete again to finish removing the account.','error');}
-    else toast('Could not delete: '+authFriendlyError(e),'error');
-    return;
-  }
-  sessionStorage.removeItem('mtUnlocked');stateLoadedForUid=null;
-  Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,defaultState());
+    for(const table of ['income','expenses','loans','savings_goals','wallets']){const {error}=await supabaseClient.from(table).delete().eq('user_id',uid);if(error)throw error;}
+    await supabaseClient.from('profiles').delete().eq('id',uid);
+  }catch(e){console.error(e);toast('Could not delete your cloud data: '+(e?.message||'Unknown error'),'error');return;}
+  sessionStorage.removeItem('mtUnlocked');stateLoadedForUid=null;Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,defaultState());
   ['kwentadoV1','mtTutDone','mtGuestBannerDismissAt','mtGuestNudge3Shown','mtGuestRemindAt','mtMoneyTab','finCloudLinked','finBioCred','finPinLock'].forEach(k=>localStorage.removeItem(k));
-  toast('Account and data deleted');
+  await supabaseClient.auth.signOut();toast('Your FINUITY data was deleted');
 }
 
 /* INIT */
@@ -7048,7 +6996,7 @@ if(state.pinHash&&!sessionStorage.getItem('mtUnlocked')){showPinScreen();}
 document.documentElement.classList.remove('finlock');
 render();
 updateSidebarUsername();
-// Auth entry point is now driven entirely by fbAuth.onAuthStateChanged → handleAuthState()
+// Auth entry point is driven by Supabase Auth → handleAuthState()
 // Recurring reminder: check if any recurring expenses haven't been logged this month
 setTimeout(()=>whenAppReady(()=>{
   const now=new Date();
