@@ -1578,6 +1578,21 @@ body[data-page="settings"] #fa-fab,body[data-page="export"] #fa-fab{display:none
     <button class="btn btn-ghost btn-sm" style="margin-top:14px" onclick="showPinScreen()">← Back to PIN</button>
   </div>
 
+  <!-- STEP: SET NEW PASSWORD (from reset email link) -->
+  <div id="auth-newpw" class="pin-box" style="display:none;max-width:380px">
+    <div style="font-size:32px;margin-bottom:14px">🔑</div>
+    <div class="pin-title">Set a New Password</div>
+    <div class="pin-sub" style="margin-bottom:18px">Choose a new password for your account.</div>
+    <div style="text-align:left;width:100%;margin-bottom:10px">
+      <input type="password" id="newpw-1" placeholder="New password" autocomplete="new-password" style="width:100%;padding:11px 14px;font-size:13.5px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)">
+    </div>
+    <div style="text-align:left;width:100%;margin-bottom:10px">
+      <input type="password" id="newpw-2" placeholder="Confirm new password" autocomplete="new-password" style="width:100%;padding:11px 14px;font-size:13.5px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)" onkeydown="if(event.key==='Enter')authSetNewPassword()">
+    </div>
+    <div class="pin-error" id="newpw-error"></div>
+    <button class="btn btn-primary" style="width:100%;margin-top:6px" id="newpw-btn" onclick="authSetNewPassword()">Save New Password</button>
+  </div>
+
   <!-- STEP: PIN LOCK (returning user) -->
   <div id="auth-pin" class="pin-box" style="display:none">
     <div style="width:56px;height:56px;margin:0 auto 14px;background:linear-gradient(135deg,rgba(var(--accent-rgb),.18),rgba(var(--accent-rgb),.07));border:1px solid rgba(var(--accent-rgb),.3);border-radius:14px;display:flex;align-items:center;justify-content:center"><img src="icon-192.png?v=2" alt="FINUITY" style="width:70%;height:70%;object-fit:contain"></div>
@@ -3111,7 +3126,41 @@ async function handleAuthState(user){
   if(!localStorage.getItem('mtTutDone')){showTutorial();}else{showSplash();}
 }
 
+// Opened from a password-reset email link? Show the "set new password" screen instead of the app.
+let recoveryActive=/[#&?]type=recovery/.test(location.hash+location.search);
+function showNewPasswordScreen(){
+  const ov=document.getElementById('auth-overlay');if(!ov)return;
+  ov.style.display='flex';hideAllAuthScreens();
+  const sp=document.getElementById('welcome-splash');if(sp)sp.style.display='none';
+  const box=document.getElementById('auth-newpw');if(box)box.style.display='block';
+}
+async function authSetNewPassword(){
+  const p1=document.getElementById('newpw-1').value,p2=document.getElementById('newpw-2').value,err=document.getElementById('newpw-error'),btn=document.getElementById('newpw-btn');
+  err.textContent='';
+  if(p1.length<6){err.textContent='Password should be at least 6 characters.';return;}
+  if(p1!==p2){err.textContent='Passwords do not match.';return;}
+  btn.disabled=true;btn.textContent='Saving…';
+  try{
+    const {error}=await supabaseClient.auth.updateUser({password:p1});
+    if(error)throw error;
+    recoveryActive=false;
+    try{history.replaceState(null,'',location.pathname);}catch(e){}
+    toast('Password updated ✓');
+    const {data}=await supabaseClient.auth.getSession();
+    handleAuthState(data&&data.session&&data.session.user?data.session.user:null);
+  }catch(e){
+    console.error('Password update failed',e);
+    err.textContent=(e&&e.message)||'Could not update password. Please try again.';
+  }
+  btn.disabled=false;btn.textContent='Save New Password';
+}
 supabaseClient.auth.onAuthStateChange(function(event,session){
+  if(event==='PASSWORD_RECOVERY')recoveryActive=true;
+  if(recoveryActive){
+    // Hold off on loading the app until the new password is saved.
+    if(session)setTimeout(showNewPasswordScreen,0);
+    return;
+  }
   // Do not perform Supabase reads/writes directly inside the auth callback.
   setTimeout(function(){handleAuthState(session&&session.user?session.user:null);},0);
 });
@@ -5383,7 +5432,7 @@ function saveEditGoal(){
 
 /* ── AUTH SCREEN SWITCHER ── */
 function hideAllAuthScreens(){
-  ['auth-login','auth-terms','auth-onboard','auth-register','auth-secsetup','auth-forgot','auth-pin','auth-pinsetup','auth-clearconfirm'].forEach(id=>{
+  ['auth-login','auth-terms','auth-onboard','auth-register','auth-secsetup','auth-forgot','auth-newpw','auth-pin','auth-pinsetup','auth-clearconfirm'].forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.style.display='none';
   });
