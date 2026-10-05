@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>FinLed</title>
 <meta name="description" content="FinLed - a private, on-device tracker for income, expenses, wallets, loans, and savings goals.">
-<meta name="theme-color" content="#F3EDE0">
+<meta name="theme-color" content="#0A0F1A">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FinLed">
@@ -1461,6 +1461,95 @@ html body.finled .hero-card::before{width:12px !important}
 html body.finled #month-snapshot>div:first-child{flex-wrap:wrap;gap:4px 14px}
 html body.finled #month-snapshot>div:first-child>div:first-child{white-space:nowrap}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style id="finled-layout">
+/* FinLed layout: top masthead + main column / side rail. Flat ledger styling. */
+:root{--bg:#0A0F1A;--surface:#0F1626;--surface2:#141D31;--surface3:#1B2640;--border:#1F2B44;--border2:#34415F;--text:#E7ECF5;--muted:#8E9AB3;--muted2:#6F7B95;--accent:#22D3BF;--accent-dim:#18A898;--accent-rgb:34,211,191;--accent-hover:#4BE0CE;--accent-glow:transparent;--accent-bg:rgba(34,211,191,.09);--on-accent:#04201C;--gold:#4F8CF0;--gold-soft:rgba(79,140,240,.16);--focus:#4F8CF0;--hero-bg:transparent;--blue:#6FA3F5;--blue-bg:rgba(111,163,245,.12);--font-d:'IBM Plex Sans',system-ui,sans-serif;--font-b:'IBM Plex Sans',system-ui,sans-serif;--r:3px;--r-sm:3px;--r-xs:2px;--sw:0px}
+body.light{--bg:#F1F3F6;--surface:#FFFFFF;--surface2:#F6F8FA;--surface3:#E9EDF3;--border:#D5DBE5;--border2:#9AA6BA;--text:#0C1424;--muted:#4F5B73;--muted2:#66728A;--accent:#0B7C86;--accent-dim:#075F68;--accent-rgb:11,124,134;--accent-hover:#0E919C;--on-accent:#fff;--gold:#1B5FC4;--gold-soft:rgba(27,95,196,.12);--focus:#1B5FC4;--blue:#1B5FC4}
+html body.finled{background-image:none!important}
+html body.finled .hero-card{--text:#E7ECF5;--muted:#8E9AB3;--muted2:#8E9AB3;--accent:#22D3BF;--accent-rgb:34,211,191;--accent-bg:transparent;background:transparent!important;border:0!important;border-top:2px solid var(--text)!important;border-radius:0!important;box-shadow:none!important;padding:18px 0 22px!important}
+html body.finled.light .hero-card{--text:#0C1424;--muted:#4F5B73;--muted2:#4F5B73;--accent:#0B7C86;--accent-rgb:11,124,134}
+html body.finled .hero-card::before,html body.finled .hero-card::after{display:none!important}
+html body.finled .hero-card .hero-amount{font-family:'IBM Plex Mono',monospace!important;font-weight:500!important;font-size:46px!important;letter-spacing:-.03em!important}
+html body.finled .card,html body.finled .stat,html body.finled .bal-card,html body.finled .goal-card,html body.finled .snapshot-card{background:var(--surface)!important;border:1px solid var(--border)!important;border-top:2px solid var(--border2)!important;border-radius:2px!important;box-shadow:none!important}
+html body.finled .stat{padding:14px 16px!important}
+html body.finled .stat.g{border-top-color:var(--accent)!important}html body.finled .stat.r{border-top-color:var(--red)!important}html body.finled .stat.a{border-top-color:var(--amber)!important}html body.finled .stat.b{border-top-color:var(--blue)!important}
+html body.finled .stat .sv{font-family:'IBM Plex Mono',monospace!important;font-weight:500!important;font-size:21px!important}
+html body.finled .card-hd{border-bottom:1px solid var(--border)!important}
+html body.finled .card-title{font-family:var(--font-b)!important;font-size:11.5px!important;font-weight:600!important;text-transform:uppercase;letter-spacing:.1em}
+html body.finled .page-title{font-weight:600!important;font-size:26px!important}
+html body.finled .btn,html body.finled input,html body.finled select,html body.finled textarea,html body.finled .pill,html body.finled .badge{border-radius:3px!important}
+html body.finled .btn-primary{box-shadow:none!important}
+html body.finled .btn-primary:active{transform:none}
+@media(min-width:901px){
+html body.finled .sidebar{display:flex!important;flex-direction:row;align-items:center;position:fixed;top:0;left:0;right:0;width:auto;height:56px;min-height:0;padding:0 28px;gap:26px;background:var(--surface)!important;border:0!important;border-bottom:1px solid var(--border)!important;z-index:30}
+html body.finled .sb-top{border:0!important;padding:0!important;margin:0}
+html body.finled .sb-nav{display:flex;flex-direction:row;align-items:stretch;gap:2px;flex:1;padding:0;margin:0;overflow-x:auto;scrollbar-width:none}
+html body.finled .nav-lbl{display:none}
+html body.finled .nav-sep{width:1px;height:18px;align-self:center;margin:0 8px;background:var(--border2)}
+html body.finled .nav-item{height:56px;min-height:0!important;margin:0;padding:0 13px!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;background:none!important;white-space:nowrap;font-size:13.5px!important}
+html body.finled .nav-item svg{display:none}
+html body.finled .nav-item.active{color:var(--text)!important;border-bottom-color:var(--accent)!important}
+html body.finled .sb-bottom{display:flex;flex-direction:row;align-items:center;gap:12px;padding:0!important;margin:0;border:0!important;flex:none}
+html body.finled .main{margin-left:0!important;padding-top:56px}
+html body.finled .topbar{position:static!important;width:100%;max-width:1180px;margin:0 auto;padding:30px 32px 0!important;background:transparent!important;border:0!important}
+html body.finled .tb-title{font-size:11px!important;font-weight:600!important;text-transform:uppercase;letter-spacing:.16em!important;color:var(--accent)!important}
+html body.finled .content{max-width:1180px!important;margin:0 auto;padding:10px 32px 80px!important}
+html body.finled #dashboard.active{display:grid!important;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);column-gap:30px;align-items:start}
+html body.finled #dashboard>.page-hd{grid-column:1/-1}
+html body.finled #dashboard>.hero-card{grid-column:1;grid-row:2}
+html body.finled #dashboard>#dash-stats{grid-column:1;grid-row:3}
+html body.finled #dashboard>.card{grid-column:1;grid-row:4}
+html body.finled #dashboard>#month-snapshot{grid-column:2;grid-row:2}
+html body.finled #dashboard>#budget-goal-card{grid-column:2;grid-row:3}
+html body.finled #dashboard>#dash-learn{grid-column:2;grid-row:4}
+html body.finled #dashboard>.two-col{grid-column:1/-1;grid-row:5}
+}
+@media(max-width:900px){
+html body.finled .bottom-nav{background:var(--surface)!important;border-top:1px solid var(--border)!important}
+html body.finled .bnav-item.active{box-shadow:inset 0 2px 0 var(--accent)}
+html body.finled .bnav-item.active svg{background:none!important;color:var(--accent)!important}
+html body.finled .bnav-plus{border-radius:3px!important;box-shadow:none!important}
+}
+</style>
+<style id="finled-a11y-layout">
+html body.finled{font-size:16px}
+html body.finled h1.page-title,html body.finled h2.card-title{margin:0}
+html body.finled .btn,html body.finled input:not([type=checkbox]):not([type=radio]),html body.finled select{min-height:48px;font-size:16px}
+html body.finled .nav-item,html body.finled .bnav-item{min-height:48px}
+html body.finled :focus-visible{outline:3px solid var(--focus)!important;outline-offset:2px!important}
+html body.finled .tsz{display:flex;gap:4px;flex:none}
+html body.finled .tsz button{min-width:40px;height:40px;border:1px solid var(--border2);background:transparent;color:var(--text);border-radius:3px;font:600 14px var(--font-b);cursor:pointer}
+html body.finled .tsz button:hover{background:var(--surface2)}
+html body.finled .qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 24px}
+html body.finled .qa button{min-height:56px;padding:0 16px;border:2px solid var(--accent);background:transparent;color:var(--text);border-radius:3px;font:600 16px var(--font-b);cursor:pointer}
+html body.finled .qa button:hover{background:var(--accent-bg)}
+html body.finled .qa .qa-main{background:var(--accent);color:var(--on-accent)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(max-width:900px){
+html body.finled #dashboard.active{display:flex!important;flex-direction:column}
+html body.finled #dashboard>*{order:9}
+html body.finled #dashboard>.page-hd{order:0}html body.finled #dashboard>.hero-card{order:1}html body.finled #dashboard>.qa{order:2}html body.finled #dashboard>#month-snapshot{order:3}html body.finled #dashboard>#dash-stats{order:4}
+}
+@media(min-width:901px){
+html body.finled .sb-bottom{margin-left:0}
+html body.finled #dashboard.active{grid-template-columns:repeat(3,minmax(0,1fr))!important;column-gap:24px!important}
+html body.finled #dashboard>.hero-card{grid-column:1/3!important;grid-row:2!important}
+html body.finled #dashboard>#month-snapshot{grid-column:3!important;grid-row:2!important}
+html body.finled #dashboard>.qa{grid-column:1/-1;grid-row:3}
+html body.finled #dashboard>#dash-stats{grid-column:1/-1!important;grid-row:4!important}
+html body.finled #dashboard>.two-col{grid-column:1/-1!important;grid-row:5!important}
+html body.finled #dashboard>.card{grid-column:1/3!important;grid-row:6/span 2!important}
+html body.finled #dashboard>#budget-goal-card{grid-column:3!important;grid-row:6!important}
+html body.finled #dashboard>#dash-learn{grid-column:3!important;grid-row:7!important}
+html body.finled #income.active,html body.finled #expenses.active,html body.finled #goals.active{display:grid!important;grid-template-columns:minmax(300px,380px) minmax(0,1fr);column-gap:28px;align-items:start}
+html body.finled #income>.page-hd,html body.finled #expenses>.page-hd,html body.finled #goals>.page-hd{grid-column:1/-1}
+html body.finled #income>*:not(.page-hd),html body.finled #expenses>*:not(.page-hd),html body.finled #goals>*:not(.page-hd){grid-column:2}
+html body.finled #income>[data-tour="income-form"],html body.finled #expenses>[data-tour="expense-form"],html body.finled #goals>[data-tour="budget-card"],html body.finled #goals>#daily-planner-card{grid-column:1;position:sticky;top:72px}
+html body.finled #goals>#daily-planner-card{position:static}
+html body.finled [data-tour$="-form"] .form-row{display:grid!important;grid-template-columns:1fr!important}
+}
+</style>
 </head>
 <body class="finled">
 <script>(function(){var t=null;try{t=localStorage.getItem('mtTheme')}catch(e){}var l=t?t==='light':!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);document.body.className='finled'+(l?' light':'')})();</script>
@@ -1802,7 +1891,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
 <nav class="sidebar" aria-label="Main">
   <div class="sb-top">
     <div class="logo">
-      <div class="logo-mark" style="background:transparent;border:none;box-shadow:none;padding:2px"><img src="Photos/icon-192.png?v=5" alt="FinLed" style="width:100%;height:100%;object-fit:contain;border-radius:8px"></div>
+      <div class="logo-mark" style="background:transparent;border:none;box-shadow:none;padding:0;width:auto;height:auto"><img src="Photos/finled-logo.png?v=5" alt="FinLed" style="height:30px;width:auto;display:block"></div>
       <div class="logo-text">Fin<span>Led</span></div>
     </div>
   </div>
@@ -1846,6 +1935,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
       <span>Settings</span>
     </div>
   </div>
+  <div class="tsz" role="group" aria-label="Text size"><button type="button" id="tsz-dn" aria-label="Smaller text">A&minus;</button><button type="button" id="tsz-up" aria-label="Larger text">A+</button></div>
   <div class="sb-bottom">
     <div style="display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:8px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);box-shadow:var(--shadow-sm)">
       <div class="sb-avatar" id="sidebar-avatar" style="width:30px;height:30px;border-radius:50%;background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;overflow:hidden">👤</div>
@@ -1909,7 +1999,8 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
       <div class="hero-wallets" id="hero-wallets-inner"></div>
     </div>
 
-    <!-- STAT GRID -->
+    <nav class="qa" aria-label="Quick actions"><button type="button" class="qa-main" onclick="show('expenses')">Add an expense</button><button type="button" onclick="show('income')">Add income</button><button type="button" onclick="show('goals')">Set a goal</button><button type="button" onclick="show('loans')">Review loans</button></nav>
+        <!-- STAT GRID -->
     <div class="stat-grid" id="dash-stats"></div>
 
     <!-- BUDGET GOAL -->
@@ -1921,7 +2012,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
     <!-- INCOME vs EXPENSE CHART -->
     <div class="card">
       <div class="card-hd">
-        <div class="card-title">Income vs Expenses - by Month</div>
+        <h2 class="card-title">Income vs Expenses - by Month</h2>
         <span class="card-link" onclick="show('income')">View income →</span>
       </div>
       <div id="dash-chart"></div>
@@ -1931,7 +2022,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
       <div>
         <div class="card">
           <div class="card-hd">
-            <div class="card-title">Loans & Payables</div>
+            <h2 class="card-title">Loans & Payables</h2>
             <span class="card-link" onclick="show('loans')">View all →</span>
           </div>
           <div id="dash-loans"></div>
@@ -1940,7 +2031,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
       <div>
         <div class="card">
           <div class="card-hd">
-            <div class="card-title">Recent Expenses</div>
+            <h2 class="card-title">Recent Expenses</h2>
             <span class="card-link" onclick="show('expenses')">View all →</span>
           </div>
           <div id="dash-recent-exp"></div>
@@ -1953,11 +2044,11 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
   <!-- ══ INCOME ══ -->
   <div id="income" class="section">
     <div class="page-hd">
-      <div class="page-title">Income</div>
+      <h1 class="page-title">Income</h1>
       <div class="page-sub">Track your salary, bonuses, and other earnings</div>
     </div>
     <div class="card" data-tour="income-form">
-      <div class="card-hd"><div class="card-title">Add Entry</div></div>
+      <div class="card-hd"><h2 class="card-title">Add Entry</h2></div>
       <div class="form-row">
         <div class="form-group"><label>Month</label>
         <select id="inc-month"><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select>
@@ -1980,12 +2071,12 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
       </button>
     </div>
     <div class="card" id="inc-breakdown-card" style="display:none">
-      <div class="card-hd"><div class="card-title">Total by Type</div><span id="inc-breakdown-badge" style="font-size:11px;color:var(--muted)">all time</span></div>
+      <div class="card-hd"><h2 class="card-title">Total by Type</h2><span id="inc-breakdown-badge" style="font-size:11px;color:var(--muted)">all time</span></div>
       <div id="inc-breakdown" style="display:flex;gap:10px;flex-wrap:wrap"></div>
     </div>
     <div class="card">
       <div class="card-hd">
-        <div class="card-title">All Income Entries</div>
+        <h2 class="card-title">All Income Entries</h2>
         <span id="inc-total-badge" style="font-family:var(--font-d);font-size:14px;color:var(--accent)"></span>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
@@ -1998,7 +2089,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
 
   <!-- ══ LEARN ══ -->
   <div id="learn" class="section">
-    <div class="page-hd"><div class="page-title">Learn</div><div class="page-sub">Short lessons. Real money habits.</div></div>
+    <div class="page-hd"><h1 class="page-title">Learn</h1><div class="page-sub">Short lessons. Real money habits.</div></div>
     <div id="learn-root"></div>
   </div>
 
@@ -2006,14 +2097,14 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
   <div id="balances" class="section">
     <div class="page-hd">
       <div class="bal-hd">
-        <div class="page-title">Balances</div>
+        <h1 class="page-title">Balances</h1>
         <button type="button" class="eye-btn" id="eye-balpage" onclick="toggleHideBalances()" title="Show/hide balances" aria-label="Show or hide balances"></button>
       </div>
       <div class="page-sub">Manage your wallets and update balances anytime</div>
     </div>
     <div class="wc-grid" id="balance-cards"></div>
     <div class="card">
-      <div class="card-hd"><div class="card-title">Net Worth</div></div>
+      <div class="card-hd"><h2 class="card-title">Net Worth</h2></div>
       <div id="nw-rows"></div>
       <div class="total-bar" style="margin-top:12px">
         <span class="lbl">Total across all wallets</span>
@@ -2025,11 +2116,11 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
   <!-- ══ EXPENSES ══ -->
   <div id="expenses" class="section">
     <div class="page-hd">
-      <div class="page-title">Expenses</div>
+      <h1 class="page-title">Expenses</h1>
       <div class="page-sub">Log what you spend, categorise it, and track your sources</div>
     </div>
     <div class="card" data-tour="expense-form">
-      <div class="card-hd"><div class="card-title">Add Expense</div><button class="btn btn-ghost btn-sm" id="scan-receipt-btn" data-tour="scan-receipt" onclick="scanReceiptStart()">📷 Scan Receipt</button></div>
+      <div class="card-hd"><h2 class="card-title">Add Expense</h2><button class="btn btn-ghost btn-sm" id="scan-receipt-btn" data-tour="scan-receipt" onclick="scanReceiptStart()">📷 Scan Receipt</button></div>
       <input type="file" id="receipt-file" accept="image/*" style="display:none" onchange="scanReceiptFile(this)">
       <div id="receipt-banner" style="display:none;font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:12px;padding:10px 12px;background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.18);border-radius:var(--r-xs)"></div>
       <div class="form-row">
@@ -2073,7 +2164,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
     <div id="recurring-panel" style="display:none"></div>
     <div class="card">
       <div class="card-hd">
-        <div class="card-title">Expense Log</div>
+        <h2 class="card-title">Expense Log</h2>
         <span id="exp-total-badge" style="font-family:var(--font-d);font-size:14px;color:var(--red)"></span>
       </div>
       <div class="search-bar">
@@ -2096,24 +2187,24 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
   <!-- ══ LOANS ══ -->
   <div id="loans" class="section">
     <div class="page-hd">
-      <div class="page-title">Loans</div>
+      <h1 class="page-title">Loans</h1>
       <div class="page-sub">Track who owes you and who you owe</div>
     </div>
     <div class="two-col" style="margin-bottom:0">
       <div class="card" style="margin-bottom:0">
-        <div class="card-title" style="margin-bottom:10px">I Owe (Payable)</div>
+        <h2 class="card-title" style="margin-bottom:10px">I Owe (Payable)</h2>
         <div style="font-family:var(--font-d);font-size:28px;font-weight:700;color:var(--red);line-height:1;margin-bottom:4px" id="payable-total"></div>
         <div style="font-size:12px;color:var(--muted)">outstanding balance</div>
       </div>
       <div class="card" style="margin-bottom:0">
-        <div class="card-title" style="margin-bottom:10px">They Owe Me (Receivable)</div>
+        <h2 class="card-title" style="margin-bottom:10px">They Owe Me (Receivable)</h2>
         <div style="font-family:var(--font-d);font-size:28px;font-weight:700;color:var(--accent);line-height:1;margin-bottom:4px" id="receivable-total"></div>
         <div style="font-size:12px;color:var(--muted)">outstanding balance</div>
       </div>
     </div>
     <div style="height:14px"></div>
     <div class="card">
-      <div class="card-hd"><div class="card-title">Add Loan</div></div>
+      <div class="card-hd"><h2 class="card-title">Add Loan</h2></div>
       <div class="form-row">
         <div class="form-group"><label>Person</label><input type="text" id="loan-name" placeholder="Name"></div>
         <div class="form-group"><label>Amount (<span class="cur-sym">₱</span>)</label><input type="number" id="loan-amount" placeholder="0.00" min="0" step="0.01"></div>
@@ -2135,7 +2226,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
       </button>
     </div>
     <div class="card">
-      <div class="card-hd"><div class="card-title">All Loans</div></div>
+      <div class="card-hd"><h2 class="card-title">All Loans</h2></div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
         <input type="search" id="loan-search" placeholder="Search loans..." oninput="setLoanFilter()" style="flex:2;min-width:140px">
         <select id="loan-filter" onchange="setLoanFilter()" style="flex:1;min-width:110px"><option value="">All</option><option value="payable">I owe</option><option value="receivable">Owes me</option><option value="overdue">Overdue</option><option value="settled">Settled</option></select>
@@ -2147,13 +2238,13 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
   <!-- ══ GOALS ══ -->
   <div id="goals" class="section">
     <div class="page-hd">
-      <div class="page-title">Goals & Budget</div>
+      <h1 class="page-title">Goals & Budget</h1>
       <div class="page-sub">Set a monthly budget and track savings goals</div>
     </div>
 
     <!-- MONTHLY BUDGET -->
     <div class="card" data-tour="budget-card">
-      <div class="card-hd"><div class="card-title">Monthly Spend Limit</div></div>
+      <div class="card-hd"><h2 class="card-title">Monthly Spend Limit</h2></div>
       <div class="form-row">
         <div class="form-group"><label>Budget Limit (<span class="cur-sym">₱</span> / month)</label><input type="number" id="budget-input" placeholder="e.g. 15000" min="0"></div>
         <div class="form-group" style="display:flex;align-items:flex-end">
@@ -2165,13 +2256,13 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
 
     <!-- DAILY SPENDING PLANNER -->
     <div class="card" id="daily-planner-card">
-      <div class="card-hd"><div class="card-title">Daily Spending Planner</div></div>
+      <div class="card-hd"><h2 class="card-title">Daily Spending Planner</h2></div>
       <div id="daily-planner"></div>
     </div>
 
     <!-- SAVINGS GOALS -->
     <div class="card">
-      <div class="card-hd"><div class="card-title">Add Savings Goal</div></div>
+      <div class="card-hd"><h2 class="card-title">Add Savings Goal</h2></div>
       <div class="form-row">
         <div class="form-group"><label>Goal Name</label><input type="text" id="goal-name" placeholder="e.g. New Laptop, Emergency Fund..."></div>
         <div class="form-group"><label>Target Amount (<span class="cur-sym">₱</span>)</label><input type="number" id="goal-target" placeholder="0.00" min="0" step="0.01"></div>
@@ -2308,7 +2399,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
       <div class="set-panel" data-panel="auto">
     <!-- RECURRING EXPENSES MANAGER -->
     <div class="card" style="margin-bottom:14px">
-      <div class="card-hd"><div class="card-title">↺ Recurring Expenses</div></div>
+      <div class="card-hd"><h2 class="card-title">↺ Recurring Expenses</h2></div>
       <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Expenses marked as recurring. Tap <strong>Log Now</strong> to re-log one for this month.</div>
       <div id="recurring-list"></div>
     </div>
@@ -2381,7 +2472,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
     <!-- RECOVERY QUESTION UPDATE MODAL -->
     <div id="secq-update-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:3000;align-items:safe center;justify-content:safe center;padding:20px;overflow-y:auto">
       <div style="background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:24px 22px;max-width:380px;width:100%;box-shadow:var(--shadow-lg)">
-        <div class="card-title" style="margin-bottom:14px">Recovery Question</div>
+        <h2 class="card-title" style="margin-bottom:14px">Recovery Question</h2>
         <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Used only if you forget your PIN. Your answer is stored as a one-way hash, not as plain text.</div>
         <div style="text-align:left;width:100%;margin-bottom:14px">
           <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:500;display:block;margin-bottom:6px">Choose a Question</label>
@@ -2416,7 +2507,7 @@ html body.finled #month-snapshot>div:first-child>div:first-child{white-space:now
   <div id="export" class="section">
     <button type="button" class="btn btn-ghost btn-sm" onclick="show('settings')" style="margin-bottom:12px">&#8249; Settings</button>
     <div class="page-hd">
-      <div class="page-title">Export & Backup</div>
+      <h1 class="page-title">Export & Backup</h1>
       <div class="page-sub">Download your data as a formal report, CSV, or full backup</div>
     </div>
     <div class="two-col">
@@ -3550,7 +3641,7 @@ function renderDash(){
     const cls=pct>=100?'over':pct>=75?'warn':'safe';
     const clsColor=pct>=100?'var(--red)':pct>=75?'var(--amber)':'var(--accent)';
     budgetEl.innerHTML=`<div class="card" style="margin-bottom:14px">
-      <div class="card-hd"><div class="card-title">Monthly Budget · ${curMonthName}</div><span style="font-size:12px;color:${clsColor};font-weight:700">${pct}% used</span></div>
+      <div class="card-hd"><h2 class="card-title">Monthly Budget · ${curMonthName}</h2><span style="font-size:12px;color:${clsColor};font-weight:700">${pct}% used</span></div>
       <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:10px">
         <span style="font-family:var(--font-d);font-size:24px;font-weight:700;color:${clsColor}">${fmt(curExp)}</span>
         <span style="font-size:13px;color:var(--muted)">of ${fmt(state.budgetLimit)}</span>
@@ -7232,7 +7323,7 @@ window.logRecurring = function(templateId){
 <!-- EDIT LOAN MODAL -->
 <div id="edit-loan-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:3000;align-items:safe center;justify-content:safe center;padding:20px;overflow-y:auto">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:24px 22px;max-width:360px;width:100%;box-shadow:var(--shadow-lg)">
-    <div class="card-title" style="margin-bottom:16px">Edit Loan</div>
+    <h2 class="card-title" style="margin-bottom:16px">Edit Loan</h2>
     <input type="hidden" id="edit-loan-id">
     <div class="form-row">
       <div class="form-group"><label>Person</label><input type="text" id="edit-loan-name" placeholder="Name"></div>
@@ -7259,7 +7350,7 @@ window.logRecurring = function(templateId){
 <!-- SETTLE LOAN MODAL -->
 <div id="settle-loan-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:3000;align-items:safe center;justify-content:safe center;padding:20px;overflow-y:auto">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:24px 22px;max-width:360px;width:100%;box-shadow:var(--shadow-lg)">
-    <div class="card-title" style="margin-bottom:6px">Settle Loan</div>
+    <h2 class="card-title" style="margin-bottom:6px">Settle Loan</h2>
     <div id="settle-loan-label" style="font-size:13px;color:var(--muted);margin-bottom:16px"></div>
     <input type="hidden" id="settle-loan-id">
     <div class="form-group"><label>Wallet</label><select id="settle-loan-wallet"></select></div>
@@ -7277,7 +7368,7 @@ window.logRecurring = function(templateId){
 <!-- EDIT INCOME MODAL -->
 <div id="edit-income-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:3000;align-items:safe center;justify-content:safe center;padding:20px;overflow-y:auto">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:24px 22px;max-width:380px;width:100%;box-shadow:var(--shadow-lg)">
-    <div class="card-title" style="margin-bottom:16px">Edit Income Entry</div>
+    <h2 class="card-title" style="margin-bottom:16px">Edit Income Entry</h2>
     <input type="hidden" id="edit-inc-id">
     <div class="form-row">
       <div class="form-group"><label>Month</label>
@@ -7305,7 +7396,7 @@ window.logRecurring = function(templateId){
 <!-- EDIT EXPENSE MODAL -->
 <div id="edit-expense-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:3000;align-items:safe center;justify-content:safe center;padding:20px;overflow-y:auto">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:24px 22px;max-width:380px;width:100%;box-shadow:var(--shadow-lg)">
-    <div class="card-title" style="margin-bottom:16px">Edit Expense</div>
+    <h2 class="card-title" style="margin-bottom:16px">Edit Expense</h2>
     <input type="hidden" id="edit-exp-id">
     <div class="form-row">
       <div class="form-group"><label>Description</label><input type="text" id="edit-exp-desc" placeholder="Description"></div>
@@ -7332,7 +7423,7 @@ window.logRecurring = function(templateId){
 <!-- EDIT GOAL MODAL -->
 <div id="edit-goal-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:3000;align-items:safe center;justify-content:safe center;padding:20px;overflow-y:auto">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:24px 22px;max-width:360px;width:100%;box-shadow:var(--shadow-lg)">
-    <div class="card-title" style="margin-bottom:16px">Edit Goal</div>
+    <h2 class="card-title" style="margin-bottom:16px">Edit Goal</h2>
     <input type="hidden" id="edit-goal-id">
     <div class="form-group"><label>Goal Name</label><input type="text" id="edit-goal-name" placeholder="Goal name"></div>
     <div class="form-row">
@@ -7351,7 +7442,7 @@ window.logRecurring = function(templateId){
 <div id="stats-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:3000;align-items:safe center;justify-content:safe center;padding:20px;overflow-y:auto" onclick="if(event.target===this)closeStatsModal()">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:24px 22px 22px;max-width:440px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg)">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <div class="card-title" id="sbm-title" style="margin-bottom:0">Breakdown</div>
+      <h2 class="card-title" id="sbm-title" style="margin-bottom:0">Breakdown</h2>
       <span style="cursor:pointer;color:var(--muted);font-size:20px;line-height:1;padding:2px 4px" onclick="closeStatsModal()">×</span>
     </div>
     <div id="sbm-body"></div>
@@ -7553,7 +7644,7 @@ function openQuick(){let q=document.getElementById('fa-quick');
     q.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:3000;display:none;align-items:safe center;justify-content:safe center;padding:20px;overflow-y:auto';
     const cats=[...document.getElementById('exp-cat').options].filter(o=>o.value!=='loan-payment').map(o=>'<option value="'+o.value+'">'+o.textContent+'</option>').join('');
     q.innerHTML='<div style="background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:22px;max-width:380px;width:100%;box-shadow:var(--shadow-lg)">'
-      +'<div class="card-title" style="margin-bottom:10px">⚡ Quick Log Expense</div><div id="fa-qchips" class="fa-chips"></div>'
+      +'<h2 class="card-title" style="margin-bottom:10px">⚡ Quick Log Expense</h2><div id="fa-qchips" class="fa-chips"></div>'
       +'<input type="text" id="fa-q-text" autocomplete="off" placeholder="burger 600 gcash" style="width:100%;font-size:16px;padding:12px 14px">'
       +'<div style="font-size:11px;color:var(--muted2);margin:6px 2px 0">Just type it like a text: “taxi 500 cash on hand”, “rode a taxi worth 500 using my gcash”, “milk tea 120 kahapon”.</div>'
       +'<div id="fa-q-prev" style="margin:12px 2px;font-size:13px;min-height:20px;color:var(--muted)"></div>'
@@ -7720,7 +7811,7 @@ function card(){const host=document.getElementById('recurring-list');if(!host)re
   if(!c){c=document.createElement('div');c.id='fa-card';c.className='card';c.style.marginBottom='14px';anchor.parentNode.insertBefore(c,anchor);}
   const a=cfg(),cur=new Date();
   const tpls=[...new Map(state.expenses.filter(e=>e.recurring).map(e=>[e.desc,e])).values()];
-  let h='<div class="card-hd"><div class="card-title">⚙️ Automation</div></div>'
+  let h='<div class="card-hd"><h2 class="card-title">⚙️ Automation</h2></div>'
    +'<label class="fa-row"><span class="fa-n">Auto-log recurring items, auto-save to goals &amp; gentle reminders<small>Everything shows a snackbar with Undo.</small></span><input type="checkbox" '+(a.on?'checked':'')+' onchange="FA.master(this)"></label>'
    +'<div class="fa-h">Recurring expenses</div>'
    +(tpls.length?tpls.map(e=>{const it=a.exp[e.desc]||{},day=it.day||(ldate(e.date).getDate()||1);
@@ -7929,6 +8020,14 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMoreSh
   function go(){wire();mark();new MutationObserver(function(){wire();mark()}).observe(document.body,{subtree:true,attributes:true,attributeFilter:['class'],childList:true})}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 })();
+</script>
+<script>
+(function(){var L=[1,1.12,1.25,1.4],i=0,K='finled-text-size';
+try{i=Math.min(3,Math.max(0,+localStorage.getItem(K)||0))}catch(e){}
+function ap(){document.body.style.zoom=L[i]}
+function st(d){i=Math.min(3,Math.max(0,i+d));ap();try{localStorage.setItem(K,i)}catch(e){}}
+document.addEventListener('DOMContentLoaded',function(){ap();var u=document.getElementById('tsz-up'),d=document.getElementById('tsz-dn');
+if(u)u.onclick=function(){st(1)};if(d)d.onclick=function(){st(-1)}});})();
 </script>
 </body>
 </html>
