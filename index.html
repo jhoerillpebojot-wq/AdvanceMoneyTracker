@@ -1572,7 +1572,7 @@ html body.finled [data-tour$="-form"] .form-row{display:grid!important;grid-temp
 #fl-today{display:grid;gap:18px;grid-template-columns:1fr 1fr;margin-bottom:6px}
 #fl-today .fl-card{margin:0}#fl-today .fl-tools{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
 .fl-tools button,.fl-btn{min-height:44px;padding:0 16px;border:1px solid var(--border2);background:transparent;color:var(--text);border-radius:3px;font:500 14px var(--font-b);cursor:pointer}
-.fl-btn.main{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+.fl-btn.fl-pri{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
 .fl-big{font:500 30px 'IBM Plex Mono',monospace;margin:4px 0}
 .fl-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 #fl-ov{position:fixed;inset:0;background:rgba(2,6,18,.7);z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
@@ -1583,6 +1583,17 @@ html body.finled [data-tour$="-form"] .form-row{display:grid!important;grid-temp
 .fl-tbl{width:100%;border-collapse:collapse;margin-top:10px;font-size:14.5px}.fl-tbl td,.fl-tbl th{padding:8px 6px;border-bottom:1px solid var(--border);text-align:right}.fl-tbl td:first-child,.fl-tbl th:first-child{text-align:left}
 @media(max-width:900px){#fl-today{grid-template-columns:1fr;order:2}.fl-plans{grid-template-columns:1fr}}
 @media(min-width:901px){html body.finled #dashboard>#fl-today{grid-column:1/-1;grid-row:4}html body.finled #dashboard>#dash-stats{grid-row:5!important}html body.finled #dashboard>.two-col{grid-row:6!important}html body.finled #dashboard>.card{grid-row:7/span 2!important}html body.finled #dashboard>#budget-goal-card{grid-row:7!important}html body.finled #dashboard>#dash-learn{grid-row:8!important}html body.finled #dashboard>#fl-insights{grid-row:9!important}}
+</style>
+<style id="finled-fixes">
+@media(max-width:900px){html body.finled #dashboard>#fl-today{order:2}html body.finled #dashboard>#fl-insights{order:9}}
+#fl-today .fl-tools{margin-bottom:6px}#fl-today{margin-bottom:18px}
+.fl-btn,.fl-tools button,.fl-chips button,.qa button{display:inline-flex;align-items:center;justify-content:center;line-height:1.25;height:auto;box-sizing:border-box;text-align:center}
+.fl-row{align-items:center}
+.fl-btn,.fl-tools button{min-height:44px}
+html body.finled.light .hero-card,html body.finled.light .hero-card:hover{background:transparent!important;border:0!important;border-top:2px solid var(--text)!important;box-shadow:none!important;border-radius:0!important}
+html body.finled.light .hero-card .hero-label,html body.finled.light .hero-card .hero-sub,html body.finled.light .hero-card .hw-name{color:var(--muted)!important}
+html body.finled.light .hero-card .hero-amount{color:var(--text)!important}
+html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!important;border:1px solid var(--border)!important;border-radius:2px!important}
 </style>
 </head>
 <body class="finled">
@@ -8110,7 +8121,7 @@ window.flRemind=function(key,box){var o=cfgR();
  if(box.checked&&window.Notification&&Notification.permission==='default'){Notification.requestPermission().then(function(p){if(p!=='granted'){box.checked=false;o[key]=false}else o[key]=true;saveR(o);draw()});return}
  if(box.checked&&(!window.Notification||Notification.permission==='denied')){box.checked=false;o[key]=false;saveR(o);toast('Notifications are blocked in your browser settings','error');return}
  o[key]=box.checked;saveR(o)};
-function draw(){var el=document.getElementById('fl-insights');if(!el||!window.state)return;
+function draw(){var el=document.getElementById('fl-insights');if(!el||typeof state==='undefined')return;
  var c=calc(),I=insights(c);if(window.FLPlan&&!FLPlan.can('insights_full')&&I.length>2){I=I.slice(0,2);I.push({t:'More insights are available with FinLed Plus.',k:''})}var goals=(state.goals||[]).filter(function(g){return g.target>0}).sort(function(a,b){return b.saved/b.target-a.saved/a.target}).slice(0,3),T=templates(),o=cfgR();window._flT=T;
  var h='<h2 id="fl-ins-h">What your numbers say</h2><ul>'+I.map(function(x){return'<li class="'+x.k+'">'+esc(x.t)+'</li>'}).join('')+'</ul>';
  if(goals.length)h+='<h3>Savings goals</h3><div class="fl-bars">'+goals.map(function(g){var p=Math.min(100,Math.round(g.saved/g.target*100));
@@ -8121,7 +8132,7 @@ function draw(){var el=document.getElementById('fl-insights');if(!el||!window.st
   +'<p class="note">\ud83d\udd12 Your records are protected by your PIN or biometric lock. You can set it up in Settings.</p>';
  el.innerHTML=h}
 function notify(t,b){try{if(window.Notification&&Notification.permission==='granted')new Notification(t,{body:b,icon:'Photos/icon-192.png'})}catch(e){}}
-function check(){if(!window.state)return;var o=cfgR(),day=today(),last={};try{last=JSON.parse(localStorage.getItem(K+'-last'))||{}}catch(e){}
+function check(){if(typeof state==='undefined')return;var o=cfgR(),day=today(),last={};try{last=JSON.parse(localStorage.getItem(K+'-last'))||{}}catch(e){}
  function once(k,f){if(o[k]&&last[k]!==day&&f()){last[k]=day}}
  once('budget',function(){var c=calc();if(state.budgetLimit>0&&c.spent>=state.budgetLimit*.8){notify('Budget check','You have used '+Math.round(c.spent/state.budgetLimit*100)+'% of this month\u2019s budget.');return 1}});
  once('loans',function(){var t=new Date(day),x=(state.loans||[]).filter(function(l){return l.type==='payable'&&!l.settled&&l.due&&(new Date(l.due)-t)/864e5<=3})[0];if(x){notify('Loan due soon',x.name+' is due '+x.due+'.');return 1}});
@@ -8139,7 +8150,7 @@ function ls(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){retu
 /* ---------- modal ---------- */
 function modal(h){close();var o=document.createElement('div');o.id='fl-ov';o.innerHTML='<div id="fl-md" role="dialog" aria-modal="true">'+h+'</div>';
  o.addEventListener('click',function(e){if(e.target===o)close()});document.body.appendChild(o);document.addEventListener('keydown',esc2);
- var f=o.querySelector('input,textarea,select,button');if(f)f.focus();return o}
+ var f=o.querySelector('input,textarea,select,button');if(f)f.focus({preventScroll:true});return o}
 function esc2(e){if(e.key==='Escape')close()}
 function close(){var o=document.getElementById('fl-ov');if(o)o.remove();document.removeEventListener('keydown',esc2)}
 /* ---------- plan / entitlement (UI gate only; real enforcement needs the backend) ---------- */
@@ -8151,11 +8162,11 @@ var provider={get:function(){var p=ls('finled-plan',{plan:'free'});if(p.trialEnd
  checkout:function(){return Promise.reject(new Error('not-connected'))}};
 var FLPlan={provider:provider,tier:function(){return provider.get()},can:function(f){return RANK[provider.get()]>=RANK[NEED[f]||'free']},
  gate:function(f,fn){if(FLPlan.can(f))return fn();FLPlan.upsell(f)},
- upsell:function(f){var w=WHY[f],t=TIERS[w[2]];modal('<h2>'+w[0]+'</h2><p>'+w[1]+'</p><p><b>Unlock with '+t.name+' \u2014 \u20b1'+t.price+'/month</b></p><div class="fl-row"><button class="fl-btn main" id="fl-up">Upgrade to '+w[2].replace('p','P')+'</button><button class="fl-btn" id="fl-later">Maybe later</button></div><p class="m">The free version keeps working fully.</p>');
+ upsell:function(f){var w=WHY[f],t=TIERS[w[2]];modal('<h2>'+w[0]+'</h2><p>'+w[1]+'</p><p><b>Unlock with '+t.name+' \u2014 \u20b1'+t.price+'/month</b></p><div class="fl-row"><button class="fl-btn fl-pri" id="fl-up">Upgrade to '+w[2].replace('p','P')+'</button><button class="fl-btn" id="fl-later">Maybe later</button></div><p class="m">The free version keeps working fully.</p>');
   document.getElementById('fl-up').onclick=function(){FLPlan.checkout(w[2])};document.getElementById('fl-later').onclick=close},
  checkout:function(t){provider.checkout(t).catch(function(){toast('Payments are not connected yet. Nothing was charged.','error')})},
  pricing:function(){var tr=provider.trialUsed();modal('<h2>Plans</h2><p class="m">Basic tracking stays free. Plans add automation and analysis.</p><div class="fl-plans">'+['plus','pro'].map(function(k){var t=TIERS[k];return'<div class="fl-plan"><b>'+t.name+'</b><div>\u20b1'+t.price+'/month</div><ul>'+t.list.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul><button class="fl-btn" onclick="FLPlan.checkout(\''+k+'\')">Choose '+k.replace('p','P')+'</button></div>'}).join('')+'</div>'
-  +(tr?'':'<div class="fl-row"><button class="fl-btn main" id="fl-tr">Try Pro free for 14 days (no card)</button></div>')+'<div class="fl-row"><button class="fl-btn" id="fl-x">Close</button></div><p class="m">Payments are not connected yet. Current plan: '+provider.get()+'.</p>');
+  +(tr?'':'<div class="fl-row"><button class="fl-btn fl-pri" id="fl-tr">Try Pro free for 14 days (no card)</button></div>')+'<div class="fl-row"><button class="fl-btn" id="fl-x">Close</button></div><p class="m">Payments are not connected yet. Current plan: '+provider.get()+'.</p>');
   var b=document.getElementById('fl-tr');if(b)b.onclick=function(){provider.startTrial();close();toast('14-day Pro trial started');render()};document.getElementById('fl-x').onclick=close}};
 window.FLPlan=FLPlan;
 /* ---------- helpers ---------- */
@@ -8168,11 +8179,11 @@ function nextPay(){var c=ls('finled-pay',null);if(!c)return null;var n=new Date(
  else{var dd=Math.min(+c.day||1,dim);r=dd>d?new Date(y,m,dd):new Date(y,m+1,Math.min(+c.day||1,new Date(y,m+2,0).getDate()))}
  return{date:r,days:Math.max(1,Math.round((r-t0)/864e5))}}
 /* ---------- check-in + payday card ---------- */
-function drawToday(){var a=document.getElementById('fl-checkin'),b=document.getElementById('fl-payday');if(!a||!window.state)return;
+function drawToday(){var a=document.getElementById('fl-checkin'),b=document.getElementById('fl-payday');if(!a||typeof state==='undefined')return;
  var t=today(),ns=ls('finled-nospend',[]),has=(state.expenses||[]).some(function(e){return e.date===t})||(state.income||[]).some(function(i){return i.dateAdded===t})||ns.indexOf(t)>-1;
- a.innerHTML='<h2>Today</h2>'+(has?'<p>You are logged for today. Nice.</p><div class="fl-row"><button class="fl-btn" onclick="FLX.recap()">Share my week</button></div>':'<p class="fl-big" style="font-size:20px">Spent anything today?</p><div class="fl-row"><button class="fl-btn" onclick="FLX.nospend()">Nothing today</button><button class="fl-btn main" onclick="show(\'expenses\')">Add an expense</button></div>');
+ a.innerHTML='<h2>Today</h2>'+(has?'<p>You are logged for today. Nice.</p><div class="fl-row"><button class="fl-btn" onclick="FLX.recap()">Share my week</button></div>':'<p class="fl-big" style="font-size:20px">Spent anything today?</p><div class="fl-row"><button class="fl-btn" onclick="FLX.nospend()">Nothing today</button><button class="fl-btn fl-pri" onclick="show(\'expenses\')">Add an expense</button></div>');
  var np=nextPay();
- if(!np){b.innerHTML='<h2>Until payday</h2><p>Tell FinLed your payday and it will show how much you can safely spend each day.</p><div class="fl-row"><button class="fl-btn main" onclick="FLX.setup()">Set my payday</button></div>';return}
+ if(!np){b.innerHTML='<h2>Until payday</h2><p>Tell FinLed your payday and it will show how much you can safely spend each day.</p><div class="fl-row"><button class="fl-btn fl-pri" onclick="FLX.setup()">Set my payday</button></div>';return}
  var cash=wallets().reduce(function(x,w){return x+(+w.balance||0)},0),due=(state.loans||[]).filter(function(l){return l.type==='payable'&&!l.settled&&l.due&&new Date(l.due)<=np.date}).reduce(function(x,l){return x+(+l.amount||0)},0),money=cash-due,safe=money/np.days;
  var cut=Date.now()-14*864e5,ex=(state.expenses||[]).filter(function(e){var d=ldate(e.date);return !isNaN(d)&&d>=cut}),avg=ex.reduce(function(x,e){return x+e.amount},0)/14,msg='';
  if(ex.length>=3){var run=avg>0?money/avg:999;msg=run>=np.days?'At your recent pace (about '+fmt(avg)+' a day) your money lasts until payday.':'At your recent pace you may run out in about '+Math.floor(run)+' days, before payday.'}
@@ -8180,13 +8191,13 @@ function drawToday(){var a=document.getElementById('fl-checkin'),b=document.getE
 /* ---------- FLX actions ---------- */
 var FLX={
  nospend:function(){var a=ls('finled-nospend',[]);a.push(today());lw('finled-nospend',a.slice(-120));toast('Logged a no-spend day');drawToday();if(window.render)render()},
- setup:function(){var c=ls('finled-pay',{mode:'semi',day:1});modal('<h2>Set up in a minute</h2><p class="m">This sets your payday and a starter budget. You can change both later.</p><label for="fo-a">Allowance or salary per payday (\u20b1)</label><input id="fo-a" type="number" inputmode="decimal" min="0"><label for="fo-m">How often are you paid?</label><select id="fo-m"><option value="semi">Twice a month (15th and 30th)</option><option value="monthly">Once a month</option><option value="weekly">Weekly allowance</option></select><label for="fo-d" id="fo-dl">Day</label><input id="fo-d" type="number" min="0" max="31"><div class="fl-row"><button class="fl-btn main" id="fo-s">Save</button><button class="fl-btn" id="fo-c">Not now</button></div>');
+ setup:function(){var c=ls('finled-pay',{mode:'semi',day:1});modal('<h2>Set up in a minute</h2><p class="m">This sets your payday and a starter budget. You can change both later.</p><label for="fo-a">Allowance or salary per payday (\u20b1)</label><input id="fo-a" type="number" inputmode="decimal" min="0"><label for="fo-m">How often are you paid?</label><select id="fo-m"><option value="semi">Twice a month (15th and 30th)</option><option value="monthly">Once a month</option><option value="weekly">Weekly allowance</option></select><label for="fo-d" id="fo-dl">Day</label><input id="fo-d" type="number" min="0" max="31"><div class="fl-row"><button class="fl-btn fl-pri" id="fo-s">Save</button><button class="fl-btn" id="fo-c">Not now</button></div>');
   var m=document.getElementById('fo-m'),d=document.getElementById('fo-d'),dl=document.getElementById('fo-dl');m.value=c.mode;d.value=c.day;
   function sync(){var w=m.value==='weekly',h=m.value==='semi';d.style.display=h?'none':'';dl.style.display=h?'none':'';dl.textContent=w?'Payday weekday (0 = Sunday, 6 = Saturday)':'Day of the month';if(w&&+d.value>6)d.value=1}m.onchange=sync;sync();
   document.getElementById('fo-c').onclick=function(){lw('finled-onb',1);close()};
   document.getElementById('fo-s').onclick=function(){var a=parseFloat(document.getElementById('fo-a').value)||0;lw('finled-pay',{mode:m.value,day:+d.value||1});lw('finled-onb',1);
    if(a>0&&!(state.budgetLimit>0)){state.budgetLimit=Math.round(a*(m.value==='weekly'?4.33:m.value==='semi'?2:1)*.8);save()}close();render();toast('Saved. Starter budget uses 80% of your monthly income.')}},
- paste:function(pre){modal('<h2>Paste a message</h2><p class="m">Paste a GCash, Maya or bank text. FinLed fills in the form and you review it before saving.</p><label for="fp-t">Message</label><textarea id="fp-t" rows="5"></textarea><div class="fl-row"><button class="fl-btn main" id="fp-g">Fill the form</button><button class="fl-btn" id="fp-c">Cancel</button></div>');
+ paste:function(pre){modal('<h2>Paste a message</h2><p class="m">Paste a GCash, Maya or bank text. FinLed fills in the form and you review it before saving.</p><label for="fp-t">Message</label><textarea id="fp-t" rows="5"></textarea><div class="fl-row"><button class="fl-btn fl-pri" id="fp-g">Fill the form</button><button class="fl-btn" id="fp-c">Cancel</button></div>');
   var t=document.getElementById('fp-t');if(pre)t.value=pre;document.getElementById('fp-c').onclick=close;
   document.getElementById('fp-g').onclick=function(){var x=t.value.replace(/,/g,''),m=x.match(/(?:php|\u20b1)\s?(\d+(?:\.\d+)?)/i)||x.match(/\bP\s?(\d+(?:\.\d+)?)/)||x.match(/(\d+(?:\.\d+)?)\s?(?:php|pesos)/i);
    if(!m){toast('Could not find an amount','error');return}var amt=+m[1],inc=/received|credited|cash.?in|deposit|salary|refund/i.test(x),mer=(x.match(/(?:\bto|\bat|\bpaid|\bfrom)\s+([A-Z][\w&'.\- ]{2,28}?)(?=\s+(?:on|with|via|ref|for)\b|[.,\n]|$)/)||[])[1]||'';
@@ -8197,7 +8208,7 @@ var FLX={
     var K=[['food',/jollibee|mcdo|kfc|foodpanda|grabfood|coffee|cafe|7.?eleven|mang inasal|chowking|bakery/i],['transport',/grab|angkas|beep|lrt|mrt|jeep|move it|ride/i],['bill',/meralco|pldt|globe|smart|converge|water|dito/i],['shop',/shopee|lazada|sm |mall|zalora/i]];
     K.forEach(function(k){if(k[1].test(x))setSel('exp-cat',function(o){return new RegExp(k[0],'i').test(o.value+' '+o.textContent)})});document.getElementById('exp-amount').focus()}
    toast('Check the details, then save')}},
- split:function(){modal('<h2>Split a bill</h2><label for="fs-t">Total bill (\u20b1)</label><input id="fs-t" type="number" inputmode="decimal"><label for="fs-n">Number of people (including you)</label><input id="fs-n" type="number" min="2" value="2"><p class="fl-big" id="fs-o"></p><div class="fl-row"><button class="fl-btn main" id="fs-c">Copy message for friends</button><button class="fl-btn" id="fs-x">Close</button></div>');
+ split:function(){modal('<h2>Split a bill</h2><label for="fs-t">Total bill (\u20b1)</label><input id="fs-t" type="number" inputmode="decimal"><label for="fs-n">Number of people (including you)</label><input id="fs-n" type="number" min="2" value="2"><p class="fl-big" id="fs-o"></p><div class="fl-row"><button class="fl-btn fl-pri" id="fs-c">Copy message for friends</button><button class="fl-btn" id="fs-x">Close</button></div>');
   var T=document.getElementById('fs-t'),N=document.getElementById('fs-n'),O=document.getElementById('fs-o');function u(){var v=(+T.value||0)/(Math.max(2,+N.value||2));O.textContent=v?fmt(v)+' each':''}T.oninput=N.oninput=u;
   document.getElementById('fs-x').onclick=close;document.getElementById('fs-c').onclick=function(){var v=(+T.value||0)/Math.max(2,+N.value||2);if(!v)return;var s='Hi! Our bill is '+fmt(+T.value)+'. Your share is '+fmt(v)+'. Thanks!';(navigator.clipboard?navigator.clipboard.writeText(s):Promise.reject()).then(function(){toast('Message copied')}).catch(function(){toast(s)})}},
  recap:function(){var n=Date.now(),wk=function(a,b){return (state.expenses||[]).filter(function(e){var d=ldate(e.date);return !isNaN(d)&&d>=n-b*864e5&&d<n-a*864e5}).reduce(function(x,e){return x+e.amount},0)},days={};(state.expenses||[]).forEach(function(e){var d=ldate(e.date);if(!isNaN(d)&&d>=n-7*864e5)days[e.date]=1});
@@ -8235,10 +8246,10 @@ var T=[['Pay-yourself-first rules','Automatically move a percentage of every inc
 ['Subscription finder','Finds charges that repeat every month.','Plus',1],
 ['Compare months','Side-by-side income, expenses, savings and categories.','Pro',1]];
 FLX.tools=function(){var o=document.createElement('div');
- var h='<h2>Premium tools</h2><p class="m">Plans add automation and analysis. Basic tracking stays free.</p><table class="fl-tbl">'+T.map(function(t){return'<tr><td><b>'+t[0]+'</b><br><span class="m">'+t[1]+'</span></td><td>'+t[2]+'</td><td>'+(t[3]?'Available':'Coming soon')+'</td></tr>'}).join('')+'</table><div class="fl-row"><button class="fl-btn main" id="ft-p">See plans</button><button class="fl-btn" id="ft-x">Close</button></div>';
+ var h='<h2>Premium tools</h2><p class="m">Plans add automation and analysis. Basic tracking stays free.</p><table class="fl-tbl">'+T.map(function(t){return'<tr><td><b>'+t[0]+'</b><br><span class="m">'+t[1]+'</span></td><td>'+t[2]+'</td><td>'+(t[3]?'Available':'Coming soon')+'</td></tr>'}).join('')+'</table><div class="fl-row"><button class="fl-btn fl-pri" id="ft-p">See plans</button><button class="fl-btn" id="ft-x">Close</button></div>';
  var ov=document.getElementById('fl-ov');if(ov)ov.remove();ov=document.createElement('div');ov.id='fl-ov';ov.innerHTML='<div id="fl-md" role="dialog" aria-modal="true">'+h+'</div>';
  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove()});document.body.appendChild(ov);
- document.getElementById('ft-x').onclick=function(){ov.remove()};document.getElementById('ft-p').onclick=function(){ov.remove();FLPlan.pricing()};document.getElementById('ft-x').focus()};
+ document.getElementById('ft-x').onclick=function(){ov.remove()};document.getElementById('ft-p').onclick=function(){ov.remove();FLPlan.pricing()};document.getElementById('ft-x').focus({preventScroll:true})};
 })();
 </script>
 </body>
