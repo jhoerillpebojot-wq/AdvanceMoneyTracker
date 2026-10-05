@@ -1550,6 +1550,40 @@ html body.finled #goals>#daily-planner-card{position:static}
 html body.finled [data-tour$="-form"] .form-row{display:grid!important;grid-template-columns:1fr!important}
 }
 </style>
+<style id="finled-insights">
+.fl-card{background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--accent);border-radius:2px;padding:20px 22px;margin-bottom:18px}
+.fl-card h2{margin:0 0 12px;font:600 11.5px var(--font-b);text-transform:uppercase;letter-spacing:.1em}
+.fl-card ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.fl-card li{font-size:15.5px;line-height:1.5;padding-left:14px;border-left:3px solid var(--border2)}
+.fl-card li.good{border-color:var(--accent)}.fl-card li.watch{border-color:var(--amber)}
+.fl-card h3{margin:20px 0 8px;font:600 13px var(--font-b);color:var(--muted)}
+.fl-bars{display:grid;gap:12px}
+.fl-bar b{font-weight:600}.fl-bar .t{height:10px;background:var(--surface3);border-radius:2px;overflow:hidden;margin-top:5px}.fl-bar .t i{display:block;height:100%;background:var(--accent)}
+.fl-chips{display:flex;flex-wrap:wrap;gap:8px}
+.fl-chips button{min-height:44px;padding:0 14px;border:1px solid var(--border2);background:transparent;color:var(--text);border-radius:3px;font:500 14px var(--font-b);cursor:pointer}
+.fl-chips button:hover{border-color:var(--accent);background:var(--accent-bg)}
+.fl-card details{margin-top:18px;border-top:1px solid var(--border);padding-top:12px}
+.fl-card summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
+.fl-card label{display:flex;gap:10px;align-items:center;min-height:44px;font-size:15px}
+.fl-card .note{font-size:13.5px;color:var(--muted);margin:8px 0 0}
+@media(min-width:901px){html body.finled #dashboard>#fl-insights{grid-column:1/-1;grid-row:8}}
+</style>
+<style id="finled-today">
+#fl-today{display:grid;gap:18px;grid-template-columns:1fr 1fr;margin-bottom:6px}
+#fl-today .fl-card{margin:0}#fl-today .fl-tools{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
+.fl-tools button,.fl-btn{min-height:44px;padding:0 16px;border:1px solid var(--border2);background:transparent;color:var(--text);border-radius:3px;font:500 14px var(--font-b);cursor:pointer}
+.fl-btn.main{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+.fl-big{font:500 30px 'IBM Plex Mono',monospace;margin:4px 0}
+.fl-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#fl-ov{position:fixed;inset:0;background:rgba(2,6,18,.7);z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+#fl-md{background:var(--surface);color:var(--text);border:1px solid var(--border2);border-top:2px solid var(--accent);border-radius:2px;max-width:560px;width:100%;padding:24px;max-height:92vh;overflow-y:auto}
+#fl-md h2{margin:0 0 6px;font:600 20px var(--font-b)}#fl-md p{margin:6px 0;line-height:1.55}#fl-md .m{color:var(--muted);font-size:14px}
+#fl-md label{display:block;margin:12px 0 4px;font-weight:600;font-size:14px}#fl-md textarea,#fl-md input,#fl-md select{width:100%;box-sizing:border-box;padding:10px;background:var(--surface2);color:var(--text);border:1px solid var(--border2);border-radius:3px;font:16px var(--font-b)}
+.fl-plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.fl-plan{border:1px solid var(--border2);padding:14px;border-radius:2px}.fl-plan b{font-size:18px}.fl-plan ul{margin:8px 0;padding-left:18px;font-size:14px;line-height:1.6}
+.fl-tbl{width:100%;border-collapse:collapse;margin-top:10px;font-size:14.5px}.fl-tbl td,.fl-tbl th{padding:8px 6px;border-bottom:1px solid var(--border);text-align:right}.fl-tbl td:first-child,.fl-tbl th:first-child{text-align:left}
+@media(max-width:900px){#fl-today{grid-template-columns:1fr;order:2}.fl-plans{grid-template-columns:1fr}}
+@media(min-width:901px){html body.finled #dashboard>#fl-today{grid-column:1/-1;grid-row:4}html body.finled #dashboard>#dash-stats{grid-row:5!important}html body.finled #dashboard>.two-col{grid-row:6!important}html body.finled #dashboard>.card{grid-row:7/span 2!important}html body.finled #dashboard>#budget-goal-card{grid-row:7!important}html body.finled #dashboard>#dash-learn{grid-row:8!important}html body.finled #dashboard>#fl-insights{grid-row:9!important}}
+</style>
 </head>
 <body class="finled">
 <script>(function(){var t=null;try{t=localStorage.getItem('mtTheme')}catch(e){}var l=t?t==='light':!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);document.body.className='finled'+(l?' light':'')})();</script>
@@ -1999,7 +2033,8 @@ html body.finled [data-tour$="-form"] .form-row{display:grid!important;grid-temp
       <div class="hero-wallets" id="hero-wallets-inner"></div>
     </div>
 
-    <nav class="qa" aria-label="Quick actions"><button type="button" class="qa-main" onclick="show('expenses')">Add an expense</button><button type="button" onclick="show('income')">Add income</button><button type="button" onclick="show('goals')">Set a goal</button><button type="button" onclick="show('loans')">Review loans</button></nav>
+    <nav class="qa" aria-label="Quick actions"><button type="button" class="qa-main" onclick="show('expenses')">Add an expense</button><button type="button" onclick="show('income')">Add income</button><button type="button" onclick="show('goals')">Set a goal</button><button type="button" onclick="show('loans')">Review loans</button><button type="button" onclick="FLX.paste()">Paste a message</button><button type="button" onclick="FLX.split()">Split a bill</button></nav>
+<div id="fl-today"><section id="fl-checkin" class="fl-card" aria-label="Daily check-in"></section><section id="fl-payday" class="fl-card" aria-label="Until payday"></section><div class="fl-tools"><button type="button" onclick="FLX.subs()">Find subscriptions</button><button type="button" onclick="FLX.compare()">Compare months</button><button type="button" onclick="FLX.tools()">Premium tools</button><button type="button" onclick="FLPlan.pricing()">Plans</button></div></div>
         <!-- STAT GRID -->
     <div class="stat-grid" id="dash-stats"></div>
 
@@ -2008,6 +2043,7 @@ html body.finled [data-tour$="-form"] .form-row{display:grid!important;grid-temp
 
     <!-- LEARN -->
     <div id="dash-learn"></div>
+<section id="fl-insights" class="fl-card" aria-labelledby="fl-ins-h"></section>
 
     <!-- INCOME vs EXPENSE CHART -->
     <div class="card">
@@ -8028,6 +8064,182 @@ function ap(){document.body.style.zoom=L[i]}
 function st(d){i=Math.min(3,Math.max(0,i+d));ap();try{localStorage.setItem(K,i)}catch(e){}}
 document.addEventListener('DOMContentLoaded',function(){ap();var u=document.getElementById('tsz-up'),d=document.getElementById('tsz-dn');
 if(u)u.onclick=function(){st(1)};if(d)d.onclick=function(){st(-1)}});})();
+</script>
+<script>
+(function(){
+var K='finled-remind',MO=MONTH_ORDER;
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function cfgR(){try{return JSON.parse(localStorage.getItem(K))||{}}catch(e){return{}}}
+function saveR(o){try{localStorage.setItem(K,JSON.stringify(o))}catch(e){}}
+function catName(v){var o=document.querySelector('#exp-cat option[value="'+v+'"]');return o?o.textContent.replace(/^[^A-Za-z]+/,'').trim():v}
+function sumBy(list,f){return list.reduce(function(a,e){return a+(f(e)?e.amount:0)},0)}
+function calc(){
+ var n=new Date(),y=n.getFullYear(),m=n.getMonth(),d=n.getDate(),dim=new Date(y,m+1,0).getDate(),pm=new Date(y,m-1,1);
+ var ex=state.expenses||[];
+ function inM(e,yy,mm,maxd){var t=ldate(e.date);return !isNaN(t)&&t.getFullYear()===yy&&t.getMonth()===mm&&t.getDate()<=maxd}
+ var cur=ex.filter(function(e){return inM(e,y,m,31)}),prev=ex.filter(function(e){return inM(e,pm.getFullYear(),pm.getMonth(),d)});
+ return{n:n,y:y,m:m,d:d,dim:dim,cur:cur,prev:prev,spent:sumBy(cur,function(){return 1}),pspent:sumBy(prev,function(){return 1})};
+}
+function insights(c){
+ var L=[],cat={},pc={};
+ c.cur.forEach(function(e){cat[e.cat]=(cat[e.cat]||0)+e.amount});c.prev.forEach(function(e){pc[e.cat]=(pc[e.cat]||0)+e.amount});
+ if(!c.cur.length&&!c.prev.length)return[{t:'Add a few expenses and this page will start explaining your month in plain words.',k:''}];
+ if(c.pspent>0){var ch=Math.round((c.spent-c.pspent)/c.pspent*100);
+  L.push(ch<=0?{t:'Your spending is '+Math.abs(ch)+'% lower than the same days last month. Nice work.',k:'good'}:{t:'Your spending is '+ch+'% higher than the same days last month ('+fmt(c.spent-c.pspent)+' more).',k:'watch'});}
+ var top=Object.keys(cat).sort(function(a,b){return cat[b]-cat[a]})[0];
+ if(top&&c.spent>0)L.push({t:Math.round(cat[top]/c.spent*100)+'% of this month\u2019s spending went to '+catName(top)+' ('+fmt(cat[top])+').',k:''});
+ var inc=sumBy(state.income||[],function(i){return i.month===MO[c.m]&&i.year===c.y});
+ if(inc>0){var kept=Math.round((inc-c.spent)/inc*100);L.push(kept>=0?{t:'You have kept '+kept+'% of this month\u2019s income so far.',k:kept>=20?'good':''}:{t:'You have spent '+fmt(c.spent-inc)+' more than this month\u2019s recorded income.',k:'watch'});}
+ var lim=state.budgetLimit;if(lim>0&&c.d>=3){var proj=c.spent/c.d*c.dim;
+  L.push(proj>lim?{t:'At this pace you will pass your '+fmt(lim)+' budget by about '+fmt(proj-lim)+'. A little less each day keeps you inside it.',k:'watch'}:{t:'You are on pace to finish the month inside your budget.',k:'good'});}
+ var rise=Object.keys(cat).map(function(k){return[k,cat[k]-(pc[k]||0)]}).sort(function(a,b){return b[1]-a[1]})[0];
+ if(rise&&rise[1]>=200&&pc[rise[0]])L.push({t:'Tip: '+catName(rise[0])+' is up '+fmt(rise[1])+' from last month. Trimming it by 10% would save about '+fmt(cat[rise[0]]*.1)+'.',k:'watch'});
+ var st=streak();if(st>=3)L.push({t:st+(st>=30?'-day logging streak. A whole month of records.':st>=7?'-day logging streak. A full week of records.':'-day logging streak. Keep it going.'),k:'good'});
+ return L;
+}
+function streak(){var days={};try{(JSON.parse(localStorage.getItem('finled-nospend'))||[]).forEach(function(k){days[k]=1})}catch(e){}(state.expenses||[]).forEach(function(e){days[e.date]=1});(state.income||[]).forEach(function(i){if(i.dateAdded)days[i.dateAdded]=1});
+ var d=new Date(),n=0;function k(x){return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')}
+ if(!days[k(d)])d.setDate(d.getDate()-1);while(days[k(d)]){n++;d.setDate(d.getDate()-1)}return n}
+function templates(){var cut=Date.now()-90*864e5,m={};
+ (state.expenses||[]).forEach(function(e){var t=ldate(e.date);if(isNaN(t)||t<cut||!e.desc)return;var k=e.desc+'|'+e.amount+'|'+e.cat;(m[k]=m[k]||{e:e,n:0}).n++});
+ return Object.keys(m).map(function(k){return m[k]}).filter(function(x){return x.n>=2}).sort(function(a,b){return b.n-a.n}).slice(0,5).map(function(x){return x.e})}
+window.flRepeat=function(i){var e=window._flT[i];if(!e)return;show('expenses');
+ document.getElementById('exp-desc').value=e.desc;document.getElementById('exp-amount').value=e.amount;document.getElementById('exp-cat').value=e.cat;
+ var a=document.getElementById('exp-amount');a.focus();a.select()};
+window.flRemind=function(key,box){var o=cfgR();
+ if(box.checked&&window.Notification&&Notification.permission==='default'){Notification.requestPermission().then(function(p){if(p!=='granted'){box.checked=false;o[key]=false}else o[key]=true;saveR(o);draw()});return}
+ if(box.checked&&(!window.Notification||Notification.permission==='denied')){box.checked=false;o[key]=false;saveR(o);toast('Notifications are blocked in your browser settings','error');return}
+ o[key]=box.checked;saveR(o)};
+function draw(){var el=document.getElementById('fl-insights');if(!el||!window.state)return;
+ var c=calc(),I=insights(c);if(window.FLPlan&&!FLPlan.can('insights_full')&&I.length>2){I=I.slice(0,2);I.push({t:'More insights are available with FinLed Plus.',k:''})}var goals=(state.goals||[]).filter(function(g){return g.target>0}).sort(function(a,b){return b.saved/b.target-a.saved/a.target}).slice(0,3),T=templates(),o=cfgR();window._flT=T;
+ var h='<h2 id="fl-ins-h">What your numbers say</h2><ul>'+I.map(function(x){return'<li class="'+x.k+'">'+esc(x.t)+'</li>'}).join('')+'</ul>';
+ if(goals.length)h+='<h3>Savings goals</h3><div class="fl-bars">'+goals.map(function(g){var p=Math.min(100,Math.round(g.saved/g.target*100));
+  return'<div class="fl-bar"><b>'+esc(g.name)+'</b> \u2013 '+p+'% ('+fmt(g.saved)+' of '+fmt(g.target)+')'+(p>=100?' \u2713 Reached':'')+'<div class="t" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+p+'" aria-label="'+esc(g.name)+' progress"><i style="width:'+p+'%"></i></div></div>'}).join('')+'</div>';
+ if(T.length)h+='<h3>Repeat a common expense</h3><div class="fl-chips">'+T.map(function(e,i){return'<button type="button" onclick="flRepeat('+i+')">'+esc(e.desc)+' \u00b7 '+fmt(e.amount)+'</button>'}).join('')+'</div>';
+ h+='<details><summary>Reminders (you choose)</summary>'+[['budget','Warn me when I have used 80% of my budget'],['loans','Remind me of loans due within 3 days'],['weekly','Weekly reminder to review my savings (Sundays)']].map(function(r){return'<label><input type="checkbox" '+(o[r[0]]?'checked ':'')+'onchange="flRemind(\''+r[0]+'\',this)"> '+r[1]+'</label>'}).join('')
+  +'<p class="note">Reminders are checked on this device while the app is open. Nothing is sent to anyone.</p></details>'
+  +'<p class="note">\ud83d\udd12 Your records are protected by your PIN or biometric lock. You can set it up in Settings.</p>';
+ el.innerHTML=h}
+function notify(t,b){try{if(window.Notification&&Notification.permission==='granted')new Notification(t,{body:b,icon:'Photos/icon-192.png'})}catch(e){}}
+function check(){if(!window.state)return;var o=cfgR(),day=today(),last={};try{last=JSON.parse(localStorage.getItem(K+'-last'))||{}}catch(e){}
+ function once(k,f){if(o[k]&&last[k]!==day&&f()){last[k]=day}}
+ once('budget',function(){var c=calc();if(state.budgetLimit>0&&c.spent>=state.budgetLimit*.8){notify('Budget check','You have used '+Math.round(c.spent/state.budgetLimit*100)+'% of this month\u2019s budget.');return 1}});
+ once('loans',function(){var t=new Date(day),x=(state.loans||[]).filter(function(l){return l.type==='payable'&&!l.settled&&l.due&&(new Date(l.due)-t)/864e5<=3})[0];if(x){notify('Loan due soon',x.name+' is due '+x.due+'.');return 1}});
+ once('weekly',function(){if(new Date().getDay()===0){notify('Savings check-in','Take a minute to review your goals.');return 1}});
+ try{localStorage.setItem(K+'-last',JSON.stringify(last))}catch(e){}}
+var _r=window.render;if(typeof _r==='function')window.render=function(){var r=_r.apply(this,arguments);try{draw()}catch(e){console.error(e)}return r};
+document.addEventListener('DOMContentLoaded',function(){setTimeout(function(){try{draw();check()}catch(e){}},600)});setInterval(check,18e5);
+})();
+</script>
+<script>
+(function(){
+var MO=MONTH_ORDER;
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function ls(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}function lw(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+/* ---------- modal ---------- */
+function modal(h){close();var o=document.createElement('div');o.id='fl-ov';o.innerHTML='<div id="fl-md" role="dialog" aria-modal="true">'+h+'</div>';
+ o.addEventListener('click',function(e){if(e.target===o)close()});document.body.appendChild(o);document.addEventListener('keydown',esc2);
+ var f=o.querySelector('input,textarea,select,button');if(f)f.focus();return o}
+function esc2(e){if(e.key==='Escape')close()}
+function close(){var o=document.getElementById('fl-ov');if(o)o.remove();document.removeEventListener('keydown',esc2)}
+/* ---------- plan / entitlement (UI gate only; real enforcement needs the backend) ---------- */
+var TIERS={plus:{name:'FinLed Plus',price:25,list:['All smart spending insights','Subscription finder','Pay-yourself-first rules (coming soon)','Multiple budgets (coming soon)','Custom categories (coming soon)','Unlimited savings goals (coming soon)']},pro:{name:'FinLed Pro',price:50,list:['Everything in Plus','Month-vs-month comparison','Monthly financial summary (coming soon)','Advanced reports (coming soon)','PDF export (coming soon)']}};
+var NEED={insights_full:'plus',subs:'plus',compare:'pro'},RANK={free:0,plus:1,pro:2};
+var WHY={insights_full:['Understand where your money is going.','Smart insights compare your spending and point out what changed.','plus'],subs:['Find the bills you forgot about.','The subscription finder spots charges that repeat every month and adds them up.','plus'],compare:['See what changed between months.','Compare income, expenses, savings and categories side by side.','pro']};
+var provider={get:function(){var p=ls('finled-plan',{plan:'free'});if(p.trialEnd&&Date.now()<p.trialEnd)return'pro';return p.plan&&p.trialEnd===undefined?p.plan:'free'},
+ trialUsed:function(){return !!ls('finled-plan',{}).trialEnd},startTrial:function(){lw('finled-plan',{plan:'free',trialEnd:Date.now()+14*864e5})},
+ checkout:function(){return Promise.reject(new Error('not-connected'))}};
+var FLPlan={provider:provider,tier:function(){return provider.get()},can:function(f){return RANK[provider.get()]>=RANK[NEED[f]||'free']},
+ gate:function(f,fn){if(FLPlan.can(f))return fn();FLPlan.upsell(f)},
+ upsell:function(f){var w=WHY[f],t=TIERS[w[2]];modal('<h2>'+w[0]+'</h2><p>'+w[1]+'</p><p><b>Unlock with '+t.name+' \u2014 \u20b1'+t.price+'/month</b></p><div class="fl-row"><button class="fl-btn main" id="fl-up">Upgrade to '+w[2].replace('p','P')+'</button><button class="fl-btn" id="fl-later">Maybe later</button></div><p class="m">The free version keeps working fully.</p>');
+  document.getElementById('fl-up').onclick=function(){FLPlan.checkout(w[2])};document.getElementById('fl-later').onclick=close},
+ checkout:function(t){provider.checkout(t).catch(function(){toast('Payments are not connected yet. Nothing was charged.','error')})},
+ pricing:function(){var tr=provider.trialUsed();modal('<h2>Plans</h2><p class="m">Basic tracking stays free. Plans add automation and analysis.</p><div class="fl-plans">'+['plus','pro'].map(function(k){var t=TIERS[k];return'<div class="fl-plan"><b>'+t.name+'</b><div>\u20b1'+t.price+'/month</div><ul>'+t.list.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul><button class="fl-btn" onclick="FLPlan.checkout(\''+k+'\')">Choose '+k.replace('p','P')+'</button></div>'}).join('')+'</div>'
+  +(tr?'':'<div class="fl-row"><button class="fl-btn main" id="fl-tr">Try Pro free for 14 days (no card)</button></div>')+'<div class="fl-row"><button class="fl-btn" id="fl-x">Close</button></div><p class="m">Payments are not connected yet. Current plan: '+provider.get()+'.</p>');
+  var b=document.getElementById('fl-tr');if(b)b.onclick=function(){provider.startTrial();close();toast('14-day Pro trial started');render()};document.getElementById('fl-x').onclick=close}};
+window.FLPlan=FLPlan;
+/* ---------- helpers ---------- */
+function dayKey(e){return e.date}
+function wallets(){return state.wallets||[]}
+function ymOf(e){var t=ldate(e.date);return isNaN(t)?null:t.getFullYear()*12+t.getMonth()}
+function nextPay(){var c=ls('finled-pay',null);if(!c)return null;var n=new Date(),y=n.getFullYear(),m=n.getMonth(),d=n.getDate(),t0=new Date(y,m,d),dim=new Date(y,m+1,0).getDate(),r;
+ if(c.mode==='semi'){r=d<15?new Date(y,m,15):d<dim?new Date(y,m,dim):new Date(y,m+1,15)}
+ else if(c.mode==='weekly'){var k=((+c.day-n.getDay())+7)%7;r=new Date(y,m,d+(k||7))}
+ else{var dd=Math.min(+c.day||1,dim);r=dd>d?new Date(y,m,dd):new Date(y,m+1,Math.min(+c.day||1,new Date(y,m+2,0).getDate()))}
+ return{date:r,days:Math.max(1,Math.round((r-t0)/864e5))}}
+/* ---------- check-in + payday card ---------- */
+function drawToday(){var a=document.getElementById('fl-checkin'),b=document.getElementById('fl-payday');if(!a||!window.state)return;
+ var t=today(),ns=ls('finled-nospend',[]),has=(state.expenses||[]).some(function(e){return e.date===t})||(state.income||[]).some(function(i){return i.dateAdded===t})||ns.indexOf(t)>-1;
+ a.innerHTML='<h2>Today</h2>'+(has?'<p>You are logged for today. Nice.</p><div class="fl-row"><button class="fl-btn" onclick="FLX.recap()">Share my week</button></div>':'<p class="fl-big" style="font-size:20px">Spent anything today?</p><div class="fl-row"><button class="fl-btn" onclick="FLX.nospend()">Nothing today</button><button class="fl-btn main" onclick="show(\'expenses\')">Add an expense</button></div>');
+ var np=nextPay();
+ if(!np){b.innerHTML='<h2>Until payday</h2><p>Tell FinLed your payday and it will show how much you can safely spend each day.</p><div class="fl-row"><button class="fl-btn main" onclick="FLX.setup()">Set my payday</button></div>';return}
+ var cash=wallets().reduce(function(x,w){return x+(+w.balance||0)},0),due=(state.loans||[]).filter(function(l){return l.type==='payable'&&!l.settled&&l.due&&new Date(l.due)<=np.date}).reduce(function(x,l){return x+(+l.amount||0)},0),money=cash-due,safe=money/np.days;
+ var cut=Date.now()-14*864e5,ex=(state.expenses||[]).filter(function(e){var d=ldate(e.date);return !isNaN(d)&&d>=cut}),avg=ex.reduce(function(x,e){return x+e.amount},0)/14,msg='';
+ if(ex.length>=3){var run=avg>0?money/avg:999;msg=run>=np.days?'At your recent pace (about '+fmt(avg)+' a day) your money lasts until payday.':'At your recent pace you may run out in about '+Math.floor(run)+' days, before payday.'}
+ b.innerHTML='<h2>Until payday</h2><div class="fl-big">'+fmt(Math.max(0,safe))+'</div><p>Safe to spend today. Payday is in '+np.days+' day'+(np.days>1?'s':'')+'.</p>'+(msg?'<p class="m">'+msg+'</p>':'')+(due>0?'<p class="m">Includes '+fmt(due)+' of loans due before payday.</p>':'')+'<div class="fl-row"><button class="fl-btn" onclick="FLX.setup()">Change payday</button></div>'}
+/* ---------- FLX actions ---------- */
+var FLX={
+ nospend:function(){var a=ls('finled-nospend',[]);a.push(today());lw('finled-nospend',a.slice(-120));toast('Logged a no-spend day');drawToday();if(window.render)render()},
+ setup:function(){var c=ls('finled-pay',{mode:'semi',day:1});modal('<h2>Set up in a minute</h2><p class="m">This sets your payday and a starter budget. You can change both later.</p><label for="fo-a">Allowance or salary per payday (\u20b1)</label><input id="fo-a" type="number" inputmode="decimal" min="0"><label for="fo-m">How often are you paid?</label><select id="fo-m"><option value="semi">Twice a month (15th and 30th)</option><option value="monthly">Once a month</option><option value="weekly">Weekly allowance</option></select><label for="fo-d" id="fo-dl">Day</label><input id="fo-d" type="number" min="0" max="31"><div class="fl-row"><button class="fl-btn main" id="fo-s">Save</button><button class="fl-btn" id="fo-c">Not now</button></div>');
+  var m=document.getElementById('fo-m'),d=document.getElementById('fo-d'),dl=document.getElementById('fo-dl');m.value=c.mode;d.value=c.day;
+  function sync(){var w=m.value==='weekly',h=m.value==='semi';d.style.display=h?'none':'';dl.style.display=h?'none':'';dl.textContent=w?'Payday weekday (0 = Sunday, 6 = Saturday)':'Day of the month';if(w&&+d.value>6)d.value=1}m.onchange=sync;sync();
+  document.getElementById('fo-c').onclick=function(){lw('finled-onb',1);close()};
+  document.getElementById('fo-s').onclick=function(){var a=parseFloat(document.getElementById('fo-a').value)||0;lw('finled-pay',{mode:m.value,day:+d.value||1});lw('finled-onb',1);
+   if(a>0&&!(state.budgetLimit>0)){state.budgetLimit=Math.round(a*(m.value==='weekly'?4.33:m.value==='semi'?2:1)*.8);save()}close();render();toast('Saved. Starter budget uses 80% of your monthly income.')}},
+ paste:function(pre){modal('<h2>Paste a message</h2><p class="m">Paste a GCash, Maya or bank text. FinLed fills in the form and you review it before saving.</p><label for="fp-t">Message</label><textarea id="fp-t" rows="5"></textarea><div class="fl-row"><button class="fl-btn main" id="fp-g">Fill the form</button><button class="fl-btn" id="fp-c">Cancel</button></div>');
+  var t=document.getElementById('fp-t');if(pre)t.value=pre;document.getElementById('fp-c').onclick=close;
+  document.getElementById('fp-g').onclick=function(){var x=t.value.replace(/,/g,''),m=x.match(/(?:php|\u20b1)\s?(\d+(?:\.\d+)?)/i)||x.match(/\bP\s?(\d+(?:\.\d+)?)/)||x.match(/(\d+(?:\.\d+)?)\s?(?:php|pesos)/i);
+   if(!m){toast('Could not find an amount','error');return}var amt=+m[1],inc=/received|credited|cash.?in|deposit|salary|refund/i.test(x),mer=(x.match(/(?:\bto|\bat|\bpaid|\bfrom)\s+([A-Z][\w&'.\- ]{2,28}?)(?=\s+(?:on|with|via|ref|for)\b|[.,\n]|$)/)||[])[1]||'';
+   var w=wallets().filter(function(w){return x.toLowerCase().indexOf(String(w.name||'').toLowerCase())>-1})[0]||wallets().filter(function(w){return /gcash|maya|bank|bdo|bpi/i.test(x)&&new RegExp(x.match(/gcash|maya|bdo|bpi/i)?x.match(/gcash|maya|bdo|bpi/i)[0]:'^$','i').test(w.name||'')})[0];
+   close();function setSel(id,pred){var s=document.getElementById(id);if(!s)return;for(var i=0;i<s.options.length;i++){if(pred(s.options[i])){s.value=s.options[i].value;return}}}
+   if(inc){show('income');document.getElementById('inc-amount').value=amt;document.getElementById('inc-note').value=mer||'Received';if(w)document.getElementById('inc-wallet').value=w.id;document.getElementById('inc-amount').focus()}
+   else{show('expenses');document.getElementById('exp-amount').value=amt;document.getElementById('exp-desc').value=mer||'Payment';if(w)setSel('exp-source',function(o){return o.value===w.id||o.textContent.indexOf(w.name)>-1});
+    var K=[['food',/jollibee|mcdo|kfc|foodpanda|grabfood|coffee|cafe|7.?eleven|mang inasal|chowking|bakery/i],['transport',/grab|angkas|beep|lrt|mrt|jeep|move it|ride/i],['bill',/meralco|pldt|globe|smart|converge|water|dito/i],['shop',/shopee|lazada|sm |mall|zalora/i]];
+    K.forEach(function(k){if(k[1].test(x))setSel('exp-cat',function(o){return new RegExp(k[0],'i').test(o.value+' '+o.textContent)})});document.getElementById('exp-amount').focus()}
+   toast('Check the details, then save')}},
+ split:function(){modal('<h2>Split a bill</h2><label for="fs-t">Total bill (\u20b1)</label><input id="fs-t" type="number" inputmode="decimal"><label for="fs-n">Number of people (including you)</label><input id="fs-n" type="number" min="2" value="2"><p class="fl-big" id="fs-o"></p><div class="fl-row"><button class="fl-btn main" id="fs-c">Copy message for friends</button><button class="fl-btn" id="fs-x">Close</button></div>');
+  var T=document.getElementById('fs-t'),N=document.getElementById('fs-n'),O=document.getElementById('fs-o');function u(){var v=(+T.value||0)/(Math.max(2,+N.value||2));O.textContent=v?fmt(v)+' each':''}T.oninput=N.oninput=u;
+  document.getElementById('fs-x').onclick=close;document.getElementById('fs-c').onclick=function(){var v=(+T.value||0)/Math.max(2,+N.value||2);if(!v)return;var s='Hi! Our bill is '+fmt(+T.value)+'. Your share is '+fmt(v)+'. Thanks!';(navigator.clipboard?navigator.clipboard.writeText(s):Promise.reject()).then(function(){toast('Message copied')}).catch(function(){toast(s)})}},
+ recap:function(){var n=Date.now(),wk=function(a,b){return (state.expenses||[]).filter(function(e){var d=ldate(e.date);return !isNaN(d)&&d>=n-b*864e5&&d<n-a*864e5}).reduce(function(x,e){return x+e.amount},0)},days={};(state.expenses||[]).forEach(function(e){var d=ldate(e.date);if(!isNaN(d)&&d>=n-7*864e5)days[e.date]=1});
+  var a=wk(0,7),b=wk(7,14),s='My week on FinLed: logged on '+Object.keys(days).length+' of 7 days'+(b>0?', spending '+(a<=b?Math.round((b-a)/b*100)+'% lower':Math.round((a-b)/b*100)+'% higher')+' than the week before':'')+'.';
+  if(navigator.share)navigator.share({text:s}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(s).then(function(){toast('Recap copied')})},
+ subs:function(){FLPlan.gate('subs',function(){var g={};(state.expenses||[]).forEach(function(e){if(!e.desc)return;var k=e.desc.trim().toLowerCase(),m=ymOf(e);if(m===null)return;(g[k]=g[k]||{n:e.desc,m:{},a:[]});g[k].m[m]=1;g[k].a.push(e.amount)});
+  var L=Object.keys(g).map(function(k){return g[k]}).filter(function(x){var a=x.a,mn=Math.min.apply(0,a),mx=Math.max.apply(0,a);return Object.keys(x.m).length>=2&&mx<=mn*1.15}).map(function(x){return{n:x.n,v:x.a.reduce(function(p,c){return p+c},0)/x.a.length}}).sort(function(a,b){return b.v-a.v}),tot=L.reduce(function(p,c){return p+c.v},0);
+  modal('<h2>Repeating charges</h2>'+(L.length?'<p>These show up in more than one month at about the same amount. Together: <b>'+fmt(tot)+'/month</b>.</p><table class="fl-tbl">'+L.map(function(x){return'<tr><td>'+esc(x.n)+'</td><td>'+fmt(x.v)+'</td></tr>'}).join('')+'</table>':'<p>No repeating charges found yet. Log a few months and they will show up here.</p>')+'<div class="fl-row"><button class="fl-btn" id="fs-x">Close</button></div>');document.getElementById('fs-x').onclick=close})},
+ compare:function(){FLPlan.gate('compare',function(){var ks={};(state.expenses||[]).forEach(function(e){var k=ymOf(e);if(k!==null)ks[k]=1});(state.income||[]).forEach(function(i){var m=MO.indexOf(i.month);if(m>-1)ks[i.year*12+m]=1});
+  var K=Object.keys(ks).map(Number).sort(function(a,b){return b-a});if(K.length<2){modal('<h2>Compare months</h2><p>You need records in at least two months first.</p><div class="fl-row"><button class="fl-btn" id="fs-x">Close</button></div>');document.getElementById('fs-x').onclick=close;return}
+  function nm(k){return MO[k%12]+' '+Math.floor(k/12)}function opts(sel){return K.map(function(k){return'<option value="'+k+'"'+(k===sel?' selected':'')+'>'+nm(k)+'</option>'}).join('')}
+  modal('<h2>Compare months</h2><label for="fc-a">Month</label><select id="fc-a">'+opts(K[1])+'</select><label for="fc-b">Compared with</label><select id="fc-b">'+opts(K[0])+'</select><div id="fc-o"></div><div class="fl-row"><button class="fl-btn" id="fs-x">Close</button></div>');
+  function data(k){var ex=(state.expenses||[]).filter(function(e){return ymOf(e)===k}),c={};ex.forEach(function(e){c[e.cat]=(c[e.cat]||0)+e.amount});var inc=(state.income||[]).filter(function(i){return i.year*12+MO.indexOf(i.month)===k}).reduce(function(x,i){return x+i.amount},0),sp=ex.reduce(function(x,e){return x+e.amount},0);return{inc:inc,sp:sp,sv:inc-sp,c:c}}
+  function ch(a,b){if(!a)return b?'new':'\u2013';var p=Math.round((b-a)/a*100);return(p>0?'+':'')+p+'%'}
+  function go(){var A=data(+document.getElementById('fc-a').value),B=data(+document.getElementById('fc-b').value),cats=Object.keys(Object.assign({},A.c,B.c)).sort(function(x,y){return((B.c[y]||0)+(A.c[y]||0))-((B.c[x]||0)+(A.c[x]||0))}).slice(0,6),mx=Math.max.apply(0,cats.map(function(c){return Math.max(A.c[c]||0,B.c[c]||0)}).concat([1]));
+   document.getElementById('fc-o').innerHTML='<table class="fl-tbl"><tr><th></th><th>A</th><th>B</th><th>Change</th></tr>'+[['Income','inc'],['Expenses','sp'],['Savings','sv']].map(function(r){return'<tr><td>'+r[0]+'</td><td>'+fmt(A[r[1]])+'</td><td>'+fmt(B[r[1]])+'</td><td>'+ch(A[r[1]],B[r[1]])+'</td></tr>'}).join('')+'</table><h3 style="margin:16px 0 4px;font-size:13px;color:var(--muted)">By category (A on top, B below)</h3>'+cats.map(function(c){return'<div style="margin:8px 0"><div>'+esc(c)+'</div><div style="height:8px;background:var(--border2);width:'+Math.round((A.c[c]||0)/mx*100)+'%"></div><div style="height:8px;margin-top:2px;background:var(--accent);width:'+Math.round((B.c[c]||0)/mx*100)+'%"></div></div>'}).join('')}
+  document.getElementById('fc-a').onchange=document.getElementById('fc-b').onchange=go;go();document.getElementById('fs-x').onclick=close})}
+};
+window.FLX=FLX;
+var _r=window.render;if(typeof _r==='function')window.render=function(){var r=_r.apply(this,arguments);try{drawToday()}catch(e){console.error(e)}return r};
+document.addEventListener('DOMContentLoaded',function(){setTimeout(function(){try{drawToday();
+ var q=new URLSearchParams(location.search),sh=q.get('text')||q.get('title');if(sh){FLX.paste(sh);history.replaceState(null,'',location.pathname)}
+ else if(!ls('finled-onb',0)&&!(state.expenses||[]).length&&!(state.income||[]).length&&!(state.budgetLimit>0))FLX.setup()}catch(e){}},900)});
+})();
+</script>
+<script>
+(function(){
+var T=[['Pay-yourself-first rules','Automatically move a percentage of every income into a savings goal.','Plus',0],
+['Multiple budgets','Separate limits for food, transport, entertainment and an overall budget.','Plus',0],
+['Custom categories','Create your own income and expense categories.','Plus',0],
+['Unlimited savings goals','No cap on how many goals you can track.','Plus',0],
+['Monthly financial summary','A one-page recap of income, expenses, savings, top category and budget result.','Pro',0],
+['Advanced reports','Deeper breakdowns by category, wallet and period.','Pro',0],
+['PDF export','Download your reports as PDF.','Pro',0],
+['Subscription finder','Finds charges that repeat every month.','Plus',1],
+['Compare months','Side-by-side income, expenses, savings and categories.','Pro',1]];
+FLX.tools=function(){var o=document.createElement('div');
+ var h='<h2>Premium tools</h2><p class="m">Plans add automation and analysis. Basic tracking stays free.</p><table class="fl-tbl">'+T.map(function(t){return'<tr><td><b>'+t[0]+'</b><br><span class="m">'+t[1]+'</span></td><td>'+t[2]+'</td><td>'+(t[3]?'Available':'Coming soon')+'</td></tr>'}).join('')+'</table><div class="fl-row"><button class="fl-btn main" id="ft-p">See plans</button><button class="fl-btn" id="ft-x">Close</button></div>';
+ var ov=document.getElementById('fl-ov');if(ov)ov.remove();ov=document.createElement('div');ov.id='fl-ov';ov.innerHTML='<div id="fl-md" role="dialog" aria-modal="true">'+h+'</div>';
+ ov.addEventListener('click',function(e){if(e.target===ov)ov.remove()});document.body.appendChild(ov);
+ document.getElementById('ft-x').onclick=function(){ov.remove()};document.getElementById('ft-p').onclick=function(){ov.remove();FLPlan.pricing()};document.getElementById('ft-x').focus()};
+})();
 </script>
 </body>
 </html>
