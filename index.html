@@ -8153,13 +8153,31 @@ function modal(h){close();var o=document.createElement('div');o.id='fl-ov';o.inn
  var f=o.querySelector('input,textarea,select,button');if(f)f.focus({preventScroll:true});return o}
 function esc2(e){if(e.key==='Escape')close()}
 function close(){var o=document.getElementById('fl-ov');if(o)o.remove();document.removeEventListener('keydown',esc2)}
-/* ---------- plan / entitlement (UI gate only; real enforcement needs the backend) ---------- */
+/* ---------- plan / entitlement: read from Supabase `subscriptions` (RLS, read-only). Gating here is UI only; any paid server data must also be protected by RLS. ---------- */
 var TIERS={plus:{name:'FinLed Plus',price:25,list:['All smart spending insights','Subscription finder','Pay-yourself-first rules (coming soon)','Multiple budgets (coming soon)','Custom categories (coming soon)','Unlimited savings goals (coming soon)']},pro:{name:'FinLed Pro',price:50,list:['Everything in Plus','Month-vs-month comparison','Monthly financial summary (coming soon)','Advanced reports (coming soon)','PDF export (coming soon)']}};
 var NEED={insights_full:'plus',subs:'plus',compare:'pro'},RANK={free:0,plus:1,pro:2};
 var WHY={insights_full:['Understand where your money is going.','Smart insights compare your spending and point out what changed.','plus'],subs:['Find the bills you forgot about.','The subscription finder spots charges that repeat every month and adds them up.','plus'],compare:['See what changed between months.','Compare income, expenses, savings and categories side by side.','pro']};
-var provider={get:function(){var p=ls('finled-plan',{plan:'free'});if(p.trialEnd&&Date.now()<p.trialEnd)return'pro';return p.plan&&p.trialEnd===undefined?p.plan:'free'},
- trialUsed:function(){return !!ls('finled-plan',{}).trialEnd},startTrial:function(){lw('finled-plan',{plan:'free',trialEnd:Date.now()+14*864e5})},
+var CK='finled-plan-cache',cache=ls(CK,null),uid=null;
+function eff(r){if(!r)return'free';var n=Date.now(),pe=r.current_period_end?Date.parse(r.current_period_end):0,te=r.trial_end?Date.parse(r.trial_end):0;
+ if(r.status==='trialing'&&te>n)return'pro';
+ if((r.status==='active'||r.status==='canceled'||r.status==='past_due')&&pe>n&&(r.plan==='plus'||r.plan==='pro'))return r.plan;
+ return'free'}
+function refresh(){if(typeof supabaseClient==='undefined')return Promise.resolve();
+ return supabaseClient.auth.getSession().then(function(r){var u=r.data&&r.data.session&&r.data.session.user;
+  if(!u){uid=null;cache=null;lw(CK,null);return}
+  uid=u.id;
+  return supabaseClient.from('subscriptions').select('plan,status,current_period_end,trial_end').eq('user_id',uid).maybeSingle().then(function(q){
+   if(q.error)return; /* offline or table missing: keep last cache */
+   cache={uid:uid,row:q.data||null};lw(CK,cache)})
+ }).then(function(){try{render()}catch(e){}}).catch(function(){})}
+/* Plan comes only from the signed-in user's Supabase row (read-only for the browser). Old localStorage 'finled-plan' is ignored. */
+var provider={get:function(){if(!uid||!cache||cache.uid!==uid)return'free';return eff(cache.row)},
+ trialUsed:function(){return !!(uid&&cache&&cache.uid===uid&&cache.row&&cache.row.trial_end)},
+ startTrial:function(){if(!uid)return Promise.reject(new Error('signed-out'));return supabaseClient.rpc('start_trial').then(function(q){if(q.error)throw q.error;return refresh()})},
+ refresh:refresh,
  checkout:function(){return Promise.reject(new Error('not-connected'))}};
+if(typeof supabaseClient!=='undefined'){try{localStorage.removeItem('finled-plan')}catch(e){}
+ supabaseClient.auth.onAuthStateChange(function(){setTimeout(refresh,0)});window.addEventListener('online',refresh);setTimeout(refresh,0)}
 var FLPlan={provider:provider,tier:function(){return provider.get()},can:function(f){return RANK[provider.get()]>=RANK[NEED[f]||'free']},
  gate:function(f,fn){if(FLPlan.can(f))return fn();FLPlan.upsell(f)},
  upsell:function(f){var w=WHY[f],t=TIERS[w[2]];modal('<h2>'+w[0]+'</h2><p>'+w[1]+'</p><p><b>Unlock with '+t.name+' \u2014 \u20b1'+t.price+'/month</b></p><div class="fl-row"><button class="fl-btn fl-pri" id="fl-up">Upgrade to '+w[2].replace('p','P')+'</button><button class="fl-btn" id="fl-later">Maybe later</button></div><p class="m">The free version keeps working fully.</p>');
@@ -8167,7 +8185,7 @@ var FLPlan={provider:provider,tier:function(){return provider.get()},can:functio
  checkout:function(t){provider.checkout(t).catch(function(){toast('Payments are not connected yet. Nothing was charged.','error')})},
  pricing:function(){var tr=provider.trialUsed();modal('<h2>Plans</h2><p class="m">Basic tracking stays free. Plans add automation and analysis.</p><div class="fl-plans">'+['plus','pro'].map(function(k){var t=TIERS[k];return'<div class="fl-plan"><b>'+t.name+'</b><div>\u20b1'+t.price+'/month</div><ul>'+t.list.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul><button class="fl-btn" onclick="FLPlan.checkout(\''+k+'\')">Choose '+k.replace('p','P')+'</button></div>'}).join('')+'</div>'
   +(tr?'':'<div class="fl-row"><button class="fl-btn fl-pri" id="fl-tr">Try Pro free for 14 days (no card)</button></div>')+'<div class="fl-row"><button class="fl-btn" id="fl-x">Close</button></div><p class="m">Payments are not connected yet. Current plan: '+provider.get()+'.</p>');
-  var b=document.getElementById('fl-tr');if(b)b.onclick=function(){provider.startTrial();close();toast('14-day Pro trial started');render()};document.getElementById('fl-x').onclick=close}};
+  var b=document.getElementById('fl-tr');if(b)b.onclick=function(){provider.startTrial().then(function(){close();toast('14-day Pro trial started');render()}).catch(function(e){toast(e&&e.message==='signed-out'?'Sign in to start your free trial.':'Could not start the trial. Check your connection and try again.','error')})};document.getElementById('fl-x').onclick=close}};
 window.FLPlan=FLPlan;
 /* ---------- helpers ---------- */
 function dayKey(e){return e.date}
