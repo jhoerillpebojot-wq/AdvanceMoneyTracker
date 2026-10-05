@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Barya</title>
-<meta name="description" content="Barya - a private, on-device tracker for income, expenses, wallets, loans, and savings goals.">
+<title>FinLed</title>
+<meta name="description" content="FinLed - a private, on-device tracker for income, expenses, wallets, loans, and savings goals.">
 <meta name="theme-color" content="#F3EDE0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Barya">
-<meta property="og:title" content="Barya">
+<meta name="apple-mobile-web-app-title" content="FinLed">
+<meta property="og:title" content="FinLed">
 <meta property="og:description" content="A private, on-device tracker for income, expenses, wallets, loans, and savings goals.">
 <meta property="og:type" content="website">
 <!-- Real icon files, not inline SVG - this is what actually lets a future icon
@@ -18,14 +18,14 @@
      their own separate favicon cache that ignores the service worker, and
      an unchanged filename+query string is a signal to just reuse what they
      already have, even if the file's bytes have changed. -->
-<link rel="icon" href="icon-192.png?v=4" type="image/png">
+<link rel="icon" href="Photos/icon-192.png?v=5" type="image/png">
 <!-- iOS: apple-touch-icon needs an opaque PNG (transparent corners often
      render as a black or white square on the home screen instead of
      blending in), so this deliberately uses the maskable icon, which
      already has a solid white background baked in. Inline SVG data URIs
      for apple-touch-icon (the old version) are also unreliable on real
      iPhones - most iOS versions never render them at all. -->
-<link rel="apple-touch-icon" href="icon-512-maskable.png?v=4">
+<link rel="apple-touch-icon" href="Photos/icon-512-maskable.png?v=5">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1363,107 +1363,107 @@ body[data-page="settings"] #fa-fab,body[data-page="export"] #fa-fab{display:none
 }
 @media(min-width:901px){.bnav-plus-wrap{display:none}}
 </style>
-<style id="barya-theme">
-/* Barya theme: delete this block + the body class to fall back to the old look */
-html body.barya{font-size:15px;line-height:1.55;background-color:var(--bg);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E")}
-html body.barya:not(.light){background-image:none}
-html body.barya ::selection{background:var(--gold);color:#1D1A14}
-html body.barya :focus-visible{outline:3px solid var(--focus) !important;outline-offset:2px !important}
-html body.barya .skip-link{position:absolute;left:-9999px;top:8px;z-index:10000;background:var(--text);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:700;text-decoration:none}
-html body.barya .skip-link:focus{left:8px}
-html body.barya .nav-lbl,html body.barya .stat label,html body.barya .hw-name,html body.barya .month-hdr,html body.barya .bal-card .acct,html body.barya .snapshot-label,html body.barya .form-group label,html body.barya .sbm-section-title,html body.barya .sbm-hero-label,html body.barya .sbm-highlight-lbl,html body.barya .hero-label,html body.barya .fa-h,html body.barya .stat .sd,html body.barya .badge,html body.barya .nav-badge{text-transform:none !important;letter-spacing:.01em !important;font-size:12.5px !important;font-weight:700 !important}
-html body.barya .nav-lbl{color:var(--muted) !important}
-html body.barya .page-title{font-family:var(--font-d) !important;font-size:28px !important;font-weight:800 !important;letter-spacing:-.01em !important}
-html body.barya .page-sub{font-size:14px !important}
-html body.barya .card-title{font-family:var(--font-d) !important;font-size:17px !important;font-weight:700 !important}
-html body.barya .tb-title{font-family:var(--font-d) !important;font-size:18px !important;font-weight:800 !important;letter-spacing:0 !important}
-html body.barya .tb-date{font-size:13px !important}
-html body.barya .card,html body.barya .stat,html body.barya .bal-card,html body.barya .goal-card,html body.barya .snapshot-card{background:var(--surface) !important;border:1.5px solid var(--border) !important;border-radius:10px !important;box-shadow:none !important}
-html body.barya .card{padding:20px !important}
-html body.barya .card-hd{border-bottom:1.5px dashed var(--border) !important}
-html body.barya .stat{border-left:6px solid var(--border2) !important;padding:16px 18px !important}
-html body.barya .stat::after{display:none !important}
-html body.barya .stat.g{border-left-color:var(--accent) !important}
-html body.barya .stat.r{border-left-color:var(--red) !important}
-html body.barya .stat.a{border-left-color:var(--amber) !important}
-html body.barya .stat.b{border-left-color:var(--blue) !important}
-html body.barya .stat .sv{font-family:var(--font-d) !important;font-size:24px !important;font-weight:800 !important;letter-spacing:0 !important}
-html body.barya .stat.clickable:hover{transform:none !important;border-color:var(--border2) !important}
-html body.barya .hero-card,html body.barya.light .hero-card{--text:#FAF4E6;--muted:rgba(250,244,230,.86);--muted2:rgba(250,244,230,.7);--accent:#F6D98B;--accent-rgb:246,217,139;--accent-bg:rgba(246,217,139,.14);--border:rgba(250,244,230,.3);--border2:rgba(250,244,230,.55);--surface2:rgba(250,244,230,.1);--surface3:rgba(250,244,230,.16);
+<style id="finled-theme">
+/* FinLed theme: delete this block + the body class to fall back to the old look */
+html body.finled{font-size:15px;line-height:1.55;background-color:var(--bg);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E")}
+html body.finled:not(.light){background-image:none}
+html body.finled ::selection{background:var(--gold);color:#1D1A14}
+html body.finled :focus-visible{outline:3px solid var(--focus) !important;outline-offset:2px !important}
+html body.finled .skip-link{position:absolute;left:-9999px;top:8px;z-index:10000;background:var(--text);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:700;text-decoration:none}
+html body.finled .skip-link:focus{left:8px}
+html body.finled .nav-lbl,html body.finled .stat label,html body.finled .hw-name,html body.finled .month-hdr,html body.finled .bal-card .acct,html body.finled .snapshot-label,html body.finled .form-group label,html body.finled .sbm-section-title,html body.finled .sbm-hero-label,html body.finled .sbm-highlight-lbl,html body.finled .hero-label,html body.finled .fa-h,html body.finled .stat .sd,html body.finled .badge,html body.finled .nav-badge{text-transform:none !important;letter-spacing:.01em !important;font-size:12.5px !important;font-weight:700 !important}
+html body.finled .nav-lbl{color:var(--muted) !important}
+html body.finled .page-title{font-family:var(--font-d) !important;font-size:28px !important;font-weight:800 !important;letter-spacing:-.01em !important}
+html body.finled .page-sub{font-size:14px !important}
+html body.finled .card-title{font-family:var(--font-d) !important;font-size:17px !important;font-weight:700 !important}
+html body.finled .tb-title{font-family:var(--font-d) !important;font-size:18px !important;font-weight:800 !important;letter-spacing:0 !important}
+html body.finled .tb-date{font-size:13px !important}
+html body.finled .card,html body.finled .stat,html body.finled .bal-card,html body.finled .goal-card,html body.finled .snapshot-card{background:var(--surface) !important;border:1.5px solid var(--border) !important;border-radius:10px !important;box-shadow:none !important}
+html body.finled .card{padding:20px !important}
+html body.finled .card-hd{border-bottom:1.5px dashed var(--border) !important}
+html body.finled .stat{border-left:6px solid var(--border2) !important;padding:16px 18px !important}
+html body.finled .stat::after{display:none !important}
+html body.finled .stat.g{border-left-color:var(--accent) !important}
+html body.finled .stat.r{border-left-color:var(--red) !important}
+html body.finled .stat.a{border-left-color:var(--amber) !important}
+html body.finled .stat.b{border-left-color:var(--blue) !important}
+html body.finled .stat .sv{font-family:var(--font-d) !important;font-size:24px !important;font-weight:800 !important;letter-spacing:0 !important}
+html body.finled .stat.clickable:hover{transform:none !important;border-color:var(--border2) !important}
+html body.finled .hero-card,html body.finled.light .hero-card{--text:#FAF4E6;--muted:rgba(250,244,230,.86);--muted2:rgba(250,244,230,.7);--accent:#F6D98B;--accent-rgb:246,217,139;--accent-bg:rgba(246,217,139,.14);--border:rgba(250,244,230,.3);--border2:rgba(250,244,230,.55);--surface2:rgba(250,244,230,.1);--surface3:rgba(250,244,230,.16);
  color:#FAF4E6;background:var(--hero-bg) !important;border:0 !important;border-radius:10px !important;box-shadow:none !important;padding:24px 22px 22px 32px !important}
-html body.barya .hero-card::before{top:0 !important;left:0 !important;right:auto !important;bottom:0 !important;width:10px !important;height:auto !important;background:var(--gold) !important;border-radius:10px 0 0 10px !important}
-html body.barya .hero-card::after{display:none !important}
-html body.barya .hero-card .hero-amount{font-family:var(--font-d) !important;font-weight:800 !important;letter-spacing:-1px !important}
-html body.barya .hero-card .hw-val{font-family:var(--font-d) !important}
-html body.barya .btn{border-radius:8px !important;min-height:44px;font-size:14.5px !important;font-weight:700 !important;letter-spacing:0 !important;padding:10px 20px !important}
-html body.barya .btn-sm{min-height:36px;font-size:13px !important;padding:6px 14px !important}
-html body.barya .btn-primary{background:var(--accent) !important;color:var(--on-accent) !important;border:0 !important;box-shadow:0 2px 0 var(--accent-dim) !important}
-html body.barya .btn-primary:hover{background:var(--accent-hover) !important;box-shadow:0 2px 0 var(--accent-dim) !important}
-html body.barya .btn-primary:active{transform:translateY(2px);box-shadow:none !important}
-html body.barya .btn-ghost{background:transparent !important;border:1.5px solid var(--border2) !important;color:var(--text) !important}
-html body.barya .btn-ghost:hover{background:var(--surface2) !important}
-html body.barya input,html body.barya select,html body.barya textarea{background:var(--surface) !important;border:1.5px solid var(--border2) !important;border-radius:8px !important;color:var(--text) !important;box-shadow:none !important}
-html body.barya input:not([type=checkbox]):not([type=radio]):not([type=color]):not([type=range]):not([type=file]),html body.barya select{min-height:46px}
-html body.barya input:focus,html body.barya select:focus,html body.barya textarea:focus{border-color:var(--accent) !important;background:var(--surface) !important;box-shadow:0 0 0 3px rgba(var(--accent-rgb),.25) !important}
-html body.barya .form-group label{font-size:13px !important}
-html body.barya .pill{border:1.5px solid var(--border2) !important;color:var(--text) !important;background:transparent !important;min-height:36px}
-html body.barya .pill.active{background:var(--text) !important;color:var(--bg) !important;border-color:var(--text) !important}
-html body.barya .badge{border-radius:6px !important;padding:3px 9px !important}
-html body.barya .badge-food{color:#9A4A0C !important;background:rgba(154,74,12,.12) !important}
-html body.barya .badge-health{color:#A3261E !important;background:rgba(163,38,30,.1) !important}
-html body.barya .badge-entertainment{color:#7A5A00 !important;background:rgba(122,90,0,.12) !important}
-html body.barya:not(.light) .badge-food{color:#F4A261 !important;background:rgba(244,162,97,.14) !important}
-html body.barya:not(.light) .badge-health{color:#F28B82 !important;background:rgba(242,139,130,.14) !important}
-html body.barya:not(.light) .badge-entertainment{color:#F0C75E !important;background:rgba(240,199,94,.14) !important}
-html body.barya .prog-track{background:var(--surface3) !important;height:8px !important;border-radius:4px !important}
-html body.barya .toast{background:var(--text) !important;color:var(--bg) !important;border:0 !important;border-radius:8px !important;box-shadow:var(--shadow-lg) !important}
-html body.barya #fa-snack button,html body.barya #fa-fab{color:var(--on-accent) !important}
-html body.barya #fa-fab{border-radius:14px !important;box-shadow:0 2px 0 var(--accent-dim) !important}
-html body.barya .topbar{background:var(--bg) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;box-shadow:none !important;border-bottom:1.5px solid var(--border) !important}
-html body.barya .sidebar{background:var(--surface) !important;border-right:1.5px solid var(--border) !important;box-shadow:none !important}
-html body.barya .sb-top{border-bottom:1.5px dashed var(--border) !important}
-html body.barya .sb-bottom{border-top:1.5px dashed var(--border) !important}
-html body.barya .logo{font-family:var(--font-d) !important;font-size:22px !important;font-weight:800 !important;letter-spacing:0 !important}
-html body.barya .logo-text,html body.barya .logo-text span{letter-spacing:0 !important}
-html body.barya .logo-text span{color:var(--accent) !important}
-html body.barya .logo-mark{width:40px !important;height:40px !important;border-radius:10px !important;box-shadow:none !important}
-html body.barya .nav-item{font-size:15px !important;font-weight:700 !important;min-height:44px;border-radius:0 8px 8px 0 !important;border-left:4px solid transparent !important;color:var(--muted) !important}
-html body.barya .nav-item:hover:not(.active){background:var(--surface2) !important;color:var(--text) !important}
-html body.barya .nav-item.active{background:var(--gold-soft) !important;color:var(--text) !important;border-left-color:var(--accent) !important}
-html body.barya .nav-badge{background:var(--surface3) !important;color:var(--text) !important}
-html body.barya .nav-item.active .nav-badge{background:var(--surface) !important;color:var(--text) !important}
-@media(max-width:900px){html body.barya .bottom-nav{background:var(--surface) !important;border-top:2px solid var(--text) !important;box-shadow:none !important;padding-top:6px !important}
-html body.barya .bnav-item{font-size:12.5px !important;font-weight:700 !important;gap:3px !important;min-height:54px;justify-content:center;color:var(--muted) !important}
-html body.barya .bnav-item svg{width:22px !important;height:22px !important;padding:4px 16px;box-sizing:content-box;border-radius:99px}
-html body.barya .bnav-item.active{color:var(--text) !important}
-html body.barya .bnav-item.active svg{background:var(--gold);color:#1D1A14 !important}
-html body.barya .bnav-plus{border-radius:16px !important;background:var(--accent) !important;color:var(--on-accent) !important;box-shadow:0 0 0 4px var(--surface),0 0 0 6px var(--text) !important}
-html body.barya .money-tabs{gap:0 !important;border-bottom:1.5px solid var(--border);background:var(--bg) !important}
-html body.barya .mt-tab{border:0 !important;border-bottom:3px solid transparent !important;border-radius:0 !important;background:transparent !important;min-height:46px !important;color:var(--muted) !important;font-size:15px !important;font-weight:700 !important}
-html body.barya .mt-tab.active{border-bottom-color:var(--accent) !important;color:var(--text) !important;background:transparent !important}
-html body.barya .page-title{font-size:26px !important}
+html body.finled .hero-card::before{top:0 !important;left:0 !important;right:auto !important;bottom:0 !important;width:10px !important;height:auto !important;background:var(--gold) !important;border-radius:10px 0 0 10px !important}
+html body.finled .hero-card::after{display:none !important}
+html body.finled .hero-card .hero-amount{font-family:var(--font-d) !important;font-weight:800 !important;letter-spacing:-1px !important}
+html body.finled .hero-card .hw-val{font-family:var(--font-d) !important}
+html body.finled .btn{border-radius:8px !important;min-height:44px;font-size:14.5px !important;font-weight:700 !important;letter-spacing:0 !important;padding:10px 20px !important}
+html body.finled .btn-sm{min-height:36px;font-size:13px !important;padding:6px 14px !important}
+html body.finled .btn-primary{background:var(--accent) !important;color:var(--on-accent) !important;border:0 !important;box-shadow:0 2px 0 var(--accent-dim) !important}
+html body.finled .btn-primary:hover{background:var(--accent-hover) !important;box-shadow:0 2px 0 var(--accent-dim) !important}
+html body.finled .btn-primary:active{transform:translateY(2px);box-shadow:none !important}
+html body.finled .btn-ghost{background:transparent !important;border:1.5px solid var(--border2) !important;color:var(--text) !important}
+html body.finled .btn-ghost:hover{background:var(--surface2) !important}
+html body.finled input,html body.finled select,html body.finled textarea{background:var(--surface) !important;border:1.5px solid var(--border2) !important;border-radius:8px !important;color:var(--text) !important;box-shadow:none !important}
+html body.finled input:not([type=checkbox]):not([type=radio]):not([type=color]):not([type=range]):not([type=file]),html body.finled select{min-height:46px}
+html body.finled input:focus,html body.finled select:focus,html body.finled textarea:focus{border-color:var(--accent) !important;background:var(--surface) !important;box-shadow:0 0 0 3px rgba(var(--accent-rgb),.25) !important}
+html body.finled .form-group label{font-size:13px !important}
+html body.finled .pill{border:1.5px solid var(--border2) !important;color:var(--text) !important;background:transparent !important;min-height:36px}
+html body.finled .pill.active{background:var(--text) !important;color:var(--bg) !important;border-color:var(--text) !important}
+html body.finled .badge{border-radius:6px !important;padding:3px 9px !important}
+html body.finled .badge-food{color:#9A4A0C !important;background:rgba(154,74,12,.12) !important}
+html body.finled .badge-health{color:#A3261E !important;background:rgba(163,38,30,.1) !important}
+html body.finled .badge-entertainment{color:#7A5A00 !important;background:rgba(122,90,0,.12) !important}
+html body.finled:not(.light) .badge-food{color:#F4A261 !important;background:rgba(244,162,97,.14) !important}
+html body.finled:not(.light) .badge-health{color:#F28B82 !important;background:rgba(242,139,130,.14) !important}
+html body.finled:not(.light) .badge-entertainment{color:#F0C75E !important;background:rgba(240,199,94,.14) !important}
+html body.finled .prog-track{background:var(--surface3) !important;height:8px !important;border-radius:4px !important}
+html body.finled .toast{background:var(--text) !important;color:var(--bg) !important;border:0 !important;border-radius:8px !important;box-shadow:var(--shadow-lg) !important}
+html body.finled #fa-snack button,html body.finled #fa-fab{color:var(--on-accent) !important}
+html body.finled #fa-fab{border-radius:14px !important;box-shadow:0 2px 0 var(--accent-dim) !important}
+html body.finled .topbar{background:var(--bg) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;box-shadow:none !important;border-bottom:1.5px solid var(--border) !important}
+html body.finled .sidebar{background:var(--surface) !important;border-right:1.5px solid var(--border) !important;box-shadow:none !important}
+html body.finled .sb-top{border-bottom:1.5px dashed var(--border) !important}
+html body.finled .sb-bottom{border-top:1.5px dashed var(--border) !important}
+html body.finled .logo{font-family:var(--font-d) !important;font-size:22px !important;font-weight:800 !important;letter-spacing:0 !important}
+html body.finled .logo-text,html body.finled .logo-text span{letter-spacing:0 !important}
+html body.finled .logo-text span{color:var(--accent) !important}
+html body.finled .logo-mark{width:40px !important;height:40px !important;border-radius:10px !important;box-shadow:none !important}
+html body.finled .nav-item{font-size:15px !important;font-weight:700 !important;min-height:44px;border-radius:0 8px 8px 0 !important;border-left:4px solid transparent !important;color:var(--muted) !important}
+html body.finled .nav-item:hover:not(.active){background:var(--surface2) !important;color:var(--text) !important}
+html body.finled .nav-item.active{background:var(--gold-soft) !important;color:var(--text) !important;border-left-color:var(--accent) !important}
+html body.finled .nav-badge{background:var(--surface3) !important;color:var(--text) !important}
+html body.finled .nav-item.active .nav-badge{background:var(--surface) !important;color:var(--text) !important}
+@media(max-width:900px){html body.finled .bottom-nav{background:var(--surface) !important;border-top:2px solid var(--text) !important;box-shadow:none !important;padding-top:6px !important}
+html body.finled .bnav-item{font-size:12.5px !important;font-weight:700 !important;gap:3px !important;min-height:54px;justify-content:center;color:var(--muted) !important}
+html body.finled .bnav-item svg{width:22px !important;height:22px !important;padding:4px 16px;box-sizing:content-box;border-radius:99px}
+html body.finled .bnav-item.active{color:var(--text) !important}
+html body.finled .bnav-item.active svg{background:var(--gold);color:#1D1A14 !important}
+html body.finled .bnav-plus{border-radius:16px !important;background:var(--accent) !important;color:var(--on-accent) !important;box-shadow:0 0 0 4px var(--surface),0 0 0 6px var(--text) !important}
+html body.finled .money-tabs{gap:0 !important;border-bottom:1.5px solid var(--border);background:var(--bg) !important}
+html body.finled .mt-tab{border:0 !important;border-bottom:3px solid transparent !important;border-radius:0 !important;background:transparent !important;min-height:46px !important;color:var(--muted) !important;font-size:15px !important;font-weight:700 !important}
+html body.finled .mt-tab.active{border-bottom-color:var(--accent) !important;color:var(--text) !important;background:transparent !important}
+html body.finled .page-title{font-size:26px !important}
 }
-html body.barya .fn-sheet{border-radius:16px 16px 0 0 !important;border-top:2px solid var(--text) !important}
-@media(prefers-reduced-motion:reduce){html body.barya .section.active,html body.barya .bnav-item.active svg,html body.barya .badge-overdue{animation:none !important}
+html body.finled .fn-sheet{border-radius:16px 16px 0 0 !important;border-top:2px solid var(--text) !important}
+@media(prefers-reduced-motion:reduce){html body.finled .section.active,html body.finled .bnav-item.active svg,html body.finled .badge-overdue{animation:none !important}
 }
-html body.barya #welcome-splash>div>div[style*="linear-gradient"]{background:var(--surface) !important;border:1.5px solid var(--border) !important;border-radius:10px !important}
-html body.barya #welcome-splash div[style*="radial-gradient"]{display:none !important}
-html body.barya .splash-tabs{display:flex;justify-content:center;gap:4px;margin:0 0 18px;border-bottom:1.5px solid var(--border)}
-html body.barya .splash-tabs button{background:transparent;border:0;border-bottom:3px solid transparent;border-radius:0;color:var(--muted);font:inherit;font-size:14px;font-weight:700;padding:10px 12px;min-height:44px;cursor:pointer;margin-bottom:-1.5px}
-html body.barya .splash-tabs button.on,html body.barya .splash-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--accent)}
-html body.barya .verse-next{font-size:13px !important;min-height:40px}
-html body.barya #welcome-splash button[onclick="closeSplash()"]{border-radius:8px !important;min-height:48px;box-shadow:0 2px 0 var(--accent-dim);letter-spacing:0 !important}
-html body.barya .hero-wallets{grid-template-columns:1fr !important;gap:0 !important}
-html body.barya .hw{display:flex !important;justify-content:space-between !important;align-items:baseline !important;gap:12px;background:transparent !important;border:0 !important;border-top:1.5px dashed rgba(250,244,230,.38) !important;border-radius:0 !important;padding:12px 0 !important}
-html body.barya .hw-name{margin:0 !important;font-size:14px !important;font-weight:700 !important}
-html body.barya .hw-val{font-size:18px !important}
-html body.barya .hero-card::before{width:12px !important}
-html body.barya #month-snapshot>div:first-child{flex-wrap:wrap;gap:4px 14px}
-html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowrap}
+html body.finled #welcome-splash>div>div[style*="linear-gradient"]{background:var(--surface) !important;border:1.5px solid var(--border) !important;border-radius:10px !important}
+html body.finled #welcome-splash div[style*="radial-gradient"]{display:none !important}
+html body.finled .splash-tabs{display:flex;justify-content:center;gap:4px;margin:0 0 18px;border-bottom:1.5px solid var(--border)}
+html body.finled .splash-tabs button{background:transparent;border:0;border-bottom:3px solid transparent;border-radius:0;color:var(--muted);font:inherit;font-size:14px;font-weight:700;padding:10px 12px;min-height:44px;cursor:pointer;margin-bottom:-1.5px}
+html body.finled .splash-tabs button.on,html body.finled .splash-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--accent)}
+html body.finled .verse-next{font-size:13px !important;min-height:40px}
+html body.finled #welcome-splash button[onclick="closeSplash()"]{border-radius:8px !important;min-height:48px;box-shadow:0 2px 0 var(--accent-dim);letter-spacing:0 !important}
+html body.finled .hero-wallets{grid-template-columns:1fr !important;gap:0 !important}
+html body.finled .hw{display:flex !important;justify-content:space-between !important;align-items:baseline !important;gap:12px;background:transparent !important;border:0 !important;border-top:1.5px dashed rgba(250,244,230,.38) !important;border-radius:0 !important;padding:12px 0 !important}
+html body.finled .hw-name{margin:0 !important;font-size:14px !important;font-weight:700 !important}
+html body.finled .hw-val{font-size:18px !important}
+html body.finled .hero-card::before{width:12px !important}
+html body.finled #month-snapshot>div:first-child{flex-wrap:wrap;gap:4px 14px}
+html body.finled #month-snapshot>div:first-child>div:first-child{white-space:nowrap}
 </style>
 </head>
-<body class="barya">
-<script>(function(){var t=null;try{t=localStorage.getItem('mtTheme')}catch(e){}var l=t?t==='light':!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);document.body.className='barya'+(l?' light':'')})();</script>
+<body class="finled">
+<script>(function(){var t=null;try{t=localStorage.getItem('mtTheme')}catch(e){}var l=t?t==='light':!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);document.body.className='finled'+(l?' light':'')})();</script>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="shell">
 
@@ -1477,15 +1477,15 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
     <!-- VIEW: LANDING -->
     <div id="auth-view-landing" class="auth-view">
       <div class="auth-view-main">
-        <div style="width:56px;height:56px;margin:0 auto 14px;overflow:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center"><img src="icon-192.png?v=4" alt="Barya" style="width:100%;height:100%;object-fit:contain;border-radius:inherit"></div>
-        <div class="pin-title">Bar<span style="color:var(--accent)">ya</span></div>
+        <div style="width:56px;height:56px;margin:0 auto 14px;overflow:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center"><img src="Photos/icon-192.png?v=5" alt="FinLed" style="width:100%;height:100%;object-fit:contain;border-radius:inherit"></div>
+        <div class="pin-title">Fin<span style="color:var(--accent)">Led</span></div>
         <div class="pin-sub" style="margin-bottom:22px">Sign in to sync your data across devices</div>
 
         <div id="pwa-install-banner" style="display:none;width:100%;margin-bottom:18px;background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.3);border-radius:12px;padding:12px 14px;text-align:left">
           <div style="display:flex;align-items:center;gap:10px">
             <div style="font-size:20px;flex-shrink:0">📲</div>
             <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:700;color:var(--text)">Install Barya</div>
+              <div style="font-size:13px;font-weight:700;color:var(--text)">Install FinLed</div>
               <div id="pwa-install-sub" style="font-size:11px;color:var(--muted)">Get it as an app on your home screen - faster, works offline.</div>
             </div>
           </div>
@@ -1541,7 +1541,7 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
   <!-- STEP: TERMS OF USE & PRIVACY NOTICE (first-time consent) -->
   <div id="auth-terms" class="pin-box" style="display:none;max-width:560px;text-align:left">
     <div style="text-align:center;margin-bottom:18px">
-      <div style="width:48px;height:48px;margin:0 auto 12px;overflow:hidden;border-radius:13px;display:flex;align-items:center;justify-content:center"><img src="icon-192.png?v=4" alt="Barya" style="width:100%;height:100%;object-fit:contain;border-radius:inherit"></div>
+      <div style="width:48px;height:48px;margin:0 auto 12px;overflow:hidden;border-radius:13px;display:flex;align-items:center;justify-content:center"><img src="Photos/icon-192.png?v=5" alt="FinLed" style="width:100%;height:100%;object-fit:contain;border-radius:inherit"></div>
       <div class="pin-title" style="margin-bottom:4px">Terms of Use &amp; Privacy Policy</div>
       <div class="pin-sub">Please read before you start tracking your money</div>
     </div>
@@ -1561,7 +1561,7 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
         <input type="checkbox" id="terms-agree-check" disabled onchange="document.getElementById('terms-continue-btn').disabled=!this.checked">
         <span class="cbox-box"><svg viewBox="0 0 16 16"><path d="M3.5 8.3L6.3 11.2L12.5 4.5"/></svg></span>
       </span>
-      <span style="font-size:12.5px;color:var(--text);line-height:1.5">I have read and agree to the <b>Terms of Use</b> and <b>Privacy Policy</b>, and I consent to Barya collecting and processing my personal data as described, including storage and transfer to Google servers that may be outside the Philippines (Data Privacy Act of 2012).</span>
+      <span style="font-size:12.5px;color:var(--text);line-height:1.5">I have read and agree to the <b>Terms of Use</b> and <b>Privacy Policy</b>, and I consent to FinLed collecting and processing my personal data as described, including storage and transfer to Google servers that may be outside the Philippines (Data Privacy Act of 2012).</span>
     </label>
 
     <button id="terms-continue-btn" onclick="acceptTermsAndContinue()" disabled style="width:100%;background:var(--accent);color:var(--on-accent);border:none;padding:12px;border-radius:10px;font-family:var(--font-d);font-size:14px;font-weight:700;cursor:pointer;opacity:1">Agree &amp; Continue</button>
@@ -1586,7 +1586,7 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
   <!-- STEP: REGISTER (new user) -->
   <div id="auth-register" class="pin-box" style="display:none">
     <div style="font-size:32px;margin-bottom:14px">👋</div>
-    <div class="pin-title">Welcome to <span style="color:var(--accent)">Barya</span></div>
+    <div class="pin-title">Welcome to <span style="color:var(--accent)">FinLed</span></div>
     <div class="pin-sub" style="margin-bottom:22px">Just set a 4-digit PIN for this device</div>
     <div style="text-align:left;width:100%;margin-bottom:14px">
       <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:500;display:block;margin-bottom:6px">Your Name</label>
@@ -1699,8 +1699,8 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
 
   <!-- STEP: PIN LOCK (returning user) -->
   <div id="auth-pin" class="pin-box" style="display:none">
-    <div style="width:56px;height:56px;margin:0 auto 14px;overflow:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center"><img src="icon-192.png?v=4" alt="Barya" style="width:100%;height:100%;object-fit:contain;border-radius:inherit"></div>
-    <div class="pin-title">Bar<span style="color:var(--accent)">ya</span></div>
+    <div style="width:56px;height:56px;margin:0 auto 14px;overflow:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center"><img src="Photos/icon-192.png?v=5" alt="FinLed" style="width:100%;height:100%;object-fit:contain;border-radius:inherit"></div>
+    <div class="pin-title">Fin<span style="color:var(--accent)">Led</span></div>
     <div class="pin-sub" id="pin-sub" style="margin-bottom:6px">Enter your PIN to continue</div>
     <div id="pin-welcome-name" style="font-family:var(--font-d);font-size:18px;font-weight:700;margin-bottom:22px;color:var(--text)"></div>
     <div class="pin-dots" id="pin-dots">
@@ -1761,8 +1761,8 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
 <!-- WELCOME SPLASH -->
 <div id="welcome-splash" style="position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:safe center;justify-content:safe center;flex-direction:column;padding:30px;overflow-y:auto">
   <div style="max-width:480px;width:100%;text-align:center">
-    <div style="width:56px;height:56px;overflow:hidden;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px"><img src="icon-192.png?v=4" alt="Barya" style="width:100%;height:100%;object-fit:contain;border-radius:inherit"></div>
-    <div style="font-family:var(--font-d);font-size:26px;font-weight:700;margin-bottom:4px">Bar<span style="color:var(--accent)">ya</span></div>
+    <div style="width:56px;height:56px;overflow:hidden;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px"><img src="Photos/icon-192.png?v=5" alt="FinLed" style="width:100%;height:100%;object-fit:contain;border-radius:inherit"></div>
+    <div style="font-family:var(--font-d);font-size:26px;font-weight:700;margin-bottom:4px">Fin<span style="color:var(--accent)">Led</span></div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:36px">Personal Finance Tracker · v2.4</div>
     <div style="background:linear-gradient(135deg,var(--surface) 0%,var(--surface2) 100%);border:1px solid rgba(var(--accent-rgb),.18);border-radius:16px;padding:26px 28px;margin-bottom:28px;position:relative;overflow:hidden">
       <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(var(--accent-rgb),.1) 0%,transparent 70%);pointer-events:none"></div>
@@ -1802,8 +1802,8 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
 <nav class="sidebar" aria-label="Main">
   <div class="sb-top">
     <div class="logo">
-      <div class="logo-mark" style="background:transparent;border:none;box-shadow:none;padding:2px"><img src="icon-192.png?v=4" alt="Barya" style="width:100%;height:100%;object-fit:contain;border-radius:8px"></div>
-      <div class="logo-text">Bar<span>ya</span></div>
+      <div class="logo-mark" style="background:transparent;border:none;box-shadow:none;padding:2px"><img src="Photos/icon-192.png?v=5" alt="FinLed" style="width:100%;height:100%;object-fit:contain;border-radius:8px"></div>
+      <div class="logo-text">Fin<span>Led</span></div>
     </div>
   </div>
   <div class="sb-nav">
@@ -2218,7 +2218,7 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
         <button class="set-item" onclick="openSetPanel('appearance')"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg><span class="lab">Appearance</span><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
         <button class="set-item" data-tour="settings-region" onclick="openSetPanel('region')"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg><span class="lab">Language &amp; currency</span><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
         <button class="set-item" onclick="show('export')"><svg class="ic" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 12v6M9 15l3 3 3-3"/></svg><span class="lab">Export &amp; reports</span><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
-         <button class="set-item" id="settings-install-item" onclick="event.stopPropagation();handleInstallClick()"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v11"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg><span class="lab">Install Barya</span><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+         <button class="set-item" id="settings-install-item" onclick="event.stopPropagation();handleInstallClick()"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v11"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg><span class="lab">Install FinLed</span><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
         <button class="set-item" onclick="openSetPanel('security')"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><span class="lab">PIN &amp; Security</span><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
         <button class="set-item" onclick="openSetPanel('auto')"><svg class="ic" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 11-2.1-9.4L23 10"/></svg><span class="lab">Automation &amp; Recurring</span><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
         <button class="set-item" onclick="openSetPanel('data')"><svg class="ic" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.7-4 3-9 3s-9-1.3-9-3M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/></svg><span class="lab">Data &amp; Backup</span><svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
@@ -2352,7 +2352,7 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
       <div class="set-panel single" data-panel="legal">
     <!-- LEGAL & DATA -->
     <div class="card" style="margin-bottom:14px">
-      <div class="row"><div><div style="font-size:13px;font-weight:500">Terms of Use</div><div style="font-size:11px;color:var(--muted)">Rules for using Barya</div></div><button class="btn btn-ghost btn-sm" onclick="openLegal('terms')">View</button></div>
+      <div class="row"><div><div style="font-size:13px;font-weight:500">Terms of Use</div><div style="font-size:11px;color:var(--muted)">Rules for using FinLed</div></div><button class="btn btn-ghost btn-sm" onclick="openLegal('terms')">View</button></div>
       <div class="row"><div><div style="font-size:13px;font-weight:500">Privacy Policy</div><div style="font-size:11px;color:var(--muted)">How your data is collected, used and protected (RA 10173)</div></div><button class="btn btn-ghost btn-sm" onclick="openLegal('privacy')">View</button></div>
       <div class="row" style="border-bottom:none"><div><div style="font-size:13px;font-weight:500;color:var(--red)">Delete Account &amp; All Data</div><div style="font-size:11px;color:var(--muted)">Your right to erasure: removes your account, cloud data and this device's copy</div></div><button class="btn btn-danger btn-sm" onclick="deleteAccountAndData()">Delete</button></div>
     </div>
@@ -2360,7 +2360,7 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
       <div class="set-panel single" data-panel="about">
     <!-- ABOUT -->
     <div class="card">
-      <div class="row"><span class="lbl">App</span><span style="font-size:13px;font-weight:500">Barya</span></div>
+      <div class="row"><span class="lbl">App</span><span style="font-size:13px;font-weight:500">FinLed</span></div>
       <div class="row"><span class="lbl">Version</span><span style="font-size:13px;color:var(--muted)">2.4</span></div>
       <div class="row" style="border-bottom:none"><span class="lbl">Storage</span><span style="font-size:13px;color:var(--muted)">Synced to your account</span></div>
     </div>
@@ -2369,7 +2369,7 @@ html body.barya #month-snapshot>div:first-child>div:first-child{white-space:nowr
 
     </div>
 
-    <!-- Barya INSTALL INSTRUCTIONS MODAL is created dynamically by showInstallInstructions() -->
+    <!-- FinLed INSTALL INSTRUCTIONS MODAL is created dynamically by showInstallInstructions() -->
     <style>
       #pwa-install-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);z-index:999999;align-items:center;justify-content:center;padding:20px;overflow-y:auto;pointer-events:auto;}
       #pwa-install-modal.pwa-install-open{display:flex !important;}
@@ -3159,7 +3159,7 @@ function confirmGuestSignoutAnyway(){
 }
 function authSignOut(){
   // Only reached for non-guest accounts now (real Sign Out button is hidden for guests).
-  mtConfirm('Sign out of Barya on this device? Your data stays saved to your account in the cloud, and this device will reset to a clean app so someone else can use it.','🚪','Sign Out','var(--red)').then(ok=>{
+  mtConfirm('Sign out of FinLed on this device? Your data stays saved to your account in the cloud, and this device will reset to a clean app so someone else can use it.','🚪','Sign Out','var(--red)').then(ok=>{
     if(!ok)return;
     doSignOut();
   });
@@ -3281,7 +3281,7 @@ function showConnectionErrorScreen(){
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0119 12.55"/><path d="M5 12.55a10.94 10.94 0 015.17-2.39"/><path d="M10.71 5.05A16 16 0 0122.58 9"/><path d="M1.42 9a15.91 15.91 0 014.7-2.88"/><path d="M8.53 16.11a6 6 0 016.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
     </div>
     <div style="font-size:16px;font-weight:700;margin-bottom:8px">Can't connect right now</div>
-    <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:22px">Barya needs a connection to reach your account. Check your internet connection, then try again.</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:22px">FinLed needs a connection to reach your account. Check your internet connection, then try again.</div>
     <button onclick="location.reload()" style="background:var(--accent);color:var(--on-accent);border:none;padding:11px 28px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">Retry</button>
   </div>`;
 }
@@ -5022,7 +5022,7 @@ function exportCSV(type){
 function backupData(){
   const backup=JSON.stringify(state,null,2);
   const d=today();
-  dlFile(backup,`barya-backup-${d}.json`,'application/json');toast('Backup saved ✓');
+  dlFile(backup,`finled-backup-${d}.json`,'application/json');toast('Backup saved ✓');
 }
 function migrateBackup(parsed){
   // Convert old balances/balanceDates format to wallets array
@@ -5190,7 +5190,7 @@ function buildReportHTML(){
 <body>
   <div class="report-header">
     <div>
-      <div class="report-brand">Bar<span>ya</span></div>
+      <div class="report-brand">Fin<span>Led</span></div>
       <div style="font-size:11px;color:#999;margin-top:3px">Personal Financial Report</div>
     </div>
     <div class="report-meta">
@@ -5226,7 +5226,7 @@ function buildReportHTML(){
   ${payTotal>0?`<div style="text-align:right;margin-top:6px;font-size:11px;color:#999">Total outstanding payable: <strong style="color:#dc2626">${fp(payTotal)}</strong></div>`:''}
 
   <div class="report-footer">
-    <span>Barya v2.4 - Personal Finance Tracker</span>
+    <span>FinLed v2.4 - Personal Finance Tracker</span>
     <span>Confidential · For personal use only</span>
   </div>
 
@@ -5578,7 +5578,7 @@ function getInstallModal(){
         <div class="pwa-install-head">
           <div class="pwa-install-icon">📲</div>
           <div>
-            <div id="pwa-install-title" class="card-title" style="margin:0">Install Barya</div>
+            <div id="pwa-install-title" class="card-title" style="margin:0">Install FinLed</div>
             <div id="pwa-install-device" style="font-size:11px;color:var(--muted);margin-top:2px"></div>
           </div>
         </div>
@@ -5610,38 +5610,38 @@ function showInstallInstructions(){
   if(isIOSDevice()){
     device.textContent='iPhone / iPad';
     steps.innerHTML=`
-      <div style="font-weight:700;margin-bottom:8px">Add Barya to your Home Screen</div>
+      <div style="font-weight:700;margin-bottom:8px">Add FinLed to your Home Screen</div>
       <ol style="margin:0;padding-left:20px">
-        <li>Open Barya in <strong>Safari</strong>.</li>
+        <li>Open FinLed in <strong>Safari</strong>.</li>
         <li>Tap the <strong>Share</strong> button <strong>↗</strong>.</li>
         <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
         <li>Tap <strong>Add</strong>.</li>
       </ol>
       <div style="margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--surface2);color:var(--muted);font-size:11.5px">
-        <strong>Important:</strong> iPhone/iPad installation must be done through Safari. Barya cannot open Apple’s Add to Home Screen menu automatically.
+        <strong>Important:</strong> iPhone/iPad installation must be done through Safari. FinLed cannot open Apple’s Add to Home Screen menu automatically.
       </div>`;
   }else if(isAndroidDevice()){
     device.textContent='Android';
     steps.innerHTML=`
-      <div style="font-weight:700;margin-bottom:8px">Install Barya</div>
+      <div style="font-weight:700;margin-bottom:8px">Install FinLed</div>
       <ol style="margin:0;padding-left:20px">
-        <li>Open Barya in <strong>Chrome</strong>.</li>
+        <li>Open FinLed in <strong>Chrome</strong>.</li>
         <li>If an install prompt appears, tap <strong>Install</strong>.</li>
         <li>If it does not appear, tap Chrome’s <strong>⋮</strong> menu.</li>
         <li>Choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li>
         <li>Confirm the installation.</li>
       </ol>
       <div style="margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--surface2);color:var(--muted);font-size:11.5px">
-        If Barya is installable, the <strong>Install Barya</strong> button can also open Chrome’s installation prompt directly.
+        If FinLed is installable, the <strong>Install FinLed</strong> button can also open Chrome’s installation prompt directly.
       </div>`;
   }else{
     device.textContent='Computer / other browser';
     steps.innerHTML=`
-      <div style="font-weight:700;margin-bottom:8px">Install Barya</div>
+      <div style="font-weight:700;margin-bottom:8px">Install FinLed</div>
       <ol style="margin:0;padding-left:20px">
         <li>Use a supported browser such as <strong>Chrome</strong> or <strong>Edge</strong>.</li>
         <li>Use the browser's <strong>Install</strong> option.</li>
-        <li>Choose <strong>Install Barya</strong> and confirm.</li>
+        <li>Choose <strong>Install FinLed</strong> and confirm.</li>
       </ol>`;
   }
 
@@ -5667,17 +5667,17 @@ function updateInstallBanner(){
   if(settingsItem)settingsItem.style.display='flex';
 
   if(deferredInstallPrompt){
-    if(btn){btn.style.display='block';btn.textContent='Install Barya';}
-    if(sub)sub.textContent='Install Barya directly on your device - no browser menu needed.';
+    if(btn){btn.style.display='block';btn.textContent='Install FinLed';}
+    if(sub)sub.textContent='Install FinLed directly on your device - no browser menu needed.';
   }else if(isIOSDevice()){
     if(btn){btn.style.display='block';btn.textContent='How to Install';}
-    if(sub)sub.textContent='Add Barya to your Home Screen from Safari.';
+    if(sub)sub.textContent='Add FinLed to your Home Screen from Safari.';
   }else if(isAndroidDevice()){
-    if(btn){btn.style.display='block';btn.textContent='Install Barya';}
+    if(btn){btn.style.display='block';btn.textContent='Install FinLed';}
     if(sub)sub.textContent='Install directly when Android provides the install prompt.';
   }else{
     if(btn){btn.style.display='block';btn.textContent='How to Install';}
-    if(sub)sub.textContent='Install Barya as an app from a supported browser.';
+    if(sub)sub.textContent='Install FinLed as an app from a supported browser.';
   }
 }
 
@@ -5695,7 +5695,7 @@ window.addEventListener('appinstalled',()=>{
   deferredInstallPrompt=null;
   updateInstallBanner();
   closeInstallInstructions();
-  if(typeof toast==='function')toast('Barya installed ✓');
+  if(typeof toast==='function')toast('FinLed installed ✓');
 });
 
 async function installApp(){
@@ -5705,9 +5705,9 @@ async function installApp(){
       const choice=await deferredInstallPrompt.userChoice;
       deferredInstallPrompt=null;
       updateInstallBanner();
-      if(choice&&choice.outcome==='accepted'&&typeof toast==='function')toast('Installing Barya…');
+      if(choice&&choice.outcome==='accepted'&&typeof toast==='function')toast('Installing FinLed…');
     }catch(err){
-      console.warn('Barya install prompt failed:',err);
+      console.warn('FinLed install prompt failed:',err);
       deferredInstallPrompt=null;
       updateInstallBanner();
       showInstallInstructions();
@@ -5831,9 +5831,9 @@ const OB_T={
     src:{friend:'Friend or family',facebook:'Facebook',tiktok:'TikTok',instagram:'Instagram',youtube:'YouTube',google:'Google search',church:'Church / community',other:'Somewhere else'}},
   fil:{step:'Hakbang {n} sa 3',t1:'Piliin ang iyong wika',s1:'Mababago mo ito anumang oras sa Settings.',t2:'Piliin ang iyong pera',s2:'Simbolo lang ang magbabago. Hindi kino-convert ang mga halaga.',t3:'Saan mo kami nalaman?',s3:'Gusto lang naming malaman para mas marami pa kaming matulungan.',cont:'Magpatuloy',back:'Bumalik',skip:'Laktawan muna',sug:'Mungkahi',oph:'Sabihin kung saan…',
     src:{friend:'Kaibigan o pamilya',facebook:'Facebook',tiktok:'TikTok',instagram:'Instagram',youtube:'YouTube',google:'Google search',church:'Simbahan / komunidad',other:'Iba pa'}},
-  ja:{step:'ステップ {n} / 3',t1:'言語を選択',s1:'設定からいつでも変更できます。',t2:'通貨を選択',s2:'記号のみ変わります。金額は換算されません。',t3:'Baryaをどこで知りましたか？',s3:'より多くの方に届けるための参考にします。',cont:'続ける',back:'戻る',skip:'今はスキップ',sug:'おすすめ',oph:'どこで知りましたか…',
+  ja:{step:'ステップ {n} / 3',t1:'言語を選択',s1:'設定からいつでも変更できます。',t2:'通貨を選択',s2:'記号のみ変わります。金額は換算されません。',t3:'FinLedをどこで知りましたか？',s3:'より多くの方に届けるための参考にします。',cont:'続ける',back:'戻る',skip:'今はスキップ',sug:'おすすめ',oph:'どこで知りましたか…',
     src:{friend:'友人・家族',facebook:'Facebook',tiktok:'TikTok',instagram:'Instagram',youtube:'YouTube',google:'Google検索',church:'教会・コミュニティ',other:'その他'}},
-  ko:{step:'{n}/3 단계',t1:'언어를 선택하세요',s1:'설정에서 언제든 바꿀 수 있어요.',t2:'통화를 선택하세요',s2:'기호만 바뀝니다. 금액은 환산되지 않아요.',t3:'Barya를 어떻게 알게 되셨나요?',s3:'더 많은 분들께 다가가는 데 도움이 돼요.',cont:'계속',back:'뒤로',skip:'나중에 하기',sug:'추천',oph:'어디에서 알게 되셨나요…',
+  ko:{step:'{n}/3 단계',t1:'언어를 선택하세요',s1:'설정에서 언제든 바꿀 수 있어요.',t2:'통화를 선택하세요',s2:'기호만 바뀝니다. 금액은 환산되지 않아요.',t3:'FinLed를 어떻게 알게 되셨나요?',s3:'더 많은 분들께 다가가는 데 도움이 돼요.',cont:'계속',back:'뒤로',skip:'나중에 하기',sug:'추천',oph:'어디에서 알게 되셨나요…',
     src:{friend:'친구 또는 가족',facebook:'Facebook',tiktok:'TikTok',instagram:'Instagram',youtube:'YouTube',google:'구글 검색',church:'교회 / 커뮤니티',other:'기타'}},
   es:{step:'Paso {n} de 3',t1:'Elige tu idioma',s1:'Puedes cambiarlo cuando quieras en Ajustes.',t2:'Elige tu moneda',s2:'Solo cambia el símbolo. Los montos no se convierten.',t3:'¿Dónde te enteraste de nosotros?',s3:'Solo por curiosidad. Nos ayuda a llegar a más personas.',cont:'Continuar',back:'Atrás',skip:'Omitir por ahora',sug:'Sugerido',oph:'Cuéntanos dónde…',
     src:{friend:'Amigo o familia',facebook:'Facebook',tiktok:'TikTok',instagram:'Instagram',youtube:'YouTube',google:'Búsqueda en Google',church:'Iglesia / comunidad',other:'Otro lugar'}}
@@ -6215,8 +6215,8 @@ async function enableBiometric(){
   try{
     const cred=await navigator.credentials.create({publicKey:{
       challenge:crypto.getRandomValues(new Uint8Array(32)),
-      rp:{name:'Barya'},
-      user:{id:crypto.getRandomValues(new Uint8Array(16)),name:'finuity-device',displayName:state.username||'Barya'},
+      rp:{name:'FinLed'},
+      user:{id:crypto.getRandomValues(new Uint8Array(16)),name:'finuity-device',displayName:state.username||'FinLed'},
       pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],
       authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'discouraged'},
       attestation:'none',timeout:60000
@@ -6895,14 +6895,14 @@ document.addEventListener('touchend',e=>{
 const TUTORIAL_SLIDES=[
   {
     icon:'💵',
-    title:'Welcome to <span style="color:var(--accent)">Barya</span>',
+    title:'Welcome to <span style="color:var(--accent)">FinLed</span>',
     desc:'Your personal finance tracker - track income, expenses, wallets, loans, and savings goals all in one place.',
     tip:null
   },
   {
     icon:'👛',
     title:'Your <span style="color:var(--accent)">Wallets</span>',
-    desc:'Barya tracks your balances across wallets like GCash, Maya, and Cash on Hand. Update them anytime from the <b>Balances</b> page.',
+    desc:'FinLed tracks your balances across wallets like GCash, Maya, and Cash on Hand. Update them anytime from the <b>Balances</b> page.',
     tip:'💡 You can add or remove wallets in the Balances section.'
   },
   {
@@ -7024,14 +7024,14 @@ function resolveMergeChoice(useRemote){
 
 /* ══ LEGAL: Terms of Use + Privacy Policy (single source, used at sign-up, login screen and Settings) ══ */
 const LEGAL_VERSION='2.0', LEGAL_UPDATED='September 28, 2026';
-const LEGAL_DEV='[YOUR NAME / BUSINESS NAME]';          // <-- fill in: the person or entity that runs Barya
+const LEGAL_DEV='[YOUR NAME / BUSINESS NAME]';          // <-- fill in: the person or entity that runs FinLed
 const LEGAL_EMAIL='[YOUR CONTACT EMAIL]';               // <-- fill in: public contact / privacy email
 const LEGAL_DOCS={
 terms:[
-['Acceptance of These Terms',`By creating an account, signing in, continuing as a Guest, or otherwise using Barya ("the App"), you agree to these Terms of Use and to our Privacy Policy. Ticking the agreement box is a valid electronic signature and creates a binding agreement under the Electronic Commerce Act of 2000 (Republic Act No. 8792). If you do not agree, do not use the App.`],
+['Acceptance of These Terms',`By creating an account, signing in, continuing as a Guest, or otherwise using FinLed ("the App"), you agree to these Terms of Use and to our Privacy Policy. Ticking the agreement box is a valid electronic signature and creates a binding agreement under the Electronic Commerce Act of 2000 (Republic Act No. 8792). If you do not agree, do not use the App.`],
 ['Who May Use the App',`You must be at least 18 years old. If you are younger, a parent or legal guardian must read and accept these documents on your behalf and supervise your use. The App is for your own personal, non-commercial use.`],
-['What Barya Is',`Barya is a personal, self-managed finance tracker for income, expenses, wallet balances (e.g. GCash, Maya, cash), loans and savings goals that <b>you</b> enter yourself. It is provided by ${LEGAL_DEV} ("we", "us") and is under active development.`],
-['What Barya Is Not',`Barya is <b>not</b> a bank, e-wallet, electronic money issuer, lending or financing company, payment processor, remittance provider, broker or investment adviser, and is not supervised by the Bangko Sentral ng Pilipinas or the Securities and Exchange Commission. It has no connection to your real bank or e-wallet accounts and never moves money. Balances, loans and reports are figures you typed in; a loan entry is a personal note, not proof of a debt or a collection tool. Nothing in the App is financial, investment, tax, accounting or legal advice, and generated reports are unaudited and are not for tax filings or submission to any authority unless you verify them yourself.`],
+['What FinLed Is',`FinLed is a personal, self-managed finance tracker for income, expenses, wallet balances (e.g. GCash, Maya, cash), loans and savings goals that <b>you</b> enter yourself. It is provided by ${LEGAL_DEV} ("we", "us") and is under active development.`],
+['What FinLed Is Not',`FinLed is <b>not</b> a bank, e-wallet, electronic money issuer, lending or financing company, payment processor, remittance provider, broker or investment adviser, and is not supervised by the Bangko Sentral ng Pilipinas or the Securities and Exchange Commission. It has no connection to your real bank or e-wallet accounts and never moves money. Balances, loans and reports are figures you typed in; a loan entry is a personal note, not proof of a debt or a collection tool. Nothing in the App is financial, investment, tax, accounting or legal advice, and generated reports are unaudited and are not for tax filings or submission to any authority unless you verify them yourself.`],
 ['Your Account and Security',`You are responsible for your sign-in credentials, your device, your 4-digit PIN and your recovery answer, and for all activity under your account. The PIN (and optional device biometric unlock) is a convenience lock, <b>not</b> encryption. Guest accounts have no email, so we cannot recover them if you lose the device or clear its storage. Tell us promptly if you suspect unauthorized access.`],
 ['Your Data and Content',`You own the information you enter. You give us a limited, non-exclusive licence to store, process and sync it solely to run the App for you. You are responsible for its accuracy and for having the right to enter information about other people (for example names in loan records) - keep it to what is necessary. Do not enter government ID numbers, card numbers, bank credentials or passwords.`],
 ['Acceptable Use',`You agree not to: use the App for anything unlawful, fraudulent or for money laundering; try to access another person's account or data; probe, attack, overload, scrape or reverse-engineer the App or its services; upload malware; or bypass any security or usage limit.`],
@@ -7048,7 +7048,7 @@ terms:[
 ['General',`If any provision is unenforceable, the rest remains in force. Our failure to enforce a right is not a waiver. These Terms and the Privacy Policy are the entire agreement between you and us about the App. Contact: ${LEGAL_EMAIL}.`]
 ],
 privacy:[
-['Who We Are',`${LEGAL_DEV} is the Personal Information Controller of Barya. Privacy contact / Data Protection Officer: ${LEGAL_EMAIL}. This policy follows the Data Privacy Act of 2012 (Republic Act No. 10173), its Implementing Rules and Regulations, and issuances of the National Privacy Commission (NPC).`],
+['Who We Are',`${LEGAL_DEV} is the Personal Information Controller of FinLed. Privacy contact / Data Protection Officer: ${LEGAL_EMAIL}. This policy follows the Data Privacy Act of 2012 (Republic Act No. 10173), its Implementing Rules and Regulations, and issuances of the National Privacy Commission (NPC).`],
 ['Personal Data We Handle',`<b>Account data:</b> email address, sign-in method (Google, email/password or guest), display name, and a unique account ID.<br><b>Data you enter:</b> income, expenses, wallet names and balances, loans (including names of people and notes), savings goals, budget limit, notes, and app settings.<br><b>Security data:</b> a salted hash of your PIN, your recovery question, and a salted hash of your answer (we cannot read either).<br><b>Technical data:</b> authentication tokens and data your browser stores (localStorage/sessionStorage: theme, tutorial status, unlock state). Google may receive your IP address and device details when you sign in, sync, or load fonts.<br><b>We do not collect:</b> bank or e-wallet credentials, card numbers, precise location, contacts, photos, or microphone/camera data, and we do not run advertising or third-party analytics.`],
 ['Why We Use It and Our Legal Basis',`We process data to (1) create and secure your account, (2) store, sync and display your records across your devices, (3) provide backups, exports and reports you request, and (4) keep the service safe and fix problems. Our bases under Section 12 of the Data Privacy Act are your <b>consent</b> (given when you accept these documents), performance of the service you asked for, and our legitimate interest in security and reliability. We do not sell your data, use it for profiling or advertising, or make automated decisions about you.`],
 ['Where Your Data Is Kept',`A copy is stored in your browser on your device. If you use an account, a copy is also stored in Google Cloud Firestore under your account ID. Google servers may be located outside the Philippines, so your data may be transferred and processed abroad; Google acts as our processor under its own security and data-protection commitments, and we remain accountable for your data.`],
@@ -7131,7 +7131,7 @@ function acceptTermsAndContinue(){
 /* Right to erasure: delete cloud data, the account, and the local copy */
 async function deleteAccountAndData(){
   if(!cloudUser){toast('Not signed in','error');return;}
-  const ok=await mtConfirm('This permanently deletes your Barya data from the cloud and this device. Your Supabase login account itself must be removed from Supabase separately. Download a backup first if you want to keep a copy.','🗑️','Delete Everything','var(--red)');
+  const ok=await mtConfirm('This permanently deletes your FinLed data from the cloud and this device. Your Supabase login account itself must be removed from Supabase separately. Download a backup first if you want to keep a copy.','🗑️','Delete Everything','var(--red)');
   if(!ok)return;
   const uid=cloudUser.uid;clearTimeout(cloudSyncTimer);cloudPushPending=false;
   try{
@@ -7140,7 +7140,7 @@ async function deleteAccountAndData(){
   }catch(e){console.error(e);toast('Could not delete your cloud data: '+(e?.message||'Unknown error'),'error');return;}
   sessionStorage.removeItem('mtUnlocked');stateLoadedForUid=null;Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,defaultState());
   ['kwentadoV1','mtTutDone','mtGuestBannerDismissAt','mtGuestNudge3Shown','mtGuestRemindAt','mtMoneyTab','finCloudLinked','finBioCred','finPinLock'].forEach(k=>localStorage.removeItem(k));
-  await supabaseClient.auth.signOut();toast('Your Barya data was deleted');
+  await supabaseClient.auth.signOut();toast('Your FinLed data was deleted');
 }
 
 /* INIT */
@@ -7378,7 +7378,7 @@ window.logRecurring = function(templateId){
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:28px 24px 22px;max-width:380px;width:100%;box-shadow:var(--shadow-lg)">
     <div style="font-size:32px;margin-bottom:10px;text-align:center">🧾</div>
     <div style="font-size:15px;font-weight:700;color:var(--text);text-align:center;margin-bottom:8px">Scan a receipt - free</div>
-    <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px">Take a photo and Barya reads the total, store and date for you. Your photo is read right on your phone - it is <b>never uploaded or saved</b>.</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px">Take a photo and FinLed reads the total, store and date for you. Your photo is read right on your phone - it is <b>never uploaded or saved</b>.</div>
     <div style="font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:16px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px">
       Because this reader is free, it has limits:<br>
       • Works best on flat, well-lit, printed receipts<br>
@@ -7911,7 +7911,7 @@ function closeMoreSheet(){var e=document.getElementById('more-sheet');if(e){e.cl
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMoreSheet();closeGuestSheet();}});
 </script>
 <script>
-/* Barya: make the div-based nav keyboard and screen-reader friendly */
+/* FinLed: make the div-based nav keyboard and screen-reader friendly */
 (function(){
   function wire(){
     document.querySelectorAll('.nav-item,.bnav-item:not(.bnav-plus-wrap)').forEach(function(el){
