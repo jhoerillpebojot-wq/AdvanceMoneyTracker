@@ -1,7 +1,7 @@
-/* FINLEDGER service worker
-   Caches only the app shell (this page + the Supabase JS script it loads +
+/* FinLed service worker
+   Caches only the app shell (this page + the Supabase JS library it loads +
    the manifest/icons) so the app can open with no connection at all.
-   It never touches Supabase database/Auth network calls — those are left alone so
+   It never touches Supabase (database/Auth) network calls — those are left alone so
    cloud sync keeps working normally whenever you do have a connection.
 
    IMPORTANT: bump the number in CACHE_NAME any time you change index.html,
@@ -11,15 +11,19 @@
    CACHE_NAME — so an unchanged cache name means old, stale assets (icons
    included) can keep being served indefinitely even after you replace the
    underlying files. */
-const CACHE_NAME = 'finledger-shell-v24';
+const CACHE_NAME = 'finled-shell-v27';
 
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
-  './icon-192.png',
-  './icon-512.png',
-  './icon-512-maskable.png',
+  './Photos/icon-192.png',
+  './Photos/icon-512.png',
+  './Photos/icon-192-maskable.png',
+  './Photos/icon-512-maskable.png',
+  './Photos/apple-touch-icon.png',
+  './Photos/favicon-32.png',
+  './Photos/finled-logo.png',
   './learn.css',
   './learn.js',
   './virtual-pet/pet.css',
@@ -52,9 +56,9 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return; // never touch writes (Supabase writes etc.)
+  if (event.request.method !== 'GET') return; // never touch writes (Supabase etc.)
 
-  // Compare without the query string for our own files: the page links icons as "icon-192.png?v=2",
+  // Compare without the query string for our own files: the page links icons as "Photos/icon-192.png?v=5",
   // which never matched the plain entries in APP_SHELL, so those requests were never cached offline.
   const keyOf = u => {
     const x = new URL(u, self.location.href);
@@ -65,11 +69,11 @@ self.addEventListener('fetch', event => {
     try { return keyOf(shellUrl) === reqKey; }
     catch (e) { return false; }
   });
-  if (!isShellAsset) return; // let every other request (Supabase, Auth, images...) pass through untouched
+  if (!isShellAsset) return; // let every other request (Supabase, images...) pass through untouched
 
   // The page itself (index.html / the app's start URL) goes network-first so a
   // pushed update shows up on the very next open instead of needing two opens.
-  // Everything else in the shell (icons, manifest, Supabase script — rarely change)
+  // Everything else in the shell (icons, manifest, Supabase library — rarely change)
   // stays cache-first for an instant, offline-friendly load.
   const isPageRequest = event.request.mode === 'navigate' ||
     reqKey === keyOf('./') ||
