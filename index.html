@@ -2045,7 +2045,7 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
     </div>
 
     <nav class="qa" aria-label="Quick actions"><button type="button" class="qa-main" onclick="show('expenses')">Add an expense</button><button type="button" onclick="show('income')">Add income</button><button type="button" onclick="show('goals')">Set a goal</button><button type="button" onclick="show('loans')">Review loans</button><button type="button" onclick="FLX.paste()">Paste a message</button><button type="button" onclick="FLX.split()">Split a bill</button></nav>
-<div id="fl-today"><section id="fl-checkin" class="fl-card" aria-label="Daily check-in"></section><section id="fl-payday" class="fl-card" aria-label="Until payday"></section><div class="fl-tools"><button type="button" onclick="FLX.subs()">Find subscriptions</button><button type="button" onclick="FLX.compare()">Compare months</button><button type="button" onclick="FLX.tools()">Premium tools</button><button type="button" onclick="FLPlan.pricing()">Plans</button></div></div>
+<div id="fl-today"><section id="fl-checkin" class="fl-card" aria-label="Daily check-in"></section><section id="fl-payday" class="fl-card" aria-label="Until payday"></section><div class="fl-tools"><button type="button" onclick="FLX.subs()">Find subscriptions</button><button type="button" onclick="FLX.compare()">Compare months</button><button type="button" onclick="FLX.budgets()">Category budgets</button><button type="button" onclick="FLX.cats()">My categories</button><button type="button" onclick="FLX.pyf()">Pay yourself first</button><button type="button" onclick="FLX.tools()">Premium tools</button><button type="button" onclick="FLPlan.pricing()">Plans</button></div></div>
         <!-- STAT GRID -->
     <div class="stat-grid" id="dash-stats"></div>
 
@@ -2955,6 +2955,10 @@ function normalizeState(raw){
   out.loans.forEach(l=>{if(typeof l.name!=='string')l.name=String(l.name==null?'':l.name);});
   out.goals.forEach(g=>{if(typeof g.name!=='string')g.name=String(g.name==null?'':g.name);});
   out.budgetLimit=Math.max(0,Number(out.budgetLimit)||0);
+  {const p=out.pyf&&typeof out.pyf==='object'?out.pyf:{};out.pyf={on:!!p.on,pct:Math.min(90,Math.max(1,Math.round(Number(p.pct))||10)),goalId:Number.isFinite(Number(p.goalId))&&p.goalId!==null?Number(p.goalId):null,lastId:Math.max(0,Number(p.lastId)||0)};}
+  {const cb=(out.catBudgets&&typeof out.catBudgets==='object'&&!Array.isArray(out.catBudgets))?out.catBudgets:{};const c2={};
+   Object.keys(cb).forEach(k=>{const v=Math.max(0,Number(cb[k])||0);if(v>0&&/^[a-z0-9-]{1,24}$/i.test(k))c2[k]=v;});out.catBudgets=c2;
+   out.customCats=(Array.isArray(out.customCats)?out.customCats:[]).filter(c=>c&&typeof c.id==='string'&&/^c-[a-z0-9]{1,12}$/.test(c.id)&&typeof c.label==='string').slice(0,12).map(c=>({id:c.id,label:c.label.replace(/[<>&"'`\\]/g,'').trim().slice(0,24)})).filter(c=>c.label);}
   out.spendDaysPerWeek=Math.min(7,Math.max(1,Math.round(Number(out.spendDaysPerWeek))||7));
   {const c=v=>Math.min(7,Math.max(1,Math.round(Number(v))||0));
    if(out.spendDaysMax===0){out.spendDaysMax=0;out.spendDaysMin=0;} // cleared: no weekly plan
@@ -3039,7 +3043,7 @@ function defaultState(){
     expenses:[],
     loans:[],
     goals:[],
-    budgetLimit:0,
+    budgetLimit:0,catBudgets:{},customCats:[],pyf:{on:false,pct:10,goalId:null,lastId:0},
     spendDaysPerWeek:7,
     spendMode:'week',
     spendPlan:{},
@@ -3139,7 +3143,7 @@ function stripUndefined(val){
   return val;
 }
 function profileMetaFromState(){
-  return {avatar:state.avatar||'',spendDaysPerWeek:state.spendDaysPerWeek||7,spendDaysMin:state.spendDaysMin??state.spendDaysPerWeek??7,spendDaysMax:state.spendDaysMax??state.spendDaysPerWeek??7,spendMode:state.spendMode||'week',spendPlan:state.spendPlan||{},pinHash:state.pinHash||'',pinSalt:state.pinSalt||'',securityQuestion:state.securityQuestion||'',securityAnswerHash:state.securityAnswerHash||'',securityAnswerSalt:state.securityAnswerSalt||'',auto:state.auto||{},onboarding:state.onboarding||{}};
+  return {avatar:state.avatar||'',spendDaysPerWeek:state.spendDaysPerWeek||7,spendDaysMin:state.spendDaysMin??state.spendDaysPerWeek??7,spendDaysMax:state.spendDaysMax??state.spendDaysPerWeek??7,spendMode:state.spendMode||'week',spendPlan:state.spendPlan||{},pinHash:state.pinHash||'',pinSalt:state.pinSalt||'',securityQuestion:state.securityQuestion||'',securityAnswerHash:state.securityAnswerHash||'',securityAnswerSalt:state.securityAnswerSalt||'',auto:state.auto||{},onboarding:state.onboarding||{},catBudgets:state.catBudgets||{},customCats:state.customCats||[],pyf:state.pyf||{}};
 }
 function packProfileUsername(){return finPackMetaText(state.username||'',profileMetaFromState());}
 function unpackProfile(row){
@@ -6440,7 +6444,7 @@ function clearAndResetAccount(){
   if(errEl)errEl.textContent='';
   mtConfirm('This account has no recovery question, so there\'s no way to verify your PIN. This will permanently delete ALL your data (income, expenses, loans, goals, wallet balances) and reset the account so you can start fresh. This cannot be undone.','⚠️','Yes, Clear Everything','var(--red)').then(ok=>{
     if(!ok)return;
-    state.income=[];state.expenses=[];state.loans=[];state.goals=[];state.budgetLimit=0;
+    state.income=[];state.expenses=[];state.loans=[];state.goals=[];state.budgetLimit=0;state.catBudgets={};state.customCats=[];state.pyf={on:false,pct:10,goalId:null,lastId:0};
     state.wallets.forEach(w=>{w.balance=0;w.updated=today();});
     state.username='';state.pin='';state.pinHash='';state.pinSalt='';bioClear();
     state.securityQuestion='';state.securityAnswer='';state.securityAnswerHash='';state.securityAnswerSalt='';
@@ -6559,7 +6563,7 @@ function clearPinBackspace(){clearPinBuf=clearPinBuf.slice(0,-1); updateClearDot
 function updateClearDots(){for(let i=0;i<4;i++){const d=document.getElementById('cpd'+i);if(d)d.className='pin-dot'+(i<clearPinBuf.length?' filled':'');}}
 function cancelClearConfirm(){document.getElementById('auth-overlay').style.display='none'; clearPinBuf='';}
 function doActualClear(){
-  state.income=[];state.expenses=[];state.loans=[];state.goals=[];state.budgetLimit=0;
+  state.income=[];state.expenses=[];state.loans=[];state.goals=[];state.budgetLimit=0;state.catBudgets={};state.customCats=[];state.pyf={on:false,pct:10,goalId:null,lastId:0};
   // Reset all wallet balances to 0
   state.wallets.forEach(w=>{w.balance=0;w.updated=today();});
   save();render();toast('All data cleared');
@@ -8154,7 +8158,7 @@ function modal(h){close();var o=document.createElement('div');o.id='fl-ov';o.inn
 function esc2(e){if(e.key==='Escape')close()}
 function close(){var o=document.getElementById('fl-ov');if(o)o.remove();document.removeEventListener('keydown',esc2)}
 /* ---------- plan / entitlement: read from Supabase `subscriptions` (RLS, read-only). Gating here is UI only; any paid server data must also be protected by RLS. ---------- */
-var TIERS={plus:{name:'FinLed Plus',price:25,list:['All smart spending insights','Subscription finder','Pay-yourself-first rules (coming soon)','Multiple budgets (coming soon)','Custom categories (coming soon)','Unlimited savings goals (coming soon)']},pro:{name:'FinLed Pro',price:50,list:['Everything in Plus','Month-vs-month comparison','Monthly financial summary (coming soon)','Advanced reports (coming soon)','PDF export (coming soon)']}};
+var TIERS={plus:{name:'FinLed Plus',price:25,list:['All smart spending insights','Subscription finder','Pay-yourself-first rules (coming soon)','Multiple budgets','Custom categories','Unlimited savings goals (coming soon)']},pro:{name:'FinLed Pro',price:50,list:['Everything in Plus','Month-vs-month comparison','Monthly financial summary (coming soon)','Advanced reports (coming soon)','PDF export (coming soon)']}};
 var NEED={insights_full:'plus',subs:'plus',compare:'pro'},RANK={free:0,plus:1,pro:2};
 var WHY={insights_full:['Understand where your money is going.','Smart insights compare your spending and point out what changed.','plus'],subs:['Find the bills you forgot about.','The subscription finder spots charges that repeat every month and adds them up.','plus'],compare:['See what changed between months.','Compare income, expenses, savings and categories side by side.','pro']};
 var CK='finled-plan-cache',cache=ls(CK,null),uid=null;
@@ -8254,9 +8258,83 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(function(){tr
 </script>
 <script>
 (function(){
-var T=[['Pay-yourself-first rules','Automatically move a percentage of every income into a savings goal.','Plus',0],
-['Multiple budgets','Separate limits for food, transport, entertainment and an overall budget.','Plus',0],
-['Custom categories','Create your own income and expense categories.','Plus',0],
+/* ---------- Multiple budgets + custom categories (Plus). Data lives in state.catBudgets / state.customCats and syncs in the profile meta like other settings. ---------- */
+NEED.budgets='plus';NEED.cats='plus';
+WHY.budgets=['Give each kind of spending its own limit.','Set monthly limits for food, transport, entertainment and more, and get a warning before you pass them.','plus'];
+WHY.cats=['Use categories that fit your life.','Create your own expense categories. They appear in the forms, lists and reports.','plus'];
+var BUILTIN=['food','transport','shopping','utilities','health','entertainment','other-exp'];
+function cleanLabel(s){return String(s||'').replace(/[<>&"'`\\]/g,'').replace(/\s+/g,' ').trim().slice(0,24)}
+function plain(k){return String(CAT_LABELS[k]||k).replace(/^[^A-Za-z]+/,'')}
+function allCats(){var a=BUILTIN.map(function(k){return[k,plain(k)]});(state.customCats||[]).forEach(function(c){a.push([c.id,c.label])});return a}
+function peso(n){return'\u20b1'+Math.round(n).toLocaleString('en-US')}
+function applyCats(){try{(state.customCats||[]).forEach(function(c){CAT_LABELS[c.id]=c.label;
+ ['exp-cat','edit-exp-cat','fa-q-cat'].forEach(function(id){var s=document.getElementById(id);
+  if(s&&!s.querySelector('option[value="'+c.id+'"]')){var o=document.createElement('option');o.value=c.id;o.textContent=c.label;s.insertBefore(o,s.querySelector('option[value="other-exp"]'))}})})}catch(e){}}
+var render0=render;render=function(){applyCats();return render0.apply(this,arguments)};
+document.addEventListener('click',function(){setTimeout(applyCats,0)},true);setTimeout(applyCats,300);
+function monthSpend(){var m=today().slice(0,7),o={_t:0};(state.expenses||[]).forEach(function(e){if(String(e.date||'').slice(0,7)===m){var k=e.cat||'other-exp',v=+e.amount||0;o[k]=(o[k]||0)+v;o._t+=v}});return o}
+function budgetsModal(){var sp=monthSpend(),cb=state.catBudgets||{};
+ function row(id,label,lim,spent){var p=lim>0?Math.min(100,Math.round(spent/lim*100)):0,over=lim>0&&spent>lim;
+  var msg=lim>0?(over?'Over by '+peso(spent-lim):p>=80?p+'% used. Close to the limit.':peso(lim-spent)+' left'):'No limit set';
+  return'<div class="fl-brow"><label for="fb-'+id+'">'+esc(label)+'</label><input id="fb-'+id+'" type="number" inputmode="numeric" min="0" step="50" value="'+(lim>0?lim:'')+'" placeholder="0">'
+   +'<div style="height:8px;background:rgba(127,127,127,.25);margin:6px 0 2px"><div style="height:8px;width:'+p+'%;background:'+(over?'#c0392b':'var(--accent)')+'"></div></div>'
+   +'<div class="m">'+peso(spent)+' spent this month. '+msg+'</div></div>'}
+ var h='<h2>Category budgets</h2><p class="m">Monthly limits. Leave blank for no limit.</p>'+row('all','Overall budget',state.budgetLimit||0,sp._t);
+ allCats().forEach(function(c){h+=row(c[0],c[1],cb[c[0]]||0,sp[c[0]]||0)});
+ h+='<div class="fl-row"><button class="fl-btn fl-pri" id="fb-s">Save budgets</button><button class="fl-btn" id="fb-x">Close</button></div>';
+ modal(h);document.getElementById('fb-x').onclick=close;
+ document.getElementById('fb-s').onclick=function(){var n={};allCats().forEach(function(c){var v=Math.max(0,Number(document.getElementById('fb-'+c[0]).value)||0);if(v>0)n[c[0]]=v});
+  state.catBudgets=n;state.budgetLimit=Math.max(0,Number(document.getElementById('fb-all').value)||0);save();close();render();toast('Budgets saved')}}
+function catsModal(){var list=state.customCats||[];
+ var h='<h2>My categories</h2><p class="m">Add your own expense categories (up to 12). They show up when you log or edit an expense.</p>';
+ h+=list.length?'<ul class="fl-cl">'+list.map(function(c){return'<li><span>'+esc(c.label)+'</span> <button class="fl-btn" data-rm="'+c.id+'" aria-label="Remove '+esc(c.label)+'">Remove</button></li>'}).join('')+'</ul>':'<p>No custom categories yet.</p>';
+ h+='<label for="fk-n">New category name</label><input id="fk-n" type="text" maxlength="24" autocomplete="off"><div class="fl-row"><button class="fl-btn fl-pri" id="fk-a">Add category</button><button class="fl-btn" id="fk-x">Close</button></div>';
+ modal(h);document.getElementById('fk-x').onclick=close;
+ document.getElementById('fk-a').onclick=function(){var l=cleanLabel(document.getElementById('fk-n').value);
+  if(!l)return toast('Type a name first.','error');
+  if(list.length>=12)return toast('You can add up to 12 categories.','error');
+  if(allCats().some(function(c){return c[1].toLowerCase()===l.toLowerCase()}))return toast('That category already exists.','error');
+  list.push({id:'c-'+Date.now().toString(36),label:l});state.customCats=list;save();applyCats();render();catsModal()};
+ [].forEach.call(document.querySelectorAll('[data-rm]'),function(b){b.onclick=function(){var id=b.getAttribute('data-rm');
+  var used=JSON.stringify([state.expenses,state.auto,state.recurring||[]]).indexOf('"'+id+'"')>-1;
+  if(used)return toast('Some expenses use this category. Change them first.','error');
+  state.customCats=list.filter(function(c){return c.id!==id});if(state.catBudgets)delete state.catBudgets[id];
+  delete CAT_LABELS[id];[].forEach.call(document.querySelectorAll('option[value="'+id+'"]'),function(o){o.remove()});save();render();catsModal()}})}
+FLX.budgets=function(){FLPlan.gate('budgets',budgetsModal)};
+FLX.cats=function(){FLPlan.gate('cats',catsModal)};
+window.addEventListener('fin:expense-logged',function(ev){setTimeout(function(){try{if(!FLPlan.can('budgets'))return;
+ var cat=(ev.detail&&ev.detail.cat)||'other-exp',sp=monthSpend(),lim=(state.catBudgets||{})[cat];
+ if(lim>0){if(sp[cat]>lim)toast(plain(cat)+' is over its budget by '+peso(sp[cat]-lim)+'.','error');else if(sp[cat]>=lim*.8)toast(plain(cat)+' is at '+Math.round(sp[cat]/lim*100)+'% of its budget.')}}catch(e){}},400)});
+/* ---------- Pay-yourself-first (Plus). state.pyf={on,pct,goalId,lastId}. lastId is a watermark of income ids already handled, so nothing is counted twice and old income is never back-filled. ---------- */
+NEED.pyf='plus';
+WHY.pyf=['Save before you spend.','Set aside a percentage of every new income into a savings goal, automatically.','plus'];
+var pyfBusy=false;
+function pyfReconcile(){if(pyfBusy)return;var r=state.pyf;if(!r||!r.on)return;pyfBusy=true;
+ try{var last=+r.lastId||0,fresh=(state.income||[]).filter(function(i){return typeof i.id==='number'&&i.id>last&&i.type!=='Loan Repayment'});
+  if(!fresh.length)return;
+  r.lastId=fresh.reduce(function(m,i){return Math.max(m,i.id)},last);save(); /* watermark first: no double count even if something below fails */
+  if(!FLPlan.can('pyf'))return;
+  var g=(state.goals||[]).find(function(x){return x.id===r.goalId});if(!g)return;
+  var amt=0;fresh.forEach(function(i){amt+=(+i.amount||0)*r.pct/100});amt=Math.round(amt*100)/100;
+  if(amt>0&&g.saved<g.target)addToGoal(g.id,amt)}
+ finally{pyfBusy=false}}
+var render1=render;render=function(){var o=render1.apply(this,arguments);setTimeout(pyfReconcile,0);return o};
+function pyfModal(){var goals=state.goals||[],r=state.pyf||{on:false,pct:10,goalId:null};
+ if(!goals.length){modal('<h2>Pay yourself first</h2><p>Create a savings goal first, then come back to choose it here.</p><div class="fl-row"><button class="fl-btn" id="fy-x">Close</button></div>');document.getElementById('fy-x').onclick=close;return}
+ var h='<h2>Pay yourself first</h2><p class="m">Each time new income is added, this share is added to the goal you choose. Existing income is not counted. Recurring income is included. Loan repayments are not.</p>'
+  +'<label for="fy-p">Share of each income (1 to 90 percent)</label><input id="fy-p" type="number" inputmode="numeric" min="1" max="90" step="1" value="'+(r.pct||10)+'">'
+  +'<label for="fy-g">Goal</label><select id="fy-g">'+goals.map(function(g){return'<option value="'+g.id+'"'+(g.id===r.goalId?' selected':'')+'>'+esc(g.name)+'</option>'}).join('')+'</select>'
+  +'<p class="m" id="fy-e"></p><div class="fl-row"><button class="fl-btn fl-pri" id="fy-s">'+(r.on?'Update rule':'Turn on')+'</button>'+(r.on?'<button class="fl-btn" id="fy-o">Turn off</button>':'')+'<button class="fl-btn" id="fy-x">Close</button></div>';
+ modal(h);document.getElementById('fy-x').onclick=close;
+ function ex(){var p=Math.min(90,Math.max(1,Math.round(+document.getElementById('fy-p').value||0)));document.getElementById('fy-e').textContent='Example: an income of '+peso(1000)+' adds '+peso(1000*p/100)+' to the goal.'}
+ document.getElementById('fy-p').oninput=ex;ex();
+ document.getElementById('fy-s').onclick=function(){var p=Math.round(+document.getElementById('fy-p').value||0);if(p<1||p>90)return toast('Enter a share from 1 to 90.','error');
+  state.pyf={on:true,pct:p,goalId:+document.getElementById('fy-g').value,lastId:(r.on&&r.lastId)?r.lastId:state.nextId};save();close();toast('Pay-yourself-first is on: '+p+'% of new income')};
+ var o=document.getElementById('fy-o');if(o)o.onclick=function(){state.pyf={on:false,pct:r.pct,goalId:r.goalId,lastId:state.nextId};save();close();toast('Pay-yourself-first is off')}}
+FLX.pyf=function(){FLPlan.gate('pyf',pyfModal)};
+var T=[['Pay-yourself-first rules','Automatically add a percentage of every new income to a savings goal.','Plus',1],
+['Multiple budgets','Separate limits for food, transport, entertainment and an overall budget.','Plus',1],
+['Custom categories','Create your own expense categories.','Plus',1],
 ['Unlimited savings goals','No cap on how many goals you can track.','Plus',0],
 ['Monthly financial summary','A one-page recap of income, expenses, savings, top category and budget result.','Pro',0],
 ['Advanced reports','Deeper breakdowns by category, wallet and period.','Pro',0],
