@@ -8158,9 +8158,10 @@ function modal(h){close();var o=document.createElement('div');o.id='fl-ov';o.inn
 function esc2(e){if(e.key==='Escape')close()}
 function close(){var o=document.getElementById('fl-ov');if(o)o.remove();document.removeEventListener('keydown',esc2)}
 /* ---------- plan / entitlement: read from Supabase `subscriptions` (RLS, read-only). Gating here is UI only; any paid server data must also be protected by RLS. ---------- */
-var TIERS={plus:{name:'FinLed Plus',price:25,list:['All smart spending insights','Subscription finder','Pay-yourself-first rules (coming soon)','Multiple budgets','Custom categories','Unlimited savings goals (coming soon)']},pro:{name:'FinLed Pro',price:50,list:['Everything in Plus','Month-vs-month comparison','Monthly financial summary (coming soon)','Advanced reports (coming soon)','PDF export (coming soon)']}};
+var TIERS={plus:{name:'FinLed Plus',price:25,list:['All smart spending insights','Subscription finder','Pay-yourself-first rules','Multiple budgets','Custom categories','Unlimited savings goals (coming soon)']},pro:{name:'FinLed Pro',price:50,list:['Everything in Plus','Month-vs-month comparison','Monthly financial summary (coming soon)','Advanced reports (coming soon)','PDF export (coming soon)']}};
 var NEED={insights_full:'plus',subs:'plus',compare:'pro'},RANK={free:0,plus:1,pro:2};
 var WHY={insights_full:['Understand where your money is going.','Smart insights compare your spending and point out what changed.','plus'],subs:['Find the bills you forgot about.','The subscription finder spots charges that repeat every month and adds them up.','plus'],compare:['See what changed between months.','Compare income, expenses, savings and categories side by side.','pro']};
+window.FLPlanData={NEED:NEED,WHY:WHY,modal:modal,close:close,esc:esc};
 var CK='finled-plan-cache',cache=ls(CK,null),uid=null;
 function eff(r){if(!r)return'free';var n=Date.now(),pe=r.current_period_end?Date.parse(r.current_period_end):0,te=r.trial_end?Date.parse(r.trial_end):0;
  if(r.status==='trialing'&&te>n)return'pro';
@@ -8259,7 +8260,7 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(function(){tr
 <script>
 (function(){
 /* ---------- Multiple budgets + custom categories (Plus). Data lives in state.catBudgets / state.customCats and syncs in the profile meta like other settings. ---------- */
-NEED.budgets='plus';NEED.cats='plus';
+var NEED=window.FLPlanData.NEED,WHY=window.FLPlanData.WHY,modal=window.FLPlanData.modal,close=window.FLPlanData.close,esc=window.FLPlanData.esc;NEED.budgets='plus';NEED.cats='plus';
 WHY.budgets=['Give each kind of spending its own limit.','Set monthly limits for food, transport, entertainment and more, and get a warning before you pass them.','plus'];
 WHY.cats=['Use categories that fit your life.','Create your own expense categories. They appear in the forms, lists and reports.','plus'];
 var BUILTIN=['food','transport','shopping','utilities','health','entertainment','other-exp'];
