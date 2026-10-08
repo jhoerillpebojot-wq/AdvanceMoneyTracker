@@ -7251,7 +7251,7 @@ terms:[
 ['Your Data and Content',`You own the information you enter. You give us a limited, non-exclusive licence to store, process and sync it solely to run the App for you. You are responsible for its accuracy and for having the right to enter information about other people (for example names in loan records) - keep it to what is necessary. Do not enter government ID numbers, card numbers, bank credentials or passwords.`],
 ['Acceptable Use',`You agree not to: use the App for anything unlawful, fraudulent or for money laundering; try to access another person's account or data; probe, attack, overload, scrape or reverse-engineer the App or its services; upload malware; or bypass any security or usage limit.`],
 ['Backups and Availability',`The App is provided as available and may be interrupted, changed or discontinued. Syncing can fail or conflict between devices. You are responsible for exporting your own backups (Settings and Export). Restoring a backup overwrites current data.`],
-['Plans and Payments',`Basic tracking in FinLed is free. Optional paid plans (FinLed Plus and FinLed Pro) add extra tools. Features that are free stay free. Each account may start one free 14-day Pro trial, without a card, which ends by itself. Paid plans are not yet available for purchase; when they are, the price, billing period and refund terms will be shown before you pay. Payments will be made on a payment provider's own page: we never receive your card or e-wallet credentials. Your plan changes only after the provider confirms your payment to our server, and a plan that is not renewed returns to free when its period ends. Your records and exports remain yours either way.`],
+['Plans and Payments',`Basic tracking in FinLed is free. Optional paid plans (FinLed Plus and FinLed Pro) add extra tools. Features that are free stay free. Each account may start one free 14-day Pro trial, without a card, which ends by itself. During the beta, paid plans can be bought by GCash, and other payment methods may be added later. The price, billing period and refund terms are shown before you pay. You pay by sending money from your own GCash app and then entering the reference number from your receipt, or on a payment provider's own page; we never receive your GCash PIN, card or e-wallet credentials. Your plan changes only after we confirm your payment (by hand during the beta), and a plan that is not renewed returns to free when its period ends. Your records and exports remain yours either way.`],
 ['Third-Party Services',`The App relies on Supabase (authentication and database), Google Sign-In, the web host that delivers the App's files, a payment provider once paid plans are available, and, only if you use the optional receipt scanner, the jsDelivr content network to download the open-source Tesseract.js reader. Their own terms and privacy policies apply, and we are not responsible for their outages or acts.`],
 ['Intellectual Property',`The App, its design, code, name, logo and icons belong to us or our licensors. You receive a limited, revocable, non-exclusive, non-transferable licence to use it for personal purposes. Scripture excerpts remain the property of their respective translation rights holders and are shown for personal encouragement only.`],
 ['Devotional Content',`Any Bible verses or devotional content is for personal encouragement. It is not pastoral, financial or professional counsel.`],
@@ -7265,7 +7265,7 @@ terms:[
 ],
 privacy:[
 ['Who We Are',`${LEGAL_DEV} is the Personal Information Controller of FinLed. Privacy contact / Data Protection Officer: ${LEGAL_EMAIL}. This policy follows the Data Privacy Act of 2012 (Republic Act No. 10173), its Implementing Rules and Regulations, and issuances of the National Privacy Commission (NPC).`],
-['Personal Data We Handle',`<b>Account data:</b> email address, sign-in method (Google, email/password or guest), display name, and a unique account ID.<br><b>Data you enter:</b> income, expenses, wallet names and balances, loans (including names of people and notes), savings goals, budget limit, notes, and app settings.<br><b>Security data:</b> a salted hash of your PIN, your recovery question, and a salted hash of your answer (we cannot read either).<br><b>Plan data:</b> your plan (free, Plus or Pro), its status, and trial or period end dates. Once paid plans are available we will also hold the payment provider's name and a payment reference. Card and e-wallet credentials go only to the payment provider, never to us.<br><b>Technical data:</b> authentication tokens and data your browser stores (localStorage/sessionStorage: theme, tutorial status, unlock state, your plan, pay-schedule and reminder settings). Google, Supabase and our web host may receive your IP address and device details when you sign in, sync, load the App or load fonts.<br><b>We do not collect:</b> bank or e-wallet credentials, card numbers, precise location, contacts, photos, or microphone/camera data, and we do not run advertising or third-party analytics.`],
+['Personal Data We Handle',`<b>Account data:</b> email address, sign-in method (Google, email/password or guest), display name, and a unique account ID.<br><b>Data you enter:</b> income, expenses, wallet names and balances, loans (including names of people and notes), savings goals, budget limit, notes, and app settings.<br><b>Security data:</b> a salted hash of your PIN, your recovery question, and a salted hash of your answer (we cannot read either).<br><b>Plan data:</b> your plan (free, Plus or Pro), its status, and trial or period end dates. When you pay, we also hold the payment method (for example GCash), the reference number and amount you submit, and the optional name you type for your GCash account. We never receive your GCash PIN, card or e-wallet credentials.<br><b>Technical data:</b> authentication tokens and data your browser stores (localStorage/sessionStorage: theme, tutorial status, unlock state, your plan, pay-schedule and reminder settings). Google, Supabase and our web host may receive your IP address and device details when you sign in, sync, load the App or load fonts.<br><b>We do not collect:</b> bank or e-wallet credentials, card numbers, precise location, contacts, photos, or microphone/camera data, and we do not run advertising or third-party analytics.`],
 ['Why We Use It and Our Legal Basis',`We process data to (1) create and secure your account, (2) store, sync and display your records across your devices, (3) provide backups, exports and reports you request, and (4) keep the service safe and fix problems. Our bases under Section 12 of the Data Privacy Act are your <b>consent</b> (given when you accept these documents), performance of the service you asked for, and our legitimate interest in security and reliability. We do not sell your data, use it for profiling or advertising, or make automated decisions about you.`],
 ['Where Your Data Is Kept',`A copy is stored in your browser on your device. In Guest mode that is the only copy: nothing is uploaded to our servers. If you sign in to an account, a copy is also stored in a Supabase database under your account ID. Supabase servers may be located outside the Philippines${LEGAL_REGION?' (our project is hosted in '+LEGAL_REGION+')':''}, so your data may be transferred and processed abroad. Supabase acts as our processor under its own security and data-protection commitments, and we remain accountable for your data. The App's files are delivered by ${LEGAL_HOST?LEGAL_HOST:'a web hosting service'}, which can see technical request data such as your IP address but not the records you enter.`],
 ['Who We Share It With',`Only with service providers needed to run the App: Supabase (authentication and database), Google (Google Sign-In), our web host, and, once paid plans are available, a payment provider that handles the payment and tells our server whether it succeeded. We disclose data to authorities only when required by law or lawful order. The optional receipt scanner runs entirely on your device: your receipt photo is not uploaded or stored, and only the open-source reader software and its language data are downloaded from a public content network (jsDelivr) the first time you use it, which may see your IP address. We do not otherwise share, rent or sell personal data. The developer does not routinely view your individual records.`],
@@ -8239,11 +8239,23 @@ function modal(h){close();var o=document.createElement('div');o.id='fl-ov';o.inn
 function esc2(e){if(e.key==='Escape')close()}
 function close(){var o=document.getElementById('fl-ov');if(o)o.remove();document.removeEventListener('keydown',esc2)}
 /* ---------- plan / entitlement: read from Supabase `subscriptions` (RLS, read-only). Gating here is UI only; any paid server data must also be protected by RLS. ---------- */
-var TIERS={plus:{name:'FinLed Plus',price:25,list:['All smart spending insights','Subscription finder','Pay-yourself-first rules','Multiple budgets','Custom categories']},pro:{name:'FinLed Pro',price:50,list:['Everything in Plus','Month-vs-month comparison','Monthly financial summary','Advanced reports by category, wallet and period','PDF export of the summary and reports']}};
+var TIERS={plus:{name:'FinLed Plus',price:20,list:['All smart spending insights','Subscription finder','Pay-yourself-first rules','Multiple budgets','Custom categories']},pro:{name:'FinLed Pro',price:30,list:['Everything in Plus','Month-vs-month comparison','Monthly financial summary','Advanced reports by category, wallet and period','PDF export of the summary and reports']}};
 var NEED={insights_full:'plus',subs:'plus',compare:'pro'},RANK={free:0,plus:1,pro:2};
 var WHY={insights_full:['Understand where your money is going.','Smart insights compare your spending and point out what changed.','plus'],subs:['Find the bills you forgot about.','The subscription finder spots charges that repeat every month and adds them up.','plus'],compare:['See what changed between months.','Compare income, expenses, savings and categories side by side.','pro']};
 window.FLPlanData={NEED:NEED,WHY:WHY,modal:modal,close:close,esc:esc};
-var PAY={fn:'',hosts:[]};/* fn: Supabase Edge Function name that creates the payment link. Empty = payments not connected. */
+var PAY={fn:'',hosts:[],gcash:{number:'',name:''},note:''};/* fn: Supabase Edge Function name that creates the payment link (provider checkout). Empty = no provider.
+   gcash: manual GCash for beta. Fill number (e.g. '09XXXXXXXXX') and name (the name shown in GCash). Empty number = manual GCash is OFF.
+   note: optional one-line text shown in the GCash screen (for example your refund terms). Empty = not shown. */
+var claim=null;
+function manualOn(){return !PAY.fn&&!!(PAY.gcash&&PAY.gcash.number)}
+function loadClaim(){if(!uid){claim=null;return Promise.resolve()}
+ return supabaseClient.from('payment_claims').select('id,tier,amount_php,reference,status,note,created_at').eq('user_id',uid).order('created_at',{ascending:false}).limit(1).maybeSingle().then(function(q){if(q.error)return;claim=q.data||null}).catch(function(){})}
+function isAnonUser(u){return !!(u&&(u.is_anonymous||(u.app_metadata&&u.app_metadata.provider==='anonymous')||(u.identities||[]).some(function(i){return i.provider==='anonymous'})))}
+function claimLine(){if(!claim||!manualOn())return'';var t=TIERS[claim.tier],last=String(claim.reference||'').slice(-4);
+ if(claim.status==='pending')return'<p class="m" role="status"><b>Payment submitted.</b> '+(t?t.name:'Plan')+', reference ending '+esc(last)+'. We have not confirmed it yet, so your plan has not changed.</p>';
+ if(claim.status==='rejected'&&Date.now()-Date.parse(claim.created_at)<14*864e5)return'<p class="m" role="status"><b>We could not confirm your last payment</b> (reference ending '+esc(last)+').'+(claim.note?' '+esc(claim.note):'')+' You can submit it again with the correct reference.</p>';
+ return''}
+function payNote(){return PAY.fn?'You pay on the payment provider\u2019s page. Your plan changes only after the provider confirms the payment.':manualOn()?'You pay with GCash, then enter your reference number. Your plan changes only after we confirm your payment.':'Payments are not connected yet.'}
 var CK='finled-plan-cache',cache=ls(CK,null),uid=null;
 function eff(r){if(!r)return'free';var n=Date.now(),pe=r.current_period_end?Date.parse(r.current_period_end):0,te=r.trial_end?Date.parse(r.trial_end):0;
  if(r.status==='trialing'&&te>n)return'pro';
@@ -8251,11 +8263,11 @@ function eff(r){if(!r)return'free';var n=Date.now(),pe=r.current_period_end?Date
  return'free'}
 function refresh(){if(typeof supabaseClient==='undefined')return Promise.resolve();
  return supabaseClient.auth.getSession().then(function(r){var u=r.data&&r.data.session&&r.data.session.user;
-  if(!u){uid=null;cache=null;lw(CK,null);return}
+  if(!u){uid=null;cache=null;claim=null;lw(CK,null);return}
   uid=u.id;
   return supabaseClient.from('subscriptions').select('plan,status,current_period_end,trial_end').eq('user_id',uid).maybeSingle().then(function(q){
    if(q.error)return; /* offline or table missing: keep last cache */
-   cache={uid:uid,row:q.data||null};lw(CK,cache)})
+   cache={uid:uid,row:q.data||null};lw(CK,cache)}).then(function(){return manualOn()?loadClaim():null})
  }).then(function(){try{render()}catch(e){}}).catch(function(){})}
 /* Plan comes only from the signed-in user's Supabase row (read-only for the browser). Old localStorage 'finled-plan' is ignored. */
 var provider={get:function(){if(!uid||!cache||cache.uid!==uid)return'free';return eff(cache.row)},
@@ -8275,15 +8287,56 @@ var provider={get:function(){if(!uid||!cache||cache.uid!==uid)return'free';retur
    location.assign(u.href)})}};
 if(typeof supabaseClient!=='undefined'){try{localStorage.removeItem('finled-plan')}catch(e){}
  supabaseClient.auth.onAuthStateChange(function(){setTimeout(refresh,0)});window.addEventListener('online',refresh);setTimeout(refresh,0)}
+function gcashModal(t,T){var g=PAY.gcash,cur=provider.get(),pe=cache&&cache.row&&cache.row.current_period_end?Date.parse(cache.row.current_period_end):0,
+  renew=(cur===t&&pe>Date.now())?'<p class="m">Your current period ends on '+new Date(pe).toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'})+'. Paying again adds one month after that.</p>':'';
+ modal('<h2>Pay with GCash</h2>'+claimLine()
+  +'<p><b>'+T.name+' \u2014 \u20b1'+T.price+'/month</b></p>'+renew
+  +'<ol class="fl-steps"><li>Open GCash and choose Send Money.</li><li>Send exactly <b>\u20b1'+T.price+'</b> to <b>'+esc(g.name||'')+'</b> at <span class="fg-mono">'+esc(g.number)+'</span>.</li><li>Copy the reference number from your GCash receipt and enter it below.</li></ol>'
+  +'<div class="fl-row fg-row"><button type="button" class="fl-btn" id="fg-copy">Copy GCash number</button></div>'
+  +'<label for="fg-ref">GCash reference number</label><input class="fg-in fg-mono" id="fg-ref" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30" aria-describedby="fg-help">'
+  +'<p class="m" id="fg-help">Letters and numbers only, 8 to 24 characters.</p>'
+  +'<label for="fg-nm">Name on your GCash account (optional)</label><input class="fg-in" id="fg-nm" type="text" autocomplete="off" maxlength="60">'
+  +'<p class="m">Tapping Submit does not change your plan. We check each payment by hand, and your plan turns on only after we confirm it. FinLed never sees your GCash PIN.</p>'
+  +(PAY.note?'<p class="m">'+esc(PAY.note)+'</p>':'')
+  +'<p class="m fg-err" id="fg-err" role="alert"></p>'
+  +'<div class="fl-row fg-row"><button type="button" class="fl-btn fl-pri" id="fg-go">Submit reference</button><button type="button" class="fl-btn" id="fg-x">Cancel</button></div>');
+ var err=document.getElementById('fg-err'),go=document.getElementById('fg-go');
+ document.getElementById('fg-x').onclick=close;
+ document.getElementById('fg-copy').onclick=function(){var n=String(g.number);
+  try{navigator.clipboard.writeText(n).then(function(){toast('GCash number copied')},function(){toast('Could not copy. Select the number and copy it by hand.','error')})}catch(e){toast('Could not copy. Select the number and copy it by hand.','error')}};
+ go.onclick=function(){var ref=document.getElementById('fg-ref').value.replace(/\s+/g,'').toUpperCase(),nm=document.getElementById('fg-nm').value.trim();err.textContent='';
+  if(!/^[A-Z0-9]{8,24}$/.test(ref)){err.textContent='Enter the reference number from your GCash receipt (8 to 24 letters and numbers).';document.getElementById('fg-ref').focus();return}
+  go.disabled=true;go.textContent='Sending...';
+  supabaseClient.rpc('submit_payment_claim',{p_tier:t,p_reference:ref,p_name:nm||null}).then(function(q){
+   if(q.error)throw q.error;
+   return loadClaim().then(function(){gcashDone(T)})}).catch(function(e){
+   var m=String(e&&e.message||''),c=e&&e.code;go.disabled=false;go.textContent='Submit reference';
+   err.textContent=/duplicate|unique/i.test(m)?'This reference was already submitted. If it is yours, wait for us to confirm it.':
+    /too many/i.test(m)?'You have too many payments waiting. Please wait until we check them.':
+    /invalid reference/i.test(m)?'That reference does not look right. Check your GCash receipt.':
+    /anonymous|not signed in/i.test(m)?'Sign in with email or Google first.':
+    (c==='PGRST202'||/could not find the function|does not exist/i.test(m))?'Payments are not set up on the server yet. Nothing was charged.':
+    'Could not send your reference. Check your connection and try again. Nothing was charged.'})}}
+function gcashDone(T){modal('<h2>Reference received</h2><p>Thank you. We have your GCash reference for <b>'+T.name+'</b>.</p><p><b>Your plan has not changed yet.</b> We check each payment by hand, and your plan turns on after we confirm it.</p><div class="fl-row fg-row"><button type="button" class="fl-btn fl-pri" id="fg-chk">Check status</button><button type="button" class="fl-btn" id="fg-d">Close</button></div><p class="m" id="fg-st" role="status"></p>');
+ document.getElementById('fg-d').onclick=close;
+ document.getElementById('fg-chk').onclick=function(){var b=this;b.disabled=true;refresh().then(function(){b.disabled=false;var t=provider.get();document.getElementById('fg-st').textContent=t==='free'?'Not confirmed yet. Your plan is still Free.':'Confirmed. Your plan is now '+(t==='pro'?'FinLed Pro':'FinLed Plus')+'.'})}}
 var FLPlan={provider:provider,tier:function(){return provider.get()},can:function(f){return RANK[provider.get()]>=RANK[NEED[f]||'free']},
  gate:function(f,fn){if(FLPlan.can(f))return fn();FLPlan.upsell(f)},
  upsell:function(f){var w=WHY[f],t=TIERS[w[2]];modal('<h2>'+w[0]+'</h2><p>'+w[1]+'</p><p><b>Unlock with '+t.name+' \u2014 \u20b1'+t.price+'/month</b></p><div class="fl-row"><button class="fl-btn fl-pri" id="fl-up">Upgrade to '+w[2].replace('p','P')+'</button><button class="fl-btn" id="fl-later">Maybe later</button></div><p class="m">The free version keeps working fully.</p>');
   document.getElementById('fl-up').onclick=function(){FLPlan.checkout(w[2])};document.getElementById('fl-later').onclick=close},
- checkout:function(t){provider.checkout(t).catch(function(e){var m=e&&e.message;toast(m==='signed-out'?'Sign in first, then choose a plan.':m==='not-connected'?'Payments are not connected yet. Nothing was charged.':'Could not start checkout. Nothing was charged.','error')})},
+ gcash:function(t){var T=TIERS[t];if(!T||!manualOn())return;
+  if(!uid){toast('Sign in first, then choose a plan.','error');return}
+  supabaseClient.auth.getSession().then(function(r){var u=r.data&&r.data.session&&r.data.session.user;
+   if(!u){toast('Sign in first, then choose a plan.','error');return}
+   if(isAnonUser(u)){toast('Sign in with email or Google first, so your plan is not lost.','error');return}
+   gcashModal(t,T)}).catch(function(){toast('Could not check your sign-in. Nothing was charged.','error')})},
+ checkout:function(t){if(!PAY.fn&&manualOn())return FLPlan.gcash(t);provider.checkout(t).catch(function(e){var m=e&&e.message;toast(m==='signed-out'?'Sign in first, then choose a plan.':m==='not-connected'?'Payments are not connected yet. Nothing was charged.':'Could not start checkout. Nothing was charged.','error')})},
  pricing:function(){var tr=provider.trialUsed();modal('<h2>Plans</h2><p class="m">Basic tracking stays free. Plans add automation and analysis.</p><div class="fl-plans">'+['plus','pro'].map(function(k){var t=TIERS[k];return'<div class="fl-plan"><b>'+t.name+'</b><div>\u20b1'+t.price+'/month</div><ul>'+t.list.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul><button class="fl-btn" onclick="FLPlan.checkout(\''+k+'\')">Choose '+k.replace('p','P')+'</button></div>'}).join('')+'</div>'
-  +(tr?'':'<div class="fl-row"><button class="fl-btn fl-pri" id="fl-tr">Try Pro free for 14 days (no card)</button></div>')+'<div class="fl-row"><button class="fl-btn" id="fl-x">Close</button></div><p class="m">'+(PAY.fn?'You pay on the payment provider\u2019s page. Your plan changes only after the provider confirms the payment.':'Payments are not connected yet.')+' Current plan: '+provider.get()+'.</p>');
+  +(tr?'':'<div class="fl-row"><button class="fl-btn fl-pri" id="fl-tr">Try Pro free for 14 days (no card)</button></div>')+claimLine()+'<div class="fl-row"><button class="fl-btn" id="fl-x">Close</button></div><p class="m">'+payNote()+' Current plan: '+provider.get()+'.</p>');
   var b=document.getElementById('fl-tr');if(b)b.onclick=function(){provider.startTrial().then(function(){close();toast('14-day Pro trial started');render()}).catch(function(e){toast(e&&e.message==='signed-out'?'Sign in to start your free trial.':'Could not start the trial. Check your connection and try again.','error')})};document.getElementById('fl-x').onclick=close}};
 window.FLPlan=FLPlan;
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&uid&&manualOn()&&claim&&claim.status==='pending')refresh()});
+(function(){var st=document.createElement('style');st.id='finled-gcash-css';st.textContent='#fl-md ol.fl-steps{margin:8px 0 4px;padding-left:22px;line-height:1.6}#fl-md ol.fl-steps li{margin:6px 0}#fl-md .fg-mono{font-family:"IBM Plex Mono",ui-monospace,monospace}#fl-md .fg-in{min-height:48px}#fl-md .fg-row .fl-btn{min-height:48px}#fl-md .fg-err{color:var(--red,#f04848);min-height:1.2em}#fl-md .fl-btn:focus-visible,#fl-md input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#fl-md button:disabled{opacity:.6;cursor:not-allowed}';document.head.appendChild(st)})();
 /* Return from the payment page (?checkout=return|cancel). The URL only tells us the person came back, never that they paid. */
 (function(){var p;try{p=new URLSearchParams(location.search).get('checkout')}catch(e){}
  if(p!=='return'&&p!=='cancel')return;
