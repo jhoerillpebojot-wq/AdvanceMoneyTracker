@@ -357,7 +357,7 @@ body.light input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0
 .auth-view-main{flex:1;display:flex;flex-direction:column;justify-content:center}
 .auth-pw-wrap{position:relative;width:100%}
 .auth-pw-wrap input{padding-right:44px !important}
-.auth-pw-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--muted);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color var(--tr)}
+.auth-pw-toggle{position:absolute;right:2px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--muted);width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color var(--tr)}
 .auth-pw-toggle:hover{color:var(--text)}
 .auth-pw-toggle svg{width:16px;height:16px;stroke-width:2}
 .auth-link{color:var(--accent);font-weight:600;cursor:pointer}
@@ -1461,20 +1461,27 @@ html body.finled .hero-card::before{width:12px !important}
 html body.finled #month-snapshot>div:first-child{flex-wrap:wrap;gap:4px 14px}
 html body.finled #month-snapshot>div:first-child>div:first-child{white-space:nowrap}
 </style>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style id="finled-fonts">
+/* IBM Plex, self-hosted (SIL OFL 1.1). Files live in fonts/ and are precached by sw.js. */
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400;font-display:swap;src:url("fonts/IBMPlexSans-Regular.woff2") format("woff2")}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:500;font-display:swap;src:url("fonts/IBMPlexSans-Medium.woff2") format("woff2")}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:600;font-display:swap;src:url("fonts/IBMPlexSans-SemiBold.woff2") format("woff2")}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url("fonts/IBMPlexMono-Regular.woff2") format("woff2")}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url("fonts/IBMPlexMono-Medium.woff2") format("woff2")}
+</style>
 <style id="finled-layout">
 /* FinLed layout: top masthead + main column / side rail. Flat ledger styling. */
-:root{--bg:#0A0F1A;--surface:#0F1626;--surface2:#141D31;--surface3:#1B2640;--border:#1F2B44;--border2:#34415F;--text:#E7ECF5;--muted:#8E9AB3;--muted2:#6F7B95;--accent:#22D3BF;--accent-dim:#18A898;--accent-rgb:34,211,191;--accent-hover:#4BE0CE;--accent-glow:transparent;--accent-bg:rgba(34,211,191,.09);--on-accent:#04201C;--gold:#4F8CF0;--gold-soft:rgba(79,140,240,.16);--focus:#4F8CF0;--hero-bg:transparent;--blue:#6FA3F5;--blue-bg:rgba(111,163,245,.12);--font-d:'IBM Plex Sans',system-ui,sans-serif;--font-b:'IBM Plex Sans',system-ui,sans-serif;--r:3px;--r-sm:3px;--r-xs:2px;--sw:0px}
+:root{--bg:#0A0F1A;--surface:#0F1626;--surface2:#141D31;--surface3:#1B2640;--border:#1F2B44;--border2:#34415F;--text:#E7ECF5;--muted:#8E9AB3;--muted2:#6F7B95;--accent:#22D3BF;--accent-dim:#18A898;--accent-rgb:34,211,191;--accent-hover:#4BE0CE;--accent-glow:transparent;--accent-bg:rgba(34,211,191,.09);--on-accent:#04201C;--gold:#4F8CF0;--gold-soft:rgba(79,140,240,.16);--focus:#4F8CF0;--hero-bg:transparent;--blue:#6FA3F5;--blue-bg:rgba(111,163,245,.12);--font-d:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;--font-b:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;--r:3px;--r-sm:3px;--r-xs:2px;--sw:0px}
 body.light{--bg:#F1F3F6;--surface:#FFFFFF;--surface2:#F6F8FA;--surface3:#E9EDF3;--border:#D5DBE5;--border2:#9AA6BA;--text:#0C1424;--muted:#4F5B73;--muted2:#66728A;--accent:#0B7C86;--accent-dim:#075F68;--accent-rgb:11,124,134;--accent-hover:#0E919C;--on-accent:#fff;--gold:#1B5FC4;--gold-soft:rgba(27,95,196,.12);--focus:#1B5FC4;--blue:#1B5FC4}
 html body.finled{background-image:none!important}
 html body.finled .hero-card{--text:#E7ECF5;--muted:#8E9AB3;--muted2:#8E9AB3;--accent:#22D3BF;--accent-rgb:34,211,191;--accent-bg:transparent;background:transparent!important;border:0!important;border-top:2px solid var(--text)!important;border-radius:0!important;box-shadow:none!important;padding:18px 0 22px!important}
 html body.finled.light .hero-card{--text:#0C1424;--muted:#4F5B73;--muted2:#4F5B73;--accent:#0B7C86;--accent-rgb:11,124,134}
 html body.finled .hero-card::before,html body.finled .hero-card::after{display:none!important}
-html body.finled .hero-card .hero-amount{font-family:'IBM Plex Mono',monospace!important;font-weight:500!important;font-size:46px!important;letter-spacing:-.03em!important}
+html body.finled .hero-card .hero-amount{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace!important;font-weight:500!important;font-size:46px!important;letter-spacing:-.03em!important}
 html body.finled .card,html body.finled .stat,html body.finled .bal-card,html body.finled .goal-card,html body.finled .snapshot-card{background:var(--surface)!important;border:1px solid var(--border)!important;border-top:2px solid var(--border2)!important;border-radius:2px!important;box-shadow:none!important}
 html body.finled .stat{padding:14px 16px!important}
 html body.finled .stat.g{border-top-color:var(--accent)!important}html body.finled .stat.r{border-top-color:var(--red)!important}html body.finled .stat.a{border-top-color:var(--amber)!important}html body.finled .stat.b{border-top-color:var(--blue)!important}
-html body.finled .stat .sv{font-family:'IBM Plex Mono',monospace!important;font-weight:500!important;font-size:21px!important}
+html body.finled .stat .sv{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace!important;font-weight:500!important;font-size:21px!important}
 html body.finled .card-hd{border-bottom:1px solid var(--border)!important}
 html body.finled .card-title{font-family:var(--font-b)!important;font-size:11.5px!important;font-weight:600!important;text-transform:uppercase;letter-spacing:.1em}
 html body.finled .page-title{font-weight:600!important;font-size:26px!important}
@@ -1573,7 +1580,7 @@ html body.finled [data-tour$="-form"] .form-row{display:grid!important;grid-temp
 #fl-today .fl-card{margin:0}#fl-today .fl-tools{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
 .fl-tools button,.fl-btn{min-height:44px;padding:0 16px;border:1px solid var(--border2);background:transparent;color:var(--text);border-radius:3px;font:500 14px var(--font-b);cursor:pointer}
 .fl-btn.fl-pri{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
-.fl-big{font:500 30px 'IBM Plex Mono',monospace;margin:4px 0}
+.fl-big{font:500 30px 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;margin:4px 0}
 .fl-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 #fl-ov{position:fixed;inset:0;background:rgba(2,6,18,.7);z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
 #fl-md{background:var(--surface);color:var(--text);border:1px solid var(--border2);border-top:2px solid var(--accent);border-radius:2px;max-width:560px;width:100%;padding:24px;max-height:92vh;overflow-y:auto}
@@ -1594,6 +1601,15 @@ html body.finled.light .hero-card,html body.finled.light .hero-card:hover{backgr
 html body.finled.light .hero-card .hero-label,html body.finled.light .hero-card .hero-sub,html body.finled.light .hero-card .hw-name{color:var(--muted)!important}
 html body.finled.light .hero-card .hero-amount{color:var(--text)!important}
 html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!important;border:1px solid var(--border)!important;border-radius:2px!important}
+</style>
+<style id="finled-auth-text">
+/* Login / register / landing: no text below 14px. Sizes only; spacing, widths and behaviour unchanged. */
+#auth-login .pin-sub,#auth-login .pin-error,#auth-login .btn-sm,#auth-login .auth-link,
+#auth-login [style*="font-size:11px"],#auth-login [style*="font-size:11.5px"],#auth-login [style*="font-size:12px"],
+#auth-login [style*="font-size:12.5px"],#auth-login [style*="font-size:13px"],#auth-login [style*="font-size:13.5px"]{font-size:14px !important}
+</style>
+<style id="finled-toast-rm">
+@media (prefers-reduced-motion:reduce){.toast,html body.finled .toast{transition:none !important}.toast{transform:none}}
 </style>
 </head>
 <body class="finled">
@@ -1642,8 +1658,8 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
       <div class="auth-view-main">
         <div class="pin-title">Welcome,</div>
         <div class="pin-sub" style="margin-bottom:22px">Glad to see you!</div>
-        <div style="margin-bottom:10px"><input type="email" id="login-email" placeholder="Email address" autocomplete="email" style="width:100%;padding:11px 14px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)"></div>
-        <div class="auth-pw-wrap" style="margin-bottom:10px"><input type="password" id="login-password" placeholder="Password" autocomplete="current-password" style="width:100%;padding:11px 14px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)" onkeydown="if(event.key==='Enter')authEmailSubmit()"><button type="button" class="auth-pw-toggle" onclick="authTogglePw('login-password',this)" aria-label="Show or hide password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <div style="margin-bottom:10px"><input type="email" id="login-email" aria-label="Email address" placeholder="Email address" autocomplete="email" style="width:100%;padding:11px 14px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)"></div>
+        <div class="auth-pw-wrap" style="margin-bottom:10px"><input type="password" id="login-password" aria-label="Password" placeholder="Password" autocomplete="current-password" style="width:100%;padding:11px 14px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)" onkeydown="if(event.key==='Enter')authEmailSubmit()"><button type="button" class="auth-pw-toggle" onclick="authTogglePw('login-password',this)" aria-label="Show or hide password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
         <div style="text-align:right;margin-bottom:8px"><button class="btn btn-ghost btn-sm" id="login-forgot-pw-btn" onclick="authForgotPassword()">Forgot password?</button></div>
         <div class="pin-error" id="login-error"></div>
         <button class="btn btn-primary" id="login-submit-btn" style="width:100%" onclick="authEmailSubmit()">Login</button>
@@ -1659,9 +1675,9 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
       <div class="auth-view-main">
         <div class="pin-title">Create Account</div>
         <div class="pin-sub" style="margin-bottom:22px">to get started now!</div>
-        <div style="margin-bottom:10px"><input type="email" id="signup-email" placeholder="Email address" autocomplete="email" style="width:100%;padding:11px 14px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)"></div>
-        <div class="auth-pw-wrap" style="margin-bottom:10px"><input type="password" id="signup-password" placeholder="Password" autocomplete="new-password" style="width:100%;padding:11px 14px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)"><button type="button" class="auth-pw-toggle" onclick="authTogglePw('signup-password',this)" aria-label="Show or hide password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
-        <div class="auth-pw-wrap" style="margin-bottom:10px"><input type="password" id="signup-confirm" placeholder="Confirm password" autocomplete="new-password" style="width:100%;padding:11px 14px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)" onkeydown="if(event.key==='Enter')authEmailSubmit()"><button type="button" class="auth-pw-toggle" onclick="authTogglePw('signup-confirm',this)" aria-label="Show or hide password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <div style="margin-bottom:10px"><input type="email" id="signup-email" aria-label="Email address" placeholder="Email address" autocomplete="email" style="width:100%;padding:11px 14px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)"></div>
+        <div class="auth-pw-wrap" style="margin-bottom:10px"><input type="password" id="signup-password" aria-label="Password" placeholder="Password" autocomplete="new-password" style="width:100%;padding:11px 14px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)"><button type="button" class="auth-pw-toggle" onclick="authTogglePw('signup-password',this)" aria-label="Show or hide password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <div class="auth-pw-wrap" style="margin-bottom:10px"><input type="password" id="signup-confirm" aria-label="Confirm password" placeholder="Confirm password" autocomplete="new-password" style="width:100%;padding:11px 14px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);outline:none;font-family:var(--font-b)" onkeydown="if(event.key==='Enter')authEmailSubmit()"><button type="button" class="auth-pw-toggle" onclick="authTogglePw('signup-confirm',this)" aria-label="Show or hide password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
         <div class="pin-error" id="signup-error"></div>
         <button class="btn btn-primary" id="signup-submit-btn" style="width:100%;margin-top:6px" onclick="authEmailSubmit()">Sign Up</button>
         <div style="display:flex;align-items:center;gap:10px;width:100%;margin:18px 0 14px;color:var(--muted2);font-size:11px"><div style="flex:1;height:1px;background:var(--border2)"></div>Or Sign Up with<div style="flex:1;height:1px;background:var(--border2)"></div></div>
@@ -1695,7 +1711,7 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
         <input type="checkbox" id="terms-agree-check" disabled onchange="document.getElementById('terms-continue-btn').disabled=!this.checked">
         <span class="cbox-box"><svg viewBox="0 0 16 16"><path d="M3.5 8.3L6.3 11.2L12.5 4.5"/></svg></span>
       </span>
-      <span style="font-size:12.5px;color:var(--text);line-height:1.5">I have read and agree to the <b>Terms of Use</b> and <b>Privacy Policy</b>, and I consent to FinLed collecting and processing my personal data as described, including storage and transfer to Google servers that may be outside the Philippines (Data Privacy Act of 2012).</span>
+      <span style="font-size:12.5px;color:var(--text);line-height:1.5">I have read and agree to the <b>Terms of Use</b> and <b>Privacy Policy</b>, and I consent to FinLed collecting and processing my personal data as described, including storage and transfer to Supabase servers that may be outside the Philippines (Data Privacy Act of 2012). If I am under 18, my parent or legal guardian has read these documents and consents for me.</span>
     </label>
 
     <button id="terms-continue-btn" onclick="acceptTermsAndContinue()" disabled style="width:100%;background:var(--accent);color:var(--on-accent);border:none;padding:12px;border-radius:10px;font-family:var(--font-d);font-size:14px;font-weight:700;cursor:pointer;opacity:1">Agree &amp; Continue</button>
@@ -1974,6 +1990,10 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 5.5A1.5 1.5 0 013.5 4H10a2 2 0 012 2v14a2 2 0 00-2-2H3.5A1.5 1.5 0 012 16.5zM22 5.5A1.5 1.5 0 0020.5 4H14a2 2 0 00-2 2v14a2 2 0 012-2h6.5a1.5 1.5 0 001.5-1.5z"/></svg>
       <span>Learn</span>
     </div>
+    <div class="nav-item" role="button" tabindex="0" id="nav-premium" onclick="FLX.tools()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();FLX.tools()}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M3 7l4 4 5-7 5 7 4-4v11H3z"/></svg>
+      <span>Premium</span>
+    </div>
     <div class="nav-sep" role="separator"></div>
     <div class="nav-item" onclick="show('settings')" data-page="settings">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -2044,8 +2064,8 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
       <div class="hero-wallets" id="hero-wallets-inner"></div>
     </div>
 
-    <nav class="qa" aria-label="Quick actions"><button type="button" class="qa-main" onclick="show('expenses')">Add an expense</button><button type="button" onclick="show('income')">Add income</button><button type="button" onclick="show('goals')">Set a goal</button><button type="button" onclick="show('loans')">Review loans</button><button type="button" onclick="FLX.paste()">Paste a message</button><button type="button" onclick="FLX.split()">Split a bill</button></nav>
-<div id="fl-today"><section id="fl-checkin" class="fl-card" aria-label="Daily check-in"></section><section id="fl-payday" class="fl-card" aria-label="Until payday"></section><div class="fl-tools"><button type="button" onclick="FLX.subs()">Find subscriptions</button><button type="button" onclick="FLX.compare()">Compare months</button><button type="button" onclick="FLX.budgets()">Category budgets</button><button type="button" onclick="FLX.cats()">My categories</button><button type="button" onclick="FLX.pyf()">Pay yourself first</button><button type="button" onclick="FLX.tools()">Premium tools</button><button type="button" onclick="FLPlan.pricing()">Plans</button></div></div>
+    <nav class="qa" aria-label="Quick actions"><button type="button" class="qa-main" onclick="show('expenses')">Add an expense</button><button type="button" onclick="show('income')">Add income</button><button type="button" onclick="show('goals')">Set a goal</button><button type="button" onclick="show('loans')">Review loans</button><button type="button" onclick="FLX.paste()">Paste a message</button><button type="button" onclick="FLX.split()">Split a bill</button><button type="button" onclick="FLX.repeat()">Same as yesterday</button></nav>
+<div id="fl-today"><section id="fl-checkin" class="fl-card" aria-label="Daily check-in"></section><section id="fl-payday" class="fl-card" aria-label="Until payday"></section><div class="fl-tools"><button type="button" onclick="FLX.subs()">Find subscriptions</button><button type="button" onclick="FLX.compare()">Compare months</button><button type="button" onclick="FLX.summary()">Monthly summary</button><button type="button" onclick="FLX.reports()">Reports</button><button type="button" onclick="FLX.budgets()">Category budgets</button><button type="button" onclick="FLX.cats()">My categories</button><button type="button" onclick="FLX.pyf()">Pay yourself first</button><button type="button" onclick="FLX.tools()">Premium tools</button><button type="button" onclick="FLPlan.pricing()">Plans</button></div></div>
         <!-- STAT GRID -->
     <div class="stat-grid" id="dash-stats"></div>
 
@@ -2488,6 +2508,8 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
     </div>
       </div>
       <div class="set-panel single" data-panel="legal">
+    <!-- MY USAGE (local only) -->
+    <div class="card" id="usage-card" style="margin-bottom:14px"><h3 class="card-title" style="margin:0 0 8px">My usage</h3><div id="usage-body" style="font-size:16px;line-height:1.5"></div></div>
     <!-- LEGAL & DATA -->
     <div class="card" style="margin-bottom:14px">
       <div class="row"><div><div style="font-size:13px;font-weight:500">Terms of Use</div><div style="font-size:11px;color:var(--muted)">Rules for using FinLed</div></div><button class="btn btn-ghost btn-sm" onclick="openLegal('terms')">View</button></div>
@@ -2666,6 +2688,7 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
   <div class="fn-sheet" role="dialog" aria-modal="true" aria-label="More">
     <div class="fn-grab"></div>
     <button type="button" class="more-row" onclick="show('settings')"><span class="more-ic">⚙️</span><span>Settings</span><span class="more-chev">›</span></button>
+    <button type="button" class="more-row" id="more-premium" onclick="closeMoreSheet();FLX.tools()"><span class="more-ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l4 4 5-7 5 7 4-4v11H3z"/></svg></span><span>Premium</span><span class="more-chev">›</span></button>
     <button type="button" class="more-row" onclick="show('export')"><span class="more-ic">📤</span><span>Export &amp; reports</span><span class="more-chev">›</span></button>
     <button type="button" class="more-row" onclick="closeMoreSheet();window.FinTour&&window.FinTour.start(true)"><span class="more-ic">❓</span><span>Take a tour</span><span class="more-chev">›</span></button>
   </div>
@@ -7165,20 +7188,23 @@ function resolveMergeChoice(useRemote){
 }
 
 /* ══ LEGAL: Terms of Use + Privacy Policy (single source, used at sign-up, login screen and Settings) ══ */
-const LEGAL_VERSION='2.0', LEGAL_UPDATED='September 28, 2026';
+const LEGAL_VERSION='2.1', LEGAL_UPDATED='October 7, 2026';
+const LEGAL_HOST='';     // <-- optional: name of the service that serves the app files (e.g. your static host). Leave '' to stay generic.
+const LEGAL_REGION='';   // <-- optional: the region of your Supabase project (Supabase dashboard > Project Settings). Leave '' until confirmed.
 const LEGAL_DEV='[YOUR NAME / BUSINESS NAME]';          // <-- fill in: the person or entity that runs FinLed
 const LEGAL_EMAIL='[YOUR CONTACT EMAIL]';               // <-- fill in: public contact / privacy email
 const LEGAL_DOCS={
 terms:[
 ['Acceptance of These Terms',`By creating an account, signing in, continuing as a Guest, or otherwise using FinLed ("the App"), you agree to these Terms of Use and to our Privacy Policy. Ticking the agreement box is a valid electronic signature and creates a binding agreement under the Electronic Commerce Act of 2000 (Republic Act No. 8792). If you do not agree, do not use the App.`],
-['Who May Use the App',`You must be at least 18 years old. If you are younger, a parent or legal guardian must read and accept these documents on your behalf and supervise your use. The App is for your own personal, non-commercial use.`],
+['Who May Use the App',`The App is meant for adults. If you are under 18, a parent or legal guardian must read these documents, accept them for you, and supervise your use. By accepting for a minor, the parent or guardian confirms they have that authority and consents, on the minor's behalf, to the processing of the minor's personal data described in the Privacy Policy. We may ask for proof of that consent, and may suspend an account if consent is missing or withdrawn. The App is for personal, non-commercial use.`],
 ['What FinLed Is',`FinLed is a personal, self-managed finance tracker for income, expenses, wallet balances (e.g. GCash, Maya, cash), loans and savings goals that <b>you</b> enter yourself. It is provided by ${LEGAL_DEV} ("we", "us") and is under active development.`],
 ['What FinLed Is Not',`FinLed is <b>not</b> a bank, e-wallet, electronic money issuer, lending or financing company, payment processor, remittance provider, broker or investment adviser, and is not supervised by the Bangko Sentral ng Pilipinas or the Securities and Exchange Commission. It has no connection to your real bank or e-wallet accounts and never moves money. Balances, loans and reports are figures you typed in; a loan entry is a personal note, not proof of a debt or a collection tool. Nothing in the App is financial, investment, tax, accounting or legal advice, and generated reports are unaudited and are not for tax filings or submission to any authority unless you verify them yourself.`],
 ['Your Account and Security',`You are responsible for your sign-in credentials, your device, your 4-digit PIN and your recovery answer, and for all activity under your account. The PIN (and optional device biometric unlock) is a convenience lock, <b>not</b> encryption. Guest accounts have no email, so we cannot recover them if you lose the device or clear its storage. Tell us promptly if you suspect unauthorized access.`],
 ['Your Data and Content',`You own the information you enter. You give us a limited, non-exclusive licence to store, process and sync it solely to run the App for you. You are responsible for its accuracy and for having the right to enter information about other people (for example names in loan records) - keep it to what is necessary. Do not enter government ID numbers, card numbers, bank credentials or passwords.`],
 ['Acceptable Use',`You agree not to: use the App for anything unlawful, fraudulent or for money laundering; try to access another person's account or data; probe, attack, overload, scrape or reverse-engineer the App or its services; upload malware; or bypass any security or usage limit.`],
 ['Backups and Availability',`The App is provided as available and may be interrupted, changed or discontinued. Syncing can fail or conflict between devices. You are responsible for exporting your own backups (Settings and Export). Restoring a backup overwrites current data.`],
-['Third-Party Services',`The App relies on Supabase (authentication and database), Google Sign-In and Google Fonts, and, only if you use the optional receipt scanner, the jsDelivr content network to download the open-source Tesseract.js reader. Their own terms and privacy policies apply, and we are not responsible for their outages or acts.`],
+['Plans and Payments',`Basic tracking in FinLed is free. Optional paid plans (FinLed Plus and FinLed Pro) add extra tools. Features that are free stay free. Each account may start one free 14-day Pro trial, without a card, which ends by itself. Paid plans are not yet available for purchase; when they are, the price, billing period and refund terms will be shown before you pay. Payments will be made on a payment provider's own page: we never receive your card or e-wallet credentials. Your plan changes only after the provider confirms your payment to our server, and a plan that is not renewed returns to free when its period ends. Your records and exports remain yours either way.`],
+['Third-Party Services',`The App relies on Supabase (authentication and database), Google Sign-In and Google Fonts, the web host that delivers the App's files, a payment provider once paid plans are available, and, only if you use the optional receipt scanner, the jsDelivr content network to download the open-source Tesseract.js reader. Their own terms and privacy policies apply, and we are not responsible for their outages or acts.`],
 ['Intellectual Property',`The App, its design, code, name, logo and icons belong to us or our licensors. You receive a limited, revocable, non-exclusive, non-transferable licence to use it for personal purposes. Scripture excerpts remain the property of their respective translation rights holders and are shown for personal encouragement only.`],
 ['Devotional Content',`Any Bible verses or devotional content is for personal encouragement. It is not pastoral, financial or professional counsel.`],
 ['Disclaimer of Warranties',`To the extent permitted by law, the App is provided "as is" and "as available" without warranties of any kind, including accuracy, reliability, uninterrupted operation, or fitness for a particular purpose. Calculations may contain errors.`],
@@ -7191,17 +7217,17 @@ terms:[
 ],
 privacy:[
 ['Who We Are',`${LEGAL_DEV} is the Personal Information Controller of FinLed. Privacy contact / Data Protection Officer: ${LEGAL_EMAIL}. This policy follows the Data Privacy Act of 2012 (Republic Act No. 10173), its Implementing Rules and Regulations, and issuances of the National Privacy Commission (NPC).`],
-['Personal Data We Handle',`<b>Account data:</b> email address, sign-in method (Google, email/password or guest), display name, and a unique account ID.<br><b>Data you enter:</b> income, expenses, wallet names and balances, loans (including names of people and notes), savings goals, budget limit, notes, and app settings.<br><b>Security data:</b> a salted hash of your PIN, your recovery question, and a salted hash of your answer (we cannot read either).<br><b>Technical data:</b> authentication tokens and data your browser stores (localStorage/sessionStorage: theme, tutorial status, unlock state). Google may receive your IP address and device details when you sign in, sync, or load fonts.<br><b>We do not collect:</b> bank or e-wallet credentials, card numbers, precise location, contacts, photos, or microphone/camera data, and we do not run advertising or third-party analytics.`],
+['Personal Data We Handle',`<b>Account data:</b> email address, sign-in method (Google, email/password or guest), display name, and a unique account ID.<br><b>Data you enter:</b> income, expenses, wallet names and balances, loans (including names of people and notes), savings goals, budget limit, notes, and app settings.<br><b>Security data:</b> a salted hash of your PIN, your recovery question, and a salted hash of your answer (we cannot read either).<br><b>Plan data:</b> your plan (free, Plus or Pro), its status, and trial or period end dates. Once paid plans are available we will also hold the payment provider's name and a payment reference. Card and e-wallet credentials go only to the payment provider, never to us.<br><b>Technical data:</b> authentication tokens and data your browser stores (localStorage/sessionStorage: theme, tutorial status, unlock state, your plan, pay-schedule and reminder settings). Google, Supabase and our web host may receive your IP address and device details when you sign in, sync, load the App or load fonts.<br><b>We do not collect:</b> bank or e-wallet credentials, card numbers, precise location, contacts, photos, or microphone/camera data, and we do not run advertising or third-party analytics.`],
 ['Why We Use It and Our Legal Basis',`We process data to (1) create and secure your account, (2) store, sync and display your records across your devices, (3) provide backups, exports and reports you request, and (4) keep the service safe and fix problems. Our bases under Section 12 of the Data Privacy Act are your <b>consent</b> (given when you accept these documents), performance of the service you asked for, and our legitimate interest in security and reliability. We do not sell your data, use it for profiling or advertising, or make automated decisions about you.`],
-['Where Your Data Is Kept',`A copy is stored in your browser on your device. If you use an account, a copy is also stored in a Supabase database under your account ID. Supabase servers may be located outside the Philippines, so your data may be transferred and processed abroad; Google acts as our processor under its own security and data-protection commitments, and we remain accountable for your data.`],
-['Who We Share It With',`Only with service providers needed to run the App: Supabase (authentication and database) and Google (Google Sign-In, Google Fonts). We disclose data to authorities only when required by law or lawful order. The optional receipt scanner runs entirely on your device: your receipt photo is not uploaded or stored, and only the open-source reader software and its language data are downloaded from a public content network (jsDelivr) the first time you use it, which may see your IP address. We do not otherwise share, rent or sell personal data. The developer does not routinely view your individual records.`],
-['How Long We Keep It',`Local data stays until you clear it or your browser storage. Cloud data stays until you delete it or your account, which you can do any time in Settings (Legal and Data). Backups you download are yours to manage. Inactive guest accounts may be removed after a long period. Deleted data may persist briefly in provider backups before being overwritten.`],
-['Security',`We use HTTPS/TLS in transit, Google's access controls, and salted hashing (SHA-256) for your PIN and recovery answer. Your records are <b>not</b> end-to-end encrypted, and the PIN is a convenience lock: someone with access to your unlocked device may see your data. <b>Optional biometric unlock:</b> if you turn it on, your device's operating system checks your face or fingerprint through the browser's WebAuthn feature; the App never receives, stores or transmits your face or fingerprint data, and keeps only an on-device credential reference in this browser. Your PIN always still works. No system is perfectly secure; use a device passcode and keep backups.`],
+['Where Your Data Is Kept',`A copy is stored in your browser on your device. If you use an account, a copy is also stored in a Supabase database under your account ID. Supabase servers may be located outside the Philippines${LEGAL_REGION?' (our project is hosted in '+LEGAL_REGION+')':''}, so your data may be transferred and processed abroad. Supabase acts as our processor under its own security and data-protection commitments, and we remain accountable for your data. The App's files are delivered by ${LEGAL_HOST?LEGAL_HOST:'a web hosting service'}, which can see technical request data such as your IP address but not the records you enter.`],
+['Who We Share It With',`Only with service providers needed to run the App: Supabase (authentication and database), Google (Google Sign-In, Google Fonts), our web host, and, once paid plans are available, a payment provider that handles the payment and tells our server whether it succeeded. We disclose data to authorities only when required by law or lawful order. The optional receipt scanner runs entirely on your device: your receipt photo is not uploaded or stored, and only the open-source reader software and its language data are downloaded from a public content network (jsDelivr) the first time you use it, which may see your IP address. We do not otherwise share, rent or sell personal data. The developer does not routinely view your individual records.`],
+['How Long We Keep It',`Local data stays until you clear it or your browser storage. Cloud data stays until you delete it or your account, which you can do any time in Settings (Legal and Data). Backups you download are yours to manage. Inactive guest accounts may be removed after a long period. Deleted data may persist briefly in provider backups before being overwritten. Records of payments we have received may be kept for as long as accounting or tax law requires.`],
+['Security',`We use HTTPS/TLS in transit, the access controls provided by Supabase, and salted hashing (SHA-256) for your PIN and recovery answer. Your records are <b>not</b> end-to-end encrypted, and the PIN is a convenience lock: someone with access to your unlocked device may see your data. <b>Optional biometric unlock:</b> if you turn it on, your device's operating system checks your face or fingerprint through the browser's WebAuthn feature; the App never receives, stores or transmits your face or fingerprint data, and keeps only an on-device credential reference in this browser. Your PIN always still works. No system is perfectly secure; use a device passcode and keep backups.`],
 ['Your Rights as a Data Subject',`Under Section 16 of the Data Privacy Act you may: be informed; object to processing; access your data; correct it; request erasure or blocking; withdraw consent; receive your data in a portable format; and claim damages for violations. In-app: edit any entry, download a JSON/CSV backup, or permanently delete your account and cloud data in Settings. Otherwise email ${LEGAL_EMAIL}; we aim to respond within 30 days. You may also complain to the National Privacy Commission (privacy.gov.ph). Withdrawing consent or deleting your account means we can no longer provide cloud sync.`],
 ['Data Breach Notification',`If a personal data breach that puts you at risk occurs, we will notify the NPC and affected users within 72 hours of knowledge or reasonable belief, as required by NPC rules, and tell you what happened and what to do.`],
 ['Other People\'s Data',`If you enter details about others (such as a person who owes you money), do so only as needed for your personal records and keep them accurate. You are responsible for that entry.`],
-['Children',`The App is not directed to children. Users under 18 need a parent or guardian to accept these documents and supervise. If we learn we hold a minor's data without proper consent, we will delete it on request.`],
-['Cookies and Local Storage',`We use browser storage and authentication tokens that are strictly necessary to keep you signed in and remember settings. We do not use advertising or tracking cookies.`],
+['Children and Minors',`The App is not directed to children. Under the Data Privacy Act, a minor cannot give valid consent alone, so a user under 18 needs a parent or legal guardian to read and accept these documents, give consent for the processing of the minor's data, and supervise use. The parent or guardian may exercise the data rights below for the minor, including access, correction and deletion. We cannot check a user's age or a guardian's identity inside the App, so we rely on the acceptance given. If we learn we hold a minor's data without proper consent, we will delete it on request.`],
+['Cookies and Local Storage',`We use browser storage and authentication tokens that are strictly necessary to keep you signed in and remember settings. We do not use advertising or tracking cookies. Reminders and optional browser notifications are worked out on your device while the App is open; nothing is sent to us or anyone else for them, and you can turn them off in the App or your browser settings. The usage counters shown in Settings (days with a record, time to first entry, check-in taps) are kept only on your device and are never sent anywhere.`],
 ['Changes and Contact',`We will update this policy when practices or the law change, show the new version, and ask for acceptance again where required. Questions, requests or complaints: ${LEGAL_EMAIL}.`]
 ]};
 function legalHTML(tab){
@@ -8158,10 +8184,11 @@ function modal(h){close();var o=document.createElement('div');o.id='fl-ov';o.inn
 function esc2(e){if(e.key==='Escape')close()}
 function close(){var o=document.getElementById('fl-ov');if(o)o.remove();document.removeEventListener('keydown',esc2)}
 /* ---------- plan / entitlement: read from Supabase `subscriptions` (RLS, read-only). Gating here is UI only; any paid server data must also be protected by RLS. ---------- */
-var TIERS={plus:{name:'FinLed Plus',price:25,list:['All smart spending insights','Subscription finder','Pay-yourself-first rules','Multiple budgets','Custom categories','Unlimited savings goals (coming soon)']},pro:{name:'FinLed Pro',price:50,list:['Everything in Plus','Month-vs-month comparison','Monthly financial summary (coming soon)','Advanced reports (coming soon)','PDF export (coming soon)']}};
+var TIERS={plus:{name:'FinLed Plus',price:25,list:['All smart spending insights','Subscription finder','Pay-yourself-first rules','Multiple budgets','Custom categories']},pro:{name:'FinLed Pro',price:50,list:['Everything in Plus','Month-vs-month comparison','Monthly financial summary','Advanced reports by category, wallet and period','PDF export of the summary and reports']}};
 var NEED={insights_full:'plus',subs:'plus',compare:'pro'},RANK={free:0,plus:1,pro:2};
 var WHY={insights_full:['Understand where your money is going.','Smart insights compare your spending and point out what changed.','plus'],subs:['Find the bills you forgot about.','The subscription finder spots charges that repeat every month and adds them up.','plus'],compare:['See what changed between months.','Compare income, expenses, savings and categories side by side.','pro']};
 window.FLPlanData={NEED:NEED,WHY:WHY,modal:modal,close:close,esc:esc};
+var PAY={fn:'',hosts:[]};/* fn: Supabase Edge Function name that creates the payment link. Empty = payments not connected. */
 var CK='finled-plan-cache',cache=ls(CK,null),uid=null;
 function eff(r){if(!r)return'free';var n=Date.now(),pe=r.current_period_end?Date.parse(r.current_period_end):0,te=r.trial_end?Date.parse(r.trial_end):0;
  if(r.status==='trialing'&&te>n)return'pro';
@@ -8180,18 +8207,38 @@ var provider={get:function(){if(!uid||!cache||cache.uid!==uid)return'free';retur
  trialUsed:function(){return !!(uid&&cache&&cache.uid===uid&&cache.row&&cache.row.trial_end)},
  startTrial:function(){if(!uid)return Promise.reject(new Error('signed-out'));return supabaseClient.rpc('start_trial').then(function(q){if(q.error)throw q.error;return refresh()})},
  refresh:refresh,
- checkout:function(){return Promise.reject(new Error('not-connected'))}};
+ /* PAYMENTS (stub, off by default). The browser only ASKS a server to create a payment link and then redirects.
+    It never decides a payment succeeded: the plan changes only when the server (webhook, service role) updates the
+    `subscriptions` row, which refresh() reads. See payments-architecture.md. No secret key ever goes in this file.
+    To connect: deploy the Edge Function, then set fn to its name and hosts to the provider's checkout hostnames. */
+ checkout:function(tier){
+  if(!PAY.fn)return Promise.reject(new Error('not-connected'));
+  if(!uid)return Promise.reject(new Error('signed-out'));
+  return supabaseClient.functions.invoke(PAY.fn,{body:{tier:tier}}).then(function(q){
+   var u;try{u=new URL(q&&q.data&&q.data.url)}catch(e){throw new Error('checkout-failed')}
+   if(q.error||u.protocol!=='https:'||PAY.hosts.indexOf(u.hostname)<0)throw new Error('checkout-failed');
+   location.assign(u.href)})}};
 if(typeof supabaseClient!=='undefined'){try{localStorage.removeItem('finled-plan')}catch(e){}
  supabaseClient.auth.onAuthStateChange(function(){setTimeout(refresh,0)});window.addEventListener('online',refresh);setTimeout(refresh,0)}
 var FLPlan={provider:provider,tier:function(){return provider.get()},can:function(f){return RANK[provider.get()]>=RANK[NEED[f]||'free']},
  gate:function(f,fn){if(FLPlan.can(f))return fn();FLPlan.upsell(f)},
  upsell:function(f){var w=WHY[f],t=TIERS[w[2]];modal('<h2>'+w[0]+'</h2><p>'+w[1]+'</p><p><b>Unlock with '+t.name+' \u2014 \u20b1'+t.price+'/month</b></p><div class="fl-row"><button class="fl-btn fl-pri" id="fl-up">Upgrade to '+w[2].replace('p','P')+'</button><button class="fl-btn" id="fl-later">Maybe later</button></div><p class="m">The free version keeps working fully.</p>');
   document.getElementById('fl-up').onclick=function(){FLPlan.checkout(w[2])};document.getElementById('fl-later').onclick=close},
- checkout:function(t){provider.checkout(t).catch(function(){toast('Payments are not connected yet. Nothing was charged.','error')})},
+ checkout:function(t){provider.checkout(t).catch(function(e){var m=e&&e.message;toast(m==='signed-out'?'Sign in first, then choose a plan.':m==='not-connected'?'Payments are not connected yet. Nothing was charged.':'Could not start checkout. Nothing was charged.','error')})},
  pricing:function(){var tr=provider.trialUsed();modal('<h2>Plans</h2><p class="m">Basic tracking stays free. Plans add automation and analysis.</p><div class="fl-plans">'+['plus','pro'].map(function(k){var t=TIERS[k];return'<div class="fl-plan"><b>'+t.name+'</b><div>\u20b1'+t.price+'/month</div><ul>'+t.list.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul><button class="fl-btn" onclick="FLPlan.checkout(\''+k+'\')">Choose '+k.replace('p','P')+'</button></div>'}).join('')+'</div>'
-  +(tr?'':'<div class="fl-row"><button class="fl-btn fl-pri" id="fl-tr">Try Pro free for 14 days (no card)</button></div>')+'<div class="fl-row"><button class="fl-btn" id="fl-x">Close</button></div><p class="m">Payments are not connected yet. Current plan: '+provider.get()+'.</p>');
+  +(tr?'':'<div class="fl-row"><button class="fl-btn fl-pri" id="fl-tr">Try Pro free for 14 days (no card)</button></div>')+'<div class="fl-row"><button class="fl-btn" id="fl-x">Close</button></div><p class="m">'+(PAY.fn?'You pay on the payment provider\u2019s page. Your plan changes only after the provider confirms the payment.':'Payments are not connected yet.')+' Current plan: '+provider.get()+'.</p>');
   var b=document.getElementById('fl-tr');if(b)b.onclick=function(){provider.startTrial().then(function(){close();toast('14-day Pro trial started');render()}).catch(function(e){toast(e&&e.message==='signed-out'?'Sign in to start your free trial.':'Could not start the trial. Check your connection and try again.','error')})};document.getElementById('fl-x').onclick=close}};
 window.FLPlan=FLPlan;
+/* Return from the payment page (?checkout=return|cancel). The URL only tells us the person came back, never that they paid. */
+(function(){var p;try{p=new URLSearchParams(location.search).get('checkout')}catch(e){}
+ if(p!=='return'&&p!=='cancel')return;
+ try{var u=new URL(location.href);u.searchParams.delete('checkout');history.replaceState(null,'',u.pathname+u.search+u.hash)}catch(e){}
+ function show(msg,again){modal('<h2>Payment</h2><p>'+msg+'</p><div class="fl-row">'+(again?'<button class="fl-btn fl-pri" id="fl-ck">Check again</button>':'')+'<button class="fl-btn" id="fl-x2">Close</button></div>');
+  document.getElementById('fl-x2').onclick=close;var b=document.getElementById('fl-ck');if(b)b.onclick=function(){refresh().then(function(){fin()})}}
+ function fin(){var t=provider.get();if(p==='cancel')return show('Checkout was cancelled. Nothing was charged.',false);
+  if(t!=='free')return show('Your plan is '+(t==='pro'?'FinLed Pro':'FinLed Plus')+'. Thank you.',false);
+  show('We have not received a payment confirmation yet. This can take a few minutes. Your plan updates by itself once the provider confirms. If it does not change after about an hour, contact support with your payment reference.',true)}
+ setTimeout(function(){refresh().then(fin)},1200)})();
 /* ---------- helpers ---------- */
 function dayKey(e){return e.date}
 function wallets(){return state.wallets||[]}
@@ -8223,7 +8270,7 @@ var FLX={
  paste:function(pre){modal('<h2>Paste a message</h2><p class="m">Paste a GCash, Maya or bank text. FinLed fills in the form and you review it before saving.</p><label for="fp-t">Message</label><textarea id="fp-t" rows="5"></textarea><div class="fl-row"><button class="fl-btn fl-pri" id="fp-g">Fill the form</button><button class="fl-btn" id="fp-c">Cancel</button></div>');
   var t=document.getElementById('fp-t');if(pre)t.value=pre;document.getElementById('fp-c').onclick=close;
   document.getElementById('fp-g').onclick=function(){var x=t.value.replace(/,/g,''),m=x.match(/(?:php|\u20b1)\s?(\d+(?:\.\d+)?)/i)||x.match(/\bP\s?(\d+(?:\.\d+)?)/)||x.match(/(\d+(?:\.\d+)?)\s?(?:php|pesos)/i);
-   if(!m){toast('Could not find an amount','error');return}var amt=+m[1],inc=/received|credited|cash.?in|deposit|salary|refund/i.test(x),mer=(x.match(/(?:\bto|\bat|\bpaid|\bfrom)\s+([A-Z][\w&'.\- ]{2,28}?)(?=\s+(?:on|with|via|ref|for)\b|[.,\n]|$)/)||[])[1]||'';
+   if(!m){toast('Could not find an amount','error');return}var amt=+m[1],inc=/received|credited|cash.?in|deposit|salary|refund/i.test(x),mer=(x.match(/(?:\bto|\bat|\bfrom)\s+([A-Z][\w&'.\- ]{2,28}?)(?=\s+(?:[Oo]n|[Ww]ith|[Vv]ia|[Rr]ef(?:erence)?|[Ff]or)\b|[.,\n]|$)/)||x.match(/\bpaid\s+(?!PHP|P\s?\d)([A-Z][\w&'.\- ]{2,28}?)(?=\s+(?:[Oo]n|[Ww]ith|[Vv]ia|[Rr]ef(?:erence)?|[Ff]or)\b|[.,\n]|$)/)||[])[1]||'';
    var w=wallets().filter(function(w){return x.toLowerCase().indexOf(String(w.name||'').toLowerCase())>-1})[0]||wallets().filter(function(w){return /gcash|maya|bank|bdo|bpi/i.test(x)&&new RegExp(x.match(/gcash|maya|bdo|bpi/i)?x.match(/gcash|maya|bdo|bpi/i)[0]:'^$','i').test(w.name||'')})[0];
    close();function setSel(id,pred){var s=document.getElementById(id);if(!s)return;for(var i=0;i<s.options.length;i++){if(pred(s.options[i])){s.value=s.options[i].value;return}}}
    if(inc){show('income');document.getElementById('inc-amount').value=amt;document.getElementById('inc-note').value=mer||'Received';if(w)document.getElementById('inc-wallet').value=w.id;document.getElementById('inc-amount').focus()}
@@ -8236,7 +8283,7 @@ var FLX={
   document.getElementById('fs-x').onclick=close;document.getElementById('fs-c').onclick=function(){var v=(+T.value||0)/Math.max(2,+N.value||2);if(!v)return;var s='Hi! Our bill is '+fmt(+T.value)+'. Your share is '+fmt(v)+'. Thanks!';(navigator.clipboard?navigator.clipboard.writeText(s):Promise.reject()).then(function(){toast('Message copied')}).catch(function(){toast(s)})}},
  recap:function(){var n=Date.now(),wk=function(a,b){return (state.expenses||[]).filter(function(e){var d=ldate(e.date);return !isNaN(d)&&d>=n-b*864e5&&d<n-a*864e5}).reduce(function(x,e){return x+e.amount},0)},days={};(state.expenses||[]).forEach(function(e){var d=ldate(e.date);if(!isNaN(d)&&d>=n-7*864e5)days[e.date]=1});
   var a=wk(0,7),b=wk(7,14),s='My week on FinLed: logged on '+Object.keys(days).length+' of 7 days'+(b>0?', spending '+(a<=b?Math.round((b-a)/b*100)+'% lower':Math.round((a-b)/b*100)+'% higher')+' than the week before':'')+'.';
-  if(navigator.share)navigator.share({text:s}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(s).then(function(){toast('Recap copied')})},
+  if(navigator.share)navigator.share({text:s}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(s).then(function(){toast('Recap copied')}).catch(function(){toast(s)});else toast(s)},
  subs:function(){FLPlan.gate('subs',function(){var g={};(state.expenses||[]).forEach(function(e){if(!e.desc)return;var k=e.desc.trim().toLowerCase(),m=ymOf(e);if(m===null)return;(g[k]=g[k]||{n:e.desc,m:{},a:[]});g[k].m[m]=1;g[k].a.push(e.amount)});
   var L=Object.keys(g).map(function(k){return g[k]}).filter(function(x){var a=x.a,mn=Math.min.apply(0,a),mx=Math.max.apply(0,a);return Object.keys(x.m).length>=2&&mx<=mn*1.15}).map(function(x){return{n:x.n,v:x.a.reduce(function(p,c){return p+c},0)/x.a.length}}).sort(function(a,b){return b.v-a.v}),tot=L.reduce(function(p,c){return p+c.v},0);
   modal('<h2>Repeating charges</h2>'+(L.length?'<p>These show up in more than one month at about the same amount. Together: <b>'+fmt(tot)+'/month</b>.</p><table class="fl-tbl">'+L.map(function(x){return'<tr><td>'+esc(x.n)+'</td><td>'+fmt(x.v)+'</td></tr>'}).join('')+'</table>':'<p>No repeating charges found yet. Log a few months and they will show up here.</p>')+'<div class="fl-row"><button class="fl-btn" id="fs-x">Close</button></div>');document.getElementById('fs-x').onclick=close})},
@@ -8247,7 +8294,7 @@ var FLX={
   function data(k){var ex=(state.expenses||[]).filter(function(e){return ymOf(e)===k}),c={};ex.forEach(function(e){c[e.cat]=(c[e.cat]||0)+e.amount});var inc=(state.income||[]).filter(function(i){return i.year*12+MO.indexOf(i.month)===k}).reduce(function(x,i){return x+i.amount},0),sp=ex.reduce(function(x,e){return x+e.amount},0);return{inc:inc,sp:sp,sv:inc-sp,c:c}}
   function ch(a,b){if(!a)return b?'new':'\u2013';var p=Math.round((b-a)/a*100);return(p>0?'+':'')+p+'%'}
   function go(){var A=data(+document.getElementById('fc-a').value),B=data(+document.getElementById('fc-b').value),cats=Object.keys(Object.assign({},A.c,B.c)).sort(function(x,y){return((B.c[y]||0)+(A.c[y]||0))-((B.c[x]||0)+(A.c[x]||0))}).slice(0,6),mx=Math.max.apply(0,cats.map(function(c){return Math.max(A.c[c]||0,B.c[c]||0)}).concat([1]));
-   document.getElementById('fc-o').innerHTML='<table class="fl-tbl"><tr><th></th><th>A</th><th>B</th><th>Change</th></tr>'+[['Income','inc'],['Expenses','sp'],['Savings','sv']].map(function(r){return'<tr><td>'+r[0]+'</td><td>'+fmt(A[r[1]])+'</td><td>'+fmt(B[r[1]])+'</td><td>'+ch(A[r[1]],B[r[1]])+'</td></tr>'}).join('')+'</table><h3 style="margin:16px 0 4px;font-size:13px;color:var(--muted)">By category (A on top, B below)</h3>'+cats.map(function(c){return'<div style="margin:8px 0"><div>'+esc(c)+'</div><div style="height:8px;background:var(--border2);width:'+Math.round((A.c[c]||0)/mx*100)+'%"></div><div style="height:8px;margin-top:2px;background:var(--accent);width:'+Math.round((B.c[c]||0)/mx*100)+'%"></div></div>'}).join('')}
+   document.getElementById('fc-o').innerHTML='<table class="fl-tbl"><tr><th></th><th>A</th><th>B</th><th>Change</th></tr>'+[['Income','inc'],['Expenses','sp'],['Savings','sv']].map(function(r){return'<tr><td>'+r[0]+'</td><td>'+fmt(A[r[1]])+'</td><td>'+fmt(B[r[1]])+'</td><td>'+ch(A[r[1]],B[r[1]])+'</td></tr>'}).join('')+'</table><h3 style="margin:16px 0 4px;font-size:16px;color:var(--muted)">By category (A on top, B below)</h3>'+cats.map(function(c){return'<div style="margin:8px 0"><div>'+esc(String(CAT_LABELS[c]||c).replace(/^[^A-Za-z]+/,''))+'</div><div style="height:8px;background:var(--border2);width:'+Math.round((A.c[c]||0)/mx*100)+'%"></div><div style="height:8px;margin-top:2px;background:var(--accent);width:'+Math.round((B.c[c]||0)/mx*100)+'%"></div></div>'}).join('')}
   document.getElementById('fc-a').onchange=document.getElementById('fc-b').onchange=go;go();document.getElementById('fs-x').onclick=close})}
 };
 window.FLX=FLX;
@@ -8336,10 +8383,9 @@ FLX.pyf=function(){FLPlan.gate('pyf',pyfModal)};
 var T=[['Pay-yourself-first rules','Automatically add a percentage of every new income to a savings goal.','Plus',1],
 ['Multiple budgets','Separate limits for food, transport, entertainment and an overall budget.','Plus',1],
 ['Custom categories','Create your own expense categories.','Plus',1],
-['Unlimited savings goals','No cap on how many goals you can track.','Plus',0],
-['Monthly financial summary','A one-page recap of income, expenses, savings, top category and budget result.','Pro',0],
-['Advanced reports','Deeper breakdowns by category, wallet and period.','Pro',0],
-['PDF export','Download your reports as PDF.','Pro',0],
+['Monthly financial summary','A one-page recap of income, expenses, savings, top category and budget result.','Pro',1],
+['Advanced reports','Deeper breakdowns by category, wallet and period.','Pro',1],
+['PDF export','Save the summary and reports as PDF through your browser print window.','Pro',1],
 ['Subscription finder','Finds charges that repeat every month.','Plus',1],
 ['Compare months','Side-by-side income, expenses, savings and categories.','Pro',1]];
 FLX.tools=function(){var o=document.createElement('div');
@@ -8347,6 +8393,135 @@ FLX.tools=function(){var o=document.createElement('div');
  var ov=document.getElementById('fl-ov');if(ov)ov.remove();ov=document.createElement('div');ov.id='fl-ov';ov.innerHTML='<div id="fl-md" role="dialog" aria-modal="true">'+h+'</div>';
  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove()});document.body.appendChild(ov);
  document.getElementById('ft-x').onclick=function(){ov.remove()};document.getElementById('ft-p').onclick=function(){ov.remove();FLPlan.pricing()};document.getElementById('ft-x').focus({preventScroll:true})};
+})();
+</script>
+<script>
+(function(){
+/* ---------- Pro reports: monthly summary + advanced reports + PDF (print view). Read-only: saves no new data and syncs nothing. ---------- */
+var D=window.FLPlanData,NEED=D.NEED,WHY=D.WHY,modal=D.modal,close=D.close,esc=D.esc,MO=MONTH_ORDER;
+NEED.summary='pro';NEED.reports='pro';
+WHY.summary=['Get a one-page recap of your month.','See income, spending, savings, your top category, how you did against your budget, and goal progress in one place. Save it as a PDF.','pro'];
+WHY.reports=['Break your money down further.','Reports by category, wallet and period, with a PDF you can keep or share.','pro'];
+var st=document.createElement('style');st.textContent='#fl-md h3{font:600 16px var(--font-b);margin:18px 0 4px}#fl-md .rs-wrap{overflow-x:auto}#fl-md .rs-wrap .fl-tbl td,#fl-md .rs-wrap .fl-tbl th{padding:8px 3px}.rbar{height:6px;background:var(--accent);margin-top:4px}';document.head.appendChild(st);
+function ym(e){var t=ldate(e.date);return isNaN(t)?null:t.getFullYear()*12+t.getMonth()}
+function iym(i){var m=MO.indexOf(i.month);return m>-1?(+i.year)*12+m:null}
+function nm(k){return MO[((k%12)+12)%12]+' '+Math.floor(k/12)}
+function lab(k){var c=(state.customCats||[]).filter(function(x){return x.id===k})[0];return c?c.label:String(CAT_LABELS[k]||k).replace(/^[^A-Za-z]+/,'')}
+function wname(id){var w=(state.wallets||[]).filter(function(x){return x.id===id})[0];return w?(w.label||w.name||id):(id||'Unknown')}
+function keysAll(){var s={};(state.expenses||[]).forEach(function(e){var k=ym(e);if(k!==null)s[k]=1});(state.income||[]).forEach(function(i){var k=iym(i);if(k!==null)s[k]=1});return Object.keys(s).map(Number).sort(function(a,b){return b-a})}
+/* Same arithmetic as Compare months: income minus expenses, all expenses counted. */
+function span(a,b){var cat={},cnt={},wal={},mon={},sp=0,ic=0,big=null,days={};
+ function W(id){return wal[id]||(wal[id]={out:0,inn:0})}function M(k){return mon[k]||(mon[k]={inc:0,sp:0})}
+ (state.expenses||[]).forEach(function(e){var k=ym(e);if(k===null||k<a||k>b)return;var v=+e.amount||0,c=e.cat||'other-exp';sp+=v;cat[c]=(cat[c]||0)+v;cnt[c]=(cnt[c]||0)+1;W(e.source).out+=v;M(k).sp+=v;days[e.date]=1;if(!big||v>big.amount)big={amount:v,desc:e.desc,date:e.date}});
+ (state.income||[]).forEach(function(i){var k=iym(i);if(k===null||k<a||k>b)return;var v=+i.amount||0;ic+=v;W(i.wallet).inn+=v;M(k).inc+=v});
+ return{sp:sp,ic:ic,sv:ic-sp,cat:cat,cnt:cnt,wal:wal,mon:mon,big:big,days:Object.keys(days).length}}
+function pz(n){return'\u20b1'+Math.round(n).toLocaleString('en-US')}
+function sh(k){return MO[((k%12)+12)%12].slice(0,3)+' '+Math.floor(k/12)}
+function chg(a,b){if(!b)return a?'new':'-';var p=Math.round((a-b)/Math.abs(b)*100);return(p>0?'+':'')+p+'%'}
+function tbl(head,rows){return'<div class="rs-wrap"><table class="fl-tbl"><thead><tr>'+head.map(function(h){return'<th scope="col">'+h+'</th>'}).join('')+'</tr></thead><tbody>'+rows.map(function(r){return'<tr>'+r.map(function(c){return'<td>'+c+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'}
+function budget(d){var L=+state.budgetLimit||0,cb=state.catBudgets||{},ks=Object.keys(cb),over=ks.filter(function(k){return(d.cat[k]||0)>cb[k]}).map(function(k){return esc(lab(k))}),o=[];
+ o.push(L>0?(d.sp<=L?'Within your overall budget of '+fmt(L)+', with '+fmt(L-d.sp)+' left.':'Over your overall budget of '+fmt(L)+' by '+fmt(d.sp-L)+'.'):'No overall budget is set.');
+ if(ks.length)o.push(over.length?'Over the limit in: '+over.join(', ')+'.':'Within every category limit.');
+ return o.map(function(x){return'<p>'+x+'</p>'}).join('')+'<p class="m">Checked against your budgets as they are set today.</p>'}
+function goals(){var G=state.goals||[];if(!G.length)return'<p>No savings goals yet.</p>';
+ var ts=G.reduce(function(x,g){return x+(+g.target||0)},0),ss=G.reduce(function(x,g){return x+(+g.saved||0)},0);
+ return'<p>'+fmt(ss)+' saved of '+fmt(ts)+' across '+G.length+' goal'+(G.length>1?'s':'')+(ts>0?' ('+Math.min(100,Math.round(ss/ts*100))+'%)':'')+'.</p>'+tbl(['Goal','Saved','Target','Done'],G.slice(0,6).map(function(g){var t=+g.target||0;return[esc(g.name),fmt(+g.saved||0),fmt(t),t>0?Math.min(100,Math.round((+g.saved||0)/t*100))+'%':'-']}))+(G.length>6?'<p class="m">and '+(G.length-6)+' more.</p>':'')+'<p class="m">Goal progress is as of today.</p>'}
+function summaryHTML(k){var A=span(k,k),P=span(k-1,k-1),hasP=P.sp>0||P.ic>0,top=Object.keys(A.cat).sort(function(a,b){return A.cat[b]-A.cat[a]})[0];
+ var h='<h3>At a glance</h3>'+tbl(['Item','Amount'],[['Income',fmt(A.ic)],['Expenses',fmt(A.sp)],['Saved (income minus expenses)',fmt(A.sv)],['Savings rate',A.ic>0?Math.round(A.sv/A.ic*100)+'%':'-'],['Top category',top&&A.sp>0?esc(lab(top))+', '+fmt(A.cat[top])+' ('+Math.round(A.cat[top]/A.sp*100)+'% of spending)':'No expenses logged']]);
+ h+='<h3>Compared with '+nm(k-1)+'</h3>'+(hasP?tbl(['Item',sh(k),sh(k-1),'Change'],[['Income',pz(A.ic),pz(P.ic),chg(A.ic,P.ic)],['Expenses',pz(A.sp),pz(P.sp),chg(A.sp,P.sp)],['Saved',pz(A.sv),pz(P.sv),chg(A.sv,P.sv)]])+'<p class="m">Rounded to the nearest peso.</p>':'<p>No records for '+nm(k-1)+' to compare with.</p>');
+ return h+'<h3>Budget result</h3>'+budget(A)+'<h3>Savings goals</h3>'+goals()}
+function reportHTML(a,b){var R=span(a,b);if(!R.sp&&!R.ic)return'<p>No records in this period.</p>';
+ var h='<h3>Overview</h3>'+tbl(['Item','Amount'],[['Income',fmt(R.ic)],['Expenses',fmt(R.sp)],['Saved (income minus expenses)',fmt(R.sv)],['Days with an expense',String(R.days)],['Biggest expense',R.big?esc(R.big.desc||'Expense')+', '+fmt(R.big.amount):'-']]);
+ var cs=Object.keys(R.cat).sort(function(x,y){return R.cat[y]-R.cat[x]});
+ h+='<h3>By category</h3>'+(cs.length?tbl(['Category','Spent','Share','Entries'],cs.map(function(c){var p=R.sp>0?R.cat[c]/R.sp*100:0;return[esc(lab(c))+'<div class="rbar" aria-hidden="true" style="width:'+Math.round(p)+'%"></div>',fmt(R.cat[c]),Math.round(p)+'%',String(R.cnt[c])]})):'<p>No expenses in this period.</p>');
+ var ws=Object.keys(R.wal);h+='<h3>By wallet</h3>'+tbl(['Wallet','Spent','Income received'],ws.map(function(w){return[esc(wname(w)),fmt(R.wal[w].out),fmt(R.wal[w].inn)]}));
+ var ms=Object.keys(R.mon).map(Number).sort(function(x,y){return y-x});
+ if(ms.length>1)h+='<h3>By month</h3>'+tbl(['Month','Income','Expenses','Saved'],ms.map(function(k){var m=R.mon[k];return[nm(k),fmt(m.inc),fmt(m.sp),fmt(m.inc-m.sp)]}));
+ return h}
+var PCSS='@page{size:A4;margin:16mm}*{box-sizing:border-box}body{font:14px/1.5 "IBM Plex Sans",system-ui,Arial,sans-serif;color:#0b1f3a;margin:0;padding:16px;max-width:760px}h1{font-size:24px;margin:0;color:#0b1f3a;border-bottom:3px solid #0f766e;padding-bottom:6px}.s{margin:6px 0 0;color:#475569}h3{font-size:15px;margin:22px 0 4px;color:#0b1f3a}table{width:100%;border-collapse:collapse}th,td{padding:6px 4px;border-bottom:1px solid #cbd5e1;text-align:right;vertical-align:top}th:first-child,td:first-child{text-align:left}th{font-size:12px;color:#475569;font-weight:600}tr{page-break-inside:avoid}.m{color:#475569;font-size:12px}.rbar{height:6px;background:#0f766e;margin-top:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}footer{margin-top:28px;border-top:1px solid #cbd5e1;padding-top:8px;color:#475569;font-size:12px}';
+function printDoc(title,sub,html){var w=window.open('','_blank');if(!w){toast('Allow pop-ups to save a PDF','error');return}
+ w.document.open();w.document.write('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title+' '+sub)+'</title><style>'+PCSS+'</style></head><body><header><h1>'+esc(title)+'</h1><p class="s">'+esc(sub)+'</p></header>'+html+'<footer>Made with FinLed on '+esc(today())+' from the records you entered. Choose Save as PDF in the print window.</footer></body></html>');w.document.close();
+ setTimeout(function(){try{w.focus();w.print()}catch(e){}},350)}
+function summaryModal(){var K=keysAll();
+ if(!K.length){modal('<h2>Monthly summary</h2><p>Log some income or expenses first, then your summary will appear here.</p><div class="fl-row"><button class="fl-btn" id="rs-x">Close</button></div>');document.getElementById('rs-x').onclick=close;return}
+ var n=new Date(),cur=n.getFullYear()*12+n.getMonth();
+ modal('<h2>Monthly summary</h2><label for="rs-m">Month</label><select id="rs-m">'+K.map(function(k){return'<option value="'+k+'">'+nm(k)+(k===cur?' (so far)':'')+'</option>'}).join('')+'</select><div id="rs-o" aria-live="polite"></div><div class="fl-row"><button class="fl-btn fl-pri" id="rs-p">Save as PDF</button><button class="fl-btn" id="rs-x">Close</button></div>');
+ var s=document.getElementById('rs-m');function go(){document.getElementById('rs-o').innerHTML=summaryHTML(+s.value)}
+ s.onchange=go;go();document.getElementById('rs-x').onclick=close;document.getElementById('rs-p').onclick=function(){printDoc('Monthly summary',nm(+s.value),summaryHTML(+s.value))}}
+function range(v){var n=new Date(),Y=n.getFullYear(),c=Y*12+n.getMonth(),K=keysAll(),all=K.length?[K[K.length-1],Math.max(c,K[0])]:[c,c];
+ return{m0:[c,c],m1:[c-1,c-1],m3:[c-2,c],m6:[c-5,c],y:[Y*12,c],all:all}[v]}
+function rlabel(r){return r[0]===r[1]?nm(r[0]):nm(r[0])+' to '+nm(r[1])}
+function reportsModal(){
+ modal('<h2>Reports</h2><label for="rr-p">Period</label><select id="rr-p"><option value="m0">This month</option><option value="m1">Last month</option><option value="m3" selected>Last 3 months</option><option value="m6">Last 6 months</option><option value="y">This year</option><option value="all">All records</option></select><div id="rr-o" aria-live="polite"></div><div class="fl-row"><button class="fl-btn fl-pri" id="rr-d">Save as PDF</button><button class="fl-btn" id="rr-x">Close</button></div>');
+ var s=document.getElementById('rr-p');function go(){var r=range(s.value);document.getElementById('rr-o').innerHTML='<p class="m">'+rlabel(r)+'</p>'+reportHTML(r[0],r[1])}
+ s.onchange=go;go();document.getElementById('rr-x').onclick=close;document.getElementById('rr-d').onclick=function(){var r=range(s.value);printDoc('FinLed report',rlabel(r),reportHTML(r[0],r[1]))}}
+FLX.summary=function(){FLPlan.gate('summary',summaryModal)};
+FLX.reports=function(){FLPlan.gate('reports',reportsModal)};
+})();
+</script>
+<script>
+(function(){
+/* ---------- Same as yesterday (free). Always shows a confirm step; nothing is added until the person presses the button. ---------- */
+var D=window.FLPlanData,modal=D.modal,close=D.close,esc=D.esc;
+function pad(n){return(n<10?'0':'')+n}
+function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function yesterday(){var d=new Date();d.setDate(d.getDate()-1);return ymd(d)}
+function lab(k){var c=(state.customCats||[]).filter(function(x){return x.id===k})[0];return c?c.label:String(CAT_LABELS[k]||k).replace(/^[^A-Za-z]+/,'')}
+function wn(id){var w=(state.wallets||[]).filter(function(x){return x.id===id})[0];return w?(w.label||w.name||''):''}
+function list(){var y=yesterday();return(state.expenses||[]).filter(function(e){return e.date===y&&e.cat!=='loan-payment'&&!e.loanId})}
+FLX.repeat=function(){
+ var L=list();
+ if(!L.length){modal('<h2>Same as yesterday</h2><p>No expenses were logged yesterday that can be repeated. Loan payments are not repeated here.</p><div class="fl-row"><button class="fl-btn" id="rp-x">Close</button></div>');document.getElementById('rp-x').onclick=close;return}
+ modal('<h2>Same as yesterday</h2><p class="m">Tick what you want to add for today. Nothing is added until you press Add.</p><div id="rp-l" role="group" aria-label="Expenses from yesterday">'+L.map(function(e,i){return'<label class="rp-row" for="rp-'+i+'"><input type="checkbox" id="rp-'+i+'" checked><span><b>'+esc(e.desc||'Expense')+'</b><br><span class="m">'+esc(lab(e.cat))+(wn(e.source)?' / '+esc(wn(e.source)):'')+'</span></span><span class="rp-amt">'+fmt(+e.amount||0)+'</span></label>'}).join('')+'</div><div class="fl-row"><button class="fl-btn fl-pri" id="rp-ok"></button><button class="fl-btn" id="rp-x">Cancel</button></div>');
+ var bx=[].slice.call(document.querySelectorAll('#rp-l input')),ok=document.getElementById('rp-ok');
+ function pick(){return L.filter(function(e,i){return bx[i].checked})}
+ function upd(){var p=pick(),t=p.reduce(function(a,e){return a+(+e.amount||0)},0);ok.textContent=p.length?'Add '+p.length+' for today ('+fmt(t)+')':'Nothing selected';ok.disabled=!p.length}
+ bx.forEach(function(b){b.onchange=upd});upd();document.getElementById('rp-x').onclick=close;
+ ok.onclick=async function(){var p=pick();if(!p.length)return;ok.disabled=true;
+  var need={};p.forEach(function(e){need[e.source]=(need[e.source]||0)+(+e.amount||0)});
+  for(var id in need){var w=(state.wallets||[]).filter(function(x){return x.id===id})[0];if(w&&walShort(w,need[id])){var go=await mtConfirm(walShortMsg(w),'\u26a0\ufe0f','Continue','var(--amber)');if(!go){ok.disabled=false;return}break}}
+  var t=today();
+  p.forEach(function(e){deductWalletBalance(e.source,+e.amount||0);pushExpense({desc:e.desc,amount:+e.amount||0,cat:e.cat,source:e.source,date:t,note:e.note||'',recurring:false})});
+  save();render();close();toast(p.length+' expense'+(p.length>1?'s':'')+' added for today');
+  p.forEach(function(e){window.dispatchEvent(new CustomEvent('fin:expense-logged',{detail:{desc:e.desc,amount:+e.amount||0,cat:e.cat,source:e.source}}))})}
+};
+var st=document.createElement('style');st.textContent='#fl-md h3{font:600 16px var(--font-b);margin:18px 0 4px}#fl-md .rp-row{display:flex;align-items:center;gap:12px;min-height:48px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer}#fl-md .rp-row input{width:24px;height:24px;flex:none;margin:0;padding:0;-webkit-appearance:checkbox;appearance:auto;accent-color:var(--accent)}#fl-md .rp-row .m{font-weight:400}#fl-md .rp-row>span:nth-child(2){flex:1;min-width:0;overflow-wrap:anywhere}#fl-md .rp-amt{font-family:"IBM Plex Mono",ui-monospace,monospace;white-space:nowrap}#fl-md button:disabled{opacity:.5;cursor:not-allowed}#nav-premium:focus-visible,#more-premium:focus-visible{outline:2px solid var(--accent);outline-offset:2px}';document.head.appendChild(st);
+})();
+</script>
+<script>
+(function(){
+/* ---------- My usage: counters kept ONLY in this browser (localStorage 'finled-usage'). Not part of `state`, so never synced.
+   Nothing here makes a network request. "Copy my usage" is a manual action by the person. ---------- */
+var K='finled-usage';
+function rd(){try{return JSON.parse(localStorage.getItem(K))||null}catch(e){return null}}
+function wr(u){try{localStorage.setItem(K,JSON.stringify(u))}catch(e){}}
+function nrec(){return((state.expenses||[]).length)+((state.income||[]).length)}
+function ensure(){var u=rd();if(u&&u.first)return u;u={v:1,first:Date.now(),pre:nrec()>0,fe:null,ck:{}};wr(u);return u}
+ensure();
+/* records may arrive from the cloud a moment after load: if so this person was not a new user */
+setTimeout(function(){var u=ensure();if(!u.fe&&!u.pre&&nrec()>0){u.pre=true;wr(u);draw()}},6000);
+function firstEntry(){var u=ensure();if(!u.fe&&!u.pre){u.fe=Date.now();wr(u)}}
+window.addEventListener('fin:expense-logged',firstEntry);window.addEventListener('fin:income-added',firstEntry);
+var ns0=FLX.nospend;FLX.nospend=function(){var r=ns0.apply(this,arguments);firstEntry();return r};
+document.addEventListener('click',function(e){var t=e.target;if(!(t&&t.closest&&t.closest('#fl-checkin button')))return;
+ var u=ensure(),d=today();u.ck=u.ck||{};u.ck[d]=(u.ck[d]||0)+1;var ks=Object.keys(u.ck).sort();while(ks.length>60)delete u.ck[ks.shift()];wr(u)},true);
+function pad(n){return(n<10?'0':'')+n}
+function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function recDays(){var o={};(state.expenses||[]).forEach(function(e){if(e.date&&!e.recurringTemplateId)o[e.date]=1});
+ (state.income||[]).forEach(function(i){if(i.dateAdded)o[i.dateAdded]=1});
+ try{(JSON.parse(localStorage.getItem('finled-nospend'))||[]).forEach(function(d){o[d]=1})}catch(e){}return o}
+function weeks(){var o=recDays(),out=[],n=new Date();for(var k=0;k<4;k++){var c=0;for(var i=0;i<7;i++){var d=new Date(n.getFullYear(),n.getMonth(),n.getDate()-(7*k+i));if(o[ymd(d)])c++}out.push(c)}return out}
+var WL=['Last 7 days','8 to 14 days ago','15 to 21 days ago','22 to 28 days ago'];
+function dur(ms){var s=Math.round(ms/1000);if(s<90)return s+' seconds';var m=Math.round(s/60);if(m<90)return m+' minutes';var h=Math.round(m/60);if(h<48)return h+' hours';return Math.round(h/24)+' days'}
+function tfe(u){return u.pre?'Not measured. You already had records before this counter started.':u.fe?dur(u.fe-u.first)+' after you first opened FinLed.':'No entry yet.'}
+function taps(u){var ks=Object.keys(u.ck||{}),tot=0,wk=0,lim=ymd(new Date(Date.now()-6*864e5));ks.forEach(function(k){tot+=u.ck[k];if(k>=lim)wk+=u.ck[k]});return[tot,wk]}
+function text(){var u=ensure(),w=weeks(),t=taps(u),L=['FinLed usage, kept on my device','Days with a record (of 7)'];WL.forEach(function(l,i){L.push(l+': '+w[i])});L.push('Time to first entry: '+tfe(u));L.push('Check-in taps: '+t[0]+' (last 7 days: '+t[1]+')');return L.join('\n')}
+function draw(){var b=document.getElementById('usage-body');if(!b)return;var u=ensure(),w=weeks(),t=taps(u);
+ b.innerHTML='<p style="margin:0 0 10px;color:var(--muted)">Kept only on this device. Nothing is sent anywhere.</p><h4 style="margin:12px 0 4px;font-size:16px">Days with a record</h4><ul style="margin:0;padding:0;list-style:none">'+WL.map(function(l,i){return'<li style="display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--border)"><span>'+l+'</span><b>'+w[i]+' of 7</b></li>'}).join('')+'</ul><h4 style="margin:14px 0 4px;font-size:16px">Time to first entry</h4><p style="margin:0">'+tfe(u)+'</p><h4 style="margin:14px 0 4px;font-size:16px">Check-in taps</h4><p style="margin:0">'+t[0]+' in total, '+t[1]+' in the last 7 days.</p><p style="margin:12px 0 0;display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn btn-ghost" id="us-c" style="min-height:48px;font-size:16px">Copy my usage</button><button type="button" class="btn btn-ghost" id="us-r" style="min-height:48px;font-size:16px">Reset counters</button></p>';
+ document.getElementById('us-c').onclick=function(){var x=text();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(x).then(function(){toast('Copied. You choose where to send it.')}).catch(function(){toast('Could not copy','error')});else toast('Could not copy','error')};
+ document.getElementById('us-r').onclick=async function(){if(!await mtConfirm('Reset your usage counters? Your records are not affected.','','Reset','var(--red)'))return;try{localStorage.removeItem(K)}catch(e){}ensure();draw();toast('Usage counters reset')}}
+var r1=render;render=function(){var o=r1.apply(this,arguments);try{draw()}catch(e){}return o};
+draw();
 })();
 </script>
 </body>
