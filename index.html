@@ -8283,7 +8283,8 @@ function gcashModal(t,T){var g=PAY.gcash,cur=provider.get(),pe=cache&&cache.row&
   +'<div class="fl-row fg-row"><button type="button" class="fl-btn" id="fg-copy">Copy GCash number</button></div>'
   +'<label for="fg-ref">GCash reference number</label><input class="fg-in fg-mono" id="fg-ref" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30" aria-describedby="fg-help">'
   +'<p class="m" id="fg-help">Letters and numbers only, 8 to 24 characters.</p>'
-  +'<label for="fg-nm">Name on your GCash account (optional)</label><input class="fg-in" id="fg-nm" type="text" autocomplete="off" maxlength="60">'
+  +'<label for="fg-nm">Your name as shown in GCash</label><input class="fg-in" id="fg-nm" type="text" autocomplete="off" maxlength="60" required>'
+  +'<label for="fg-tm">Time you sent the payment (see your receipt)</label><input class="fg-in" id="fg-tm" type="time" required>'
   +'<p class="m">Tapping Submit does not change your plan. We check each payment by hand, and your plan turns on only after we confirm it. FinLed never sees your GCash PIN.</p>'
   +(PAY.note?'<p class="m">'+esc(PAY.note)+'</p>':'')
   +'<p class="m fg-err" id="fg-err" role="alert"></p>'
@@ -8292,16 +8293,20 @@ function gcashModal(t,T){var g=PAY.gcash,cur=provider.get(),pe=cache&&cache.row&
  document.getElementById('fg-x').onclick=close;
  document.getElementById('fg-copy').onclick=function(){var n=String(g.number);
   try{navigator.clipboard.writeText(n).then(function(){toast('GCash number copied')},function(){toast('Could not copy. Select the number and copy it by hand.','error')})}catch(e){toast('Could not copy. Select the number and copy it by hand.','error')}};
- go.onclick=function(){var ref=document.getElementById('fg-ref').value.replace(/\s+/g,'').toUpperCase(),nm=document.getElementById('fg-nm').value.trim();err.textContent='';
+ go.onclick=function(){var ref=document.getElementById('fg-ref').value.replace(/\s+/g,'').toUpperCase(),nm=document.getElementById('fg-nm').value.trim(),tm=document.getElementById('fg-tm').value;err.textContent='';
   if(!/^[A-Z0-9]{8,24}$/.test(ref)){err.textContent='Enter the reference number from your GCash receipt (8 to 24 letters and numbers).';document.getElementById('fg-ref').focus();return}
+  if(nm.length<2){err.textContent='Enter your name exactly as it shows in GCash.';document.getElementById('fg-nm').focus();return}
+  if(!/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(tm)){err.textContent='Enter the time shown on your GCash receipt.';document.getElementById('fg-tm').focus();return}
   go.disabled=true;go.textContent='Sending...';
-  supabaseClient.rpc('submit_payment_claim',{p_tier:t,p_reference:ref,p_name:nm||null}).then(function(q){
+  supabaseClient.rpc('submit_payment_claim',{p_tier:t,p_reference:ref,p_name:nm,p_sent:tm}).then(function(q){
    if(q.error)throw q.error;
    return loadClaim().then(function(){gcashDone(T)})}).catch(function(e){
    var m=String(e&&e.message||''),c=e&&e.code;go.disabled=false;go.textContent='Submit reference';
    err.textContent=/duplicate|unique/i.test(m)?'This reference was already submitted. If it is yours, wait for us to confirm it.':
     /too many/i.test(m)?'You have too many payments waiting. Please wait until we check them.':
     /invalid reference/i.test(m)?'That reference does not look right. Check your GCash receipt.':
+    /payer name required/i.test(m)?'Enter your name exactly as it shows in GCash.':
+    /invalid time/i.test(m)?'Enter the time shown on your GCash receipt.':
     /anonymous|not signed in/i.test(m)?'Sign in with email or Google first.':
     (c==='PGRST202'||/could not find the function|does not exist/i.test(m))?'Payments are not set up on the server yet. Nothing was charged.':
     'Could not send your reference. Check your connection and try again. Nothing was charged.'})}}
