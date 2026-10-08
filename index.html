@@ -1644,7 +1644,7 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
       </div>
       <div style="padding-top:22px">
         <span onclick="authAnonymousSignIn()" style="font-size:12.5px;color:var(--muted);cursor:pointer;text-decoration:underline">Continue as Guest</span>
-        <div style="font-size:11px;color:var(--muted2);margin-top:8px;line-height:1.5">Guest mode keeps you anonymous - you can still set a nickname just for the greeting. Your data syncs to this guest account, but there's no email to recover it if you lose this device.</div>
+        <div style="font-size:11px;color:var(--muted2);margin-top:8px;line-height:1.5">Guest mode needs no account and no internet. Your data stays only on this device and is not backed up: if you clear browser data, lose the phone or uninstall the app, it is gone. Sign in any time to back it up and sync.</div>
         <div style="font-size:11px;color:var(--muted2);margin-top:10px;line-height:1.5">By continuing you agree to our <span class="auth-link" onclick="openLegal('terms')">Terms of Use</span> and <span class="auth-link" onclick="openLegal('privacy')">Privacy Policy</span>.</div>
       </div>
     </div>
@@ -2674,8 +2674,8 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
     <div class="fn-grab"></div>
     <div class="gs-ico" aria-hidden="true">🛡️</div>
     <div class="gs-t" id="gs-title">Keep your data safe</div>
-    <div class="gs-p">You're using a guest account with no email. If you lose this phone or clear its storage, your wallets and records can't be recovered. Linking Google takes about 10 seconds.</div>
-    <button type="button" class="btn btn-primary gs-btn" onclick="closeGuestSheet();authLinkToGoogle()">Link to Google</button>
+    <div class="gs-p">You're in Guest mode, so your data is only on this phone. If you lose it or clear its storage, your wallets and records can't be recovered. Sign in to back them up and sync across devices.</div>
+    <button type="button" class="btn btn-primary gs-btn" onclick="closeGuestSheet();authLinkToGoogle()">Sign in to back up</button>
     <button type="button" class="gs-later" onclick="guestRemindLater()">Remind me in 7 days</button>
   </div>
 </div>
@@ -2943,7 +2943,7 @@ function ldate(s){
 function whenAppReady(fn,tries){
   tries=tries||0;
   let unlocked=false;try{unlocked=!!sessionStorage.getItem('mtUnlocked');}catch(e){}
-  if(cloudUser&&unlocked&&!cloudLoadInFlight){fn();return;}
+  if((cloudUser||isLocalGuest())&&unlocked&&!cloudLoadInFlight){fn();return;}
   if(tries<45)setTimeout(function(){whenAppReady(fn,tries+1);},1000);
 }
 /* Turn ANY saved/synced/backup object into a complete, safe state: fills missing fields, migrates the
@@ -3103,6 +3103,16 @@ function save(){
 
 // ── Cloud Sync (Supabase) ───────────────────────────────────
 let cloudUser=null;
+/* Guest mode is LOCAL ONLY: no Supabase user is created and nothing is uploaded. It is a flag on this device.
+   Signing in later runs the normal cloud load: local data is pushed to the new account (or the merge dialog asks). */
+function isLocalGuest(){try{return localStorage.getItem('finLocalGuest')==='1';}catch(e){return false;}}
+function setLocalGuest(on){try{if(on)localStorage.setItem('finLocalGuest','1');else localStorage.removeItem('finLocalGuest');}catch(e){}}
+function isGuestMode(){return !!((cloudUser&&cloudUser.isAnonymous)||(!cloudUser&&isLocalGuest()));}
+/* Offline-first: edits always save on this device first. This marker survives a reload so unsynced edits are never forgotten. */
+function setPushPending(uid,on){try{if(on&&uid)localStorage.setItem('finPushPending',uid);else localStorage.removeItem('finPushPending');}catch(e){}}
+function hasPushPending(uid){try{return !!uid&&localStorage.getItem('finPushPending')===uid;}catch(e){return false;}}
+let offlineNoted=false,cloudRetryT=null;
+function noteOffline(){if(offlineNoted)return;offlineNoted=true;toast("You're offline. Your changes are saved on this device and will sync when you're back online.");}
 let cloudSyncTimer=null;
 let lastCloudUpdatedAt=0,cloudPushPending=false,cloudPushing=false,cloudPulling=false,lastCloudPullAt=0;
 
@@ -3153,8 +3163,14 @@ function migrateWalletIdsForSupabase(){
 }
 function queueCloudPush(){
   if(!cloudUser)return;
-  clearTimeout(cloudSyncTimer);cloudPushPending=true;
+  clearTimeout(cloudSyncTimer);cloudPushPending=true;setPushPending(cloudUser.uid,true);
+  if(navigator.onLine===false){noteOffline();return;}
   cloudSyncTimer=setTimeout(pushToCloud,800);
+}
+function flushCloudPush(){
+  if(!cloudUser||!cloudPushPending||cloudPushing||navigator.onLine===false)return;
+  if(stateLoadedForUid!==cloudUser.uid)return;
+  clearTimeout(cloudSyncTimer);pushToCloud();
 }
 function setCloudSpinner(on){const s=document.getElementById('cloud-sync-spinner');if(s)s.style.display=on?'inline':'none';}
 function stripUndefined(val){
@@ -3191,6 +3207,7 @@ async function ensureProfile(user){
 }
 async function pushToCloud(force){
   if(!cloudUser)return;
+  if(navigator.onLine===false){cloudPushPending=true;setPushPending(cloudUser.uid,true);noteOffline();return;}
   if(force!==true&&stateLoadedForUid!==cloudUser.uid){cloudPushPending=true;return;}
   cloudPushPending=false;cloudPushing=true;setCloudSpinner(true);
   try{
@@ -3210,8 +3227,12 @@ async function pushToCloud(force){
     if(loanRows.length){let r=await supabaseClient.from('loans').insert(loanRows);if(r.error)throw r.error;}
     if(goalRows.length){let r=await supabaseClient.from('savings_goals').insert(goalRows);if(r.error)throw r.error;}
     lastCloudUpdatedAt=Date.parse(now)||Date.now();markCloudLinked(uid,lastCloudUpdatedAt);
+    if(!cloudPushPending)setPushPending(uid,false);
+    if(offlineNoted){offlineNoted=false;toast('Back online. Your changes are synced.');}
   }catch(e){
-    console.error('Supabase cloud sync failed',e);cloudPushPending=true;toast('Cloud sync failed: '+((e&&(e.message||e.details))||'unknown error'),'error');
+    console.error('Supabase cloud sync failed',e);cloudPushPending=true;if(cloudUser)setPushPending(cloudUser.uid,true);
+    if(navigator.onLine===false)noteOffline();else toast('Cloud sync failed: '+((e&&(e.message||e.details))||'unknown error')+'. Your data is safe on this device; we will retry.','error');
+    clearTimeout(cloudRetryT);cloudRetryT=setTimeout(flushCloudPush,30000);
   }
   cloudPushing=false;setCloudSpinner(false);
 }
@@ -3255,13 +3276,17 @@ async function _loadStateForUser(user){
     const hasRemote=remoteWallets.length||remoteIncome.length||remoteExpenses.length||remoteLoans.length||remoteGoals.length||remote.username;
     if(localHasData&&!hasRemote){useRemote=false;await pushToCloud(true);}
     else if(localHasData&&hasRemote){
-      if(linked)useRemote=remoteAt>linked.at;
+      if(linked){
+        useRemote=remoteAt>linked.at;
+        // Edits made offline are still waiting AND another device changed the account: never overwrite either silently.
+        if(useRemote&&hasPushPending(uid))useRemote=await showMergeChoice(remote,remoteAt);
+      }
       else useRemote=await showMergeChoice(remote,remoteAt);
     }
-    if(useRemote){replaceState(remote);clearTimeout(cloudSyncTimer);cloudPushPending=false;localStorage.setItem('kwentadoV1',JSON.stringify(state));markCloudLinked(uid,remoteAt||Date.now());}
+    if(useRemote){replaceState(remote);clearTimeout(cloudSyncTimer);cloudPushPending=false;setPushPending(uid,false);localStorage.setItem('kwentadoV1',JSON.stringify(state));markCloudLinked(uid,remoteAt||Date.now());}
     else await pushToCloud(true);
     stateLoadedForUid=uid;
-  }catch(e){console.error('Supabase cloud load failed',e);toast('Cloud load failed: '+((e&&(e.message||e.details))||'unknown error'),'error');}
+  }catch(e){console.error('Supabase cloud load failed',e);if(navigator.onLine===false)noteOffline();else toast('Cloud load failed: '+((e&&(e.message||e.details))||'unknown error'),'error');}
   setCloudSpinner(false);
 }
 async function pullCloudIfNewer(){
@@ -3278,8 +3303,8 @@ async function pullCloudIfNewer(){
   }catch(e){console.warn('Supabase cloud refresh failed',e);}
   cloudPulling=false;
 }
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pullCloudIfNewer();});
-window.addEventListener('online',pullCloudIfNewer);window.addEventListener('focus',pullCloudIfNewer);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){flushCloudPush();pullCloudIfNewer();}});
+window.addEventListener('online',()=>{flushCloudPush();pullCloudIfNewer();});window.addEventListener('focus',()=>{flushCloudPush();pullCloudIfNewer();});
 
 function updateAccountSettingsUI(){
   updateSettingsHome();
@@ -3287,6 +3312,13 @@ function updateAccountSettingsUI(){
   const outBtn=document.getElementById('cloud-signout-btn');
   const linkBtn=document.getElementById('cloud-link-btn');
   const guestSignoutWrap=document.getElementById('guest-signout-link-wrap');
+  if(!cloudUser&&isLocalGuest()){
+    if(statusEl)statusEl.textContent='Guest mode: your data is stored only on this device and is not backed up. Sign in to back it up and sync across devices.';
+    if(outBtn)outBtn.style.display='none';
+    if(linkBtn){linkBtn.style.display='';linkBtn.textContent='Sign in to back up';}
+    if(guestSignoutWrap)guestSignoutWrap.style.display='block';
+    return;
+  }
   if(!cloudUser){
     if(statusEl)statusEl.textContent='Not signed in.';
     if(outBtn)outBtn.style.display='none';
@@ -3310,6 +3342,12 @@ function updateAccountSettingsUI(){
 }
 
 function openGuestSignoutWarning(){
+  const local=!cloudUser&&isLocalGuest();
+  const set=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t;};
+  set('gso-title',local?'Leave Guest mode?':"You're signed in as a Guest");
+  set('gso-body',local?'Your data is stored only on this device. If you sign out now it is erased and cannot be recovered. Sign in first to keep it.':'This account has no email or password. If you sign out without linking first, there is no way to sign back in - all your data here will be permanently unreachable.');
+  set('gso-keep',local?'Sign in (keep my data)':'Link to Google (Keep My Data)');
+  set('gso-out',local?'Erase and sign out':'Sign Out Anyway');
   document.getElementById('guest-signout-modal').style.display='flex';
 }
 function closeGuestSignoutWarning(){
@@ -3327,6 +3365,8 @@ function authSignOut(){
   });
 }
 function doSignOut(){
+  const wasLocalGuest=!cloudUser&&isLocalGuest();
+  setLocalGuest(false);setPushPending(null,false);
   sessionStorage.removeItem('mtUnlocked');
   stateLoadedForUid=null;
   // wipe this device's local copy so the next person gets a fresh app, not your leftover data
@@ -3336,9 +3376,11 @@ function doSignOut(){
   localStorage.removeItem('mtTutDone');
   clearCloudLinked();bioClear();
   supabaseClient.auth.signOut();
+  if(wasLocalGuest)setTimeout(function(){handleAuthState(null);},0); // no Supabase session, so no sign-out event will fire
 }
 
 async function authLinkToGoogle(){
+  if(!cloudUser&&isLocalGuest()){showLoginScreen();return;} // local guest: open Login / Sign Up / Google; local data is carried over
   if(!cloudUser||!cloudUser.isAnonymous)return;
   try{
     const {error}=await supabaseClient.auth.linkIdentity({provider:'google',options:{redirectTo:'https://jhoerillpebojot-wq.github.io/AdvanceMoneyTracker/'}});
@@ -3358,12 +3400,13 @@ function makeCloudUser(user){
 }
 async function handleAuthState(user){
   cloudUser=makeCloudUser(user);
+  if(user)setLocalGuest(false); // a real (or legacy guest) account replaces local guest mode; local data is merged below
   updateAccountSettingsUI();
-  if(!user){
+  if(!user&&!isLocalGuest()){
     showLoginScreen();
     return;
   }
-  await loadStateForUser(cloudUser);
+  if(cloudUser)await loadStateForUser(cloudUser);
   await migratePlaintextSecrets();
   if(!state.termsAccepted||state.termsAccepted.version!==LEGAL_VERSION){
     showTermsScreen();
@@ -3530,17 +3573,22 @@ function openSetPanel(key){
 }
 function closeSetPanel(){openSetPanel(null);}
 function logOutFromSettings(){
-  if(cloudUser&&cloudUser.isAnonymous)openGuestSignoutWarning();else authSignOut();
+  if(isGuestMode())openGuestSignoutWarning();else authSignOut();
 }
 function updateSettingsHome(){
   const box=document.getElementById('set-sync');if(!box)return;
   const ic=document.getElementById('set-sync-ic'),t=document.getElementById('set-sync-t'),sub=document.getElementById('set-sync-s'),btn=document.getElementById('set-sync-btn'),mail=document.getElementById('set-pmail');
+  if(!cloudUser&&isLocalGuest()){
+    box.style.display='flex';box.classList.add('guest');ic.textContent='⚠️';t.textContent='Guest mode';
+    sub.textContent='Data is stored only on this device. Sign in to back it up and sync.';
+    btn.textContent='Sign in';btn.style.display='';if(mail)mail.textContent='Guest (this device only)';return;
+  }
   if(!cloudUser){box.style.display='none';if(mail)mail.textContent='Not signed in';return;}
   box.style.display='flex';
   if(cloudUser.isAnonymous){
     box.classList.add('guest');ic.textContent='⚠️';t.textContent='Guest account';
-    sub.textContent='Data is stored only on this device. Link Google to back it up.';
-    btn.style.display='';if(mail)mail.textContent='Guest account';
+    sub.textContent='Backed up to a guest cloud account that has no email. Link Google so you can always get back in.';
+    btn.textContent='Link Google';btn.style.display='';if(mail)mail.textContent='Guest account';
   }else{
     box.classList.remove('guest');ic.textContent='☁️';t.textContent='Cloud sync is on';
     sub.textContent='Your data syncs automatically across your devices.';
@@ -3583,7 +3631,7 @@ function renderGuestBanner(){
   // The full explanation lives in a bottom sheet that opens when the pill is tapped, once automatically
   // when real data first builds up (3+ entries), and again 7 days after "Remind me in 7 days".
   const pill=document.getElementById('guest-pill');
-  const isGuest=!!(cloudUser&&cloudUser.isAnonymous);
+  const isGuest=isGuestMode();
   if(pill)pill.style.display=isGuest?'inline-flex':'none';
   if(!isGuest)return;
   const entryCount=(state.income||[]).length+(state.expenses||[]).length+(state.loans||[]).length+(state.goals||[]).length;
@@ -3606,7 +3654,7 @@ function scheduleGuestSheet(){
     _gsTimer=null;
     const dash=document.getElementById('dashboard');
     if(!dash||!dash.classList.contains('active')||_overlayBusy())return; // try again on the next render
-    if(!(cloudUser&&cloudUser.isAnonymous))return;
+    if(!isGuestMode())return;
     localStorage.setItem('mtGuestNudge3Shown','1');
     localStorage.removeItem('mtGuestRemindAt');
     openGuestSheet();
@@ -5953,9 +6001,12 @@ async function authGoogleSignIn(){
   catch(e){console.error(e);errEl.textContent=e?.message||'Google sign-in is unavailable. Configure Google in Supabase Auth → Providers.';}
 }
 async function authAnonymousSignIn(){
+  // Guest mode is local only: no account is created, nothing is uploaded, and it works with no connection.
   const errEl=document.getElementById('login-error');errEl.textContent='';
-  try{const {error}=await supabaseClient.auth.signInAnonymously();if(error)throw error;}
-  catch(e){console.error(e);errEl.textContent=e?.message||'Guest sign-in is unavailable. Enable Anonymous sign-ins in Supabase Auth.';}
+  if(!cloudUser&&isLocalGuest()&&state.username&&state.termsAccepted){document.getElementById('auth-overlay').style.display='none';return;} // already a guest: just close the sign-in screen
+  setLocalGuest(true);
+  try{await handleAuthState(null);}
+  catch(e){console.error(e);setLocalGuest(false);errEl.textContent='Could not start guest mode. Please try again.';}
 }
 
 /* ── FIRST-TIME ONBOARDING (language · currency · where did you hear about us) ── */
@@ -6151,7 +6202,7 @@ function regPinKey(k){
       // validate name first (optional for guest/anonymous accounts)
       const nmInput=document.getElementById('reg-username');
       let nm=nmInput.value.trim();
-      const isGuest=cloudUser && cloudUser.isAnonymous;
+      const isGuest=isGuestMode();
       if(!nm && isGuest){ nm='Guest'; nmInput.value='Guest'; }
       if(!nm){
         document.getElementById('reg-pin-error').textContent='Please enter your name first.';
@@ -6186,7 +6237,7 @@ function regConfirmKey(k){
         pendingRegUsername=document.getElementById('reg-username').value.trim();
         pendingRegPin=regPinFirst;
         regPinBuf=''; regConfirmBuf=''; regPinFirst=''; regPinPhase='set';
-        if(cloudUser && cloudUser.isAnonymous){
+        if(isGuestMode()){
           showSecSetupScreen();
         }else{
           finalizeRegistration('','');
@@ -7196,7 +7247,7 @@ terms:[
 ['Who May Use the App',`The App is meant for adults. If you are under 18, a parent or legal guardian must read these documents, accept them for you, and supervise your use. By accepting for a minor, the parent or guardian confirms they have that authority and consents, on the minor's behalf, to the processing of the minor's personal data described in the Privacy Policy. We may ask for proof of that consent, and may suspend an account if consent is missing or withdrawn. The App is for personal, non-commercial use.`],
 ['What FinLed Is',`FinLed is a personal, self-managed finance tracker for income, expenses, wallet balances (e.g. GCash, Maya, cash), loans and savings goals that <b>you</b> enter yourself. It is provided by ${LEGAL_DEV} ("we", "us") and is under active development.`],
 ['What FinLed Is Not',`FinLed is <b>not</b> a bank, e-wallet, electronic money issuer, lending or financing company, payment processor, remittance provider, broker or investment adviser, and is not supervised by the Bangko Sentral ng Pilipinas or the Securities and Exchange Commission. It has no connection to your real bank or e-wallet accounts and never moves money. Balances, loans and reports are figures you typed in; a loan entry is a personal note, not proof of a debt or a collection tool. Nothing in the App is financial, investment, tax, accounting or legal advice, and generated reports are unaudited and are not for tax filings or submission to any authority unless you verify them yourself.`],
-['Your Account and Security',`You are responsible for your sign-in credentials, your device, your 4-digit PIN and your recovery answer, and for all activity under your account. The PIN (and optional device biometric unlock) is a convenience lock, <b>not</b> encryption. Guest accounts have no email, so we cannot recover them if you lose the device or clear its storage. Tell us promptly if you suspect unauthorized access.`],
+['Your Account and Security',`You are responsible for your sign-in credentials, your device, your 4-digit PIN and your recovery answer, and for all activity under your account. The PIN (and optional device biometric unlock) is a convenience lock, <b>not</b> encryption. Guest mode keeps your data only on your device and has no email, so we cannot recover it if you lose the device or clear its storage. Tell us promptly if you suspect unauthorized access.`],
 ['Your Data and Content',`You own the information you enter. You give us a limited, non-exclusive licence to store, process and sync it solely to run the App for you. You are responsible for its accuracy and for having the right to enter information about other people (for example names in loan records) - keep it to what is necessary. Do not enter government ID numbers, card numbers, bank credentials or passwords.`],
 ['Acceptable Use',`You agree not to: use the App for anything unlawful, fraudulent or for money laundering; try to access another person's account or data; probe, attack, overload, scrape or reverse-engineer the App or its services; upload malware; or bypass any security or usage limit.`],
 ['Backups and Availability',`The App is provided as available and may be interrupted, changed or discontinued. Syncing can fail or conflict between devices. You are responsible for exporting your own backups (Settings and Export). Restoring a backup overwrites current data.`],
@@ -7216,9 +7267,9 @@ privacy:[
 ['Who We Are',`${LEGAL_DEV} is the Personal Information Controller of FinLed. Privacy contact / Data Protection Officer: ${LEGAL_EMAIL}. This policy follows the Data Privacy Act of 2012 (Republic Act No. 10173), its Implementing Rules and Regulations, and issuances of the National Privacy Commission (NPC).`],
 ['Personal Data We Handle',`<b>Account data:</b> email address, sign-in method (Google, email/password or guest), display name, and a unique account ID.<br><b>Data you enter:</b> income, expenses, wallet names and balances, loans (including names of people and notes), savings goals, budget limit, notes, and app settings.<br><b>Security data:</b> a salted hash of your PIN, your recovery question, and a salted hash of your answer (we cannot read either).<br><b>Plan data:</b> your plan (free, Plus or Pro), its status, and trial or period end dates. Once paid plans are available we will also hold the payment provider's name and a payment reference. Card and e-wallet credentials go only to the payment provider, never to us.<br><b>Technical data:</b> authentication tokens and data your browser stores (localStorage/sessionStorage: theme, tutorial status, unlock state, your plan, pay-schedule and reminder settings). Google, Supabase and our web host may receive your IP address and device details when you sign in, sync, load the App or load fonts.<br><b>We do not collect:</b> bank or e-wallet credentials, card numbers, precise location, contacts, photos, or microphone/camera data, and we do not run advertising or third-party analytics.`],
 ['Why We Use It and Our Legal Basis',`We process data to (1) create and secure your account, (2) store, sync and display your records across your devices, (3) provide backups, exports and reports you request, and (4) keep the service safe and fix problems. Our bases under Section 12 of the Data Privacy Act are your <b>consent</b> (given when you accept these documents), performance of the service you asked for, and our legitimate interest in security and reliability. We do not sell your data, use it for profiling or advertising, or make automated decisions about you.`],
-['Where Your Data Is Kept',`A copy is stored in your browser on your device. If you use an account, a copy is also stored in a Supabase database under your account ID. Supabase servers may be located outside the Philippines${LEGAL_REGION?' (our project is hosted in '+LEGAL_REGION+')':''}, so your data may be transferred and processed abroad. Supabase acts as our processor under its own security and data-protection commitments, and we remain accountable for your data. The App's files are delivered by ${LEGAL_HOST?LEGAL_HOST:'a web hosting service'}, which can see technical request data such as your IP address but not the records you enter.`],
+['Where Your Data Is Kept',`A copy is stored in your browser on your device. In Guest mode that is the only copy: nothing is uploaded to our servers. If you sign in to an account, a copy is also stored in a Supabase database under your account ID. Supabase servers may be located outside the Philippines${LEGAL_REGION?' (our project is hosted in '+LEGAL_REGION+')':''}, so your data may be transferred and processed abroad. Supabase acts as our processor under its own security and data-protection commitments, and we remain accountable for your data. The App's files are delivered by ${LEGAL_HOST?LEGAL_HOST:'a web hosting service'}, which can see technical request data such as your IP address but not the records you enter.`],
 ['Who We Share It With',`Only with service providers needed to run the App: Supabase (authentication and database), Google (Google Sign-In), our web host, and, once paid plans are available, a payment provider that handles the payment and tells our server whether it succeeded. We disclose data to authorities only when required by law or lawful order. The optional receipt scanner runs entirely on your device: your receipt photo is not uploaded or stored, and only the open-source reader software and its language data are downloaded from a public content network (jsDelivr) the first time you use it, which may see your IP address. We do not otherwise share, rent or sell personal data. The developer does not routinely view your individual records.`],
-['How Long We Keep It',`Local data stays until you clear it or your browser storage. Cloud data stays until you delete it or your account, which you can do any time in Settings (Legal and Data). Backups you download are yours to manage. We do not currently delete inactive guest accounts automatically; you can delete yours any time in Settings. Deleted data may persist briefly in provider backups before being overwritten. Records of payments we have received may be kept for as long as accounting or tax law requires.`],
+['How Long We Keep It',`Local data stays until you clear it or your browser storage. Cloud data stays until you delete it or your account, which you can do any time in Settings (Legal and Data). Backups you download are yours to manage. In Guest mode your data stays on your device until you clear it or your browser storage, and you can erase it any time in Settings. Cloud guest accounts created before Guest mode became device-only are not deleted automatically; you can delete yours in Settings. Deleted data may persist briefly in provider backups before being overwritten. Records of payments we have received may be kept for as long as accounting or tax law requires.`],
 ['Security',`We use HTTPS/TLS in transit, the access controls provided by Supabase, and salted hashing (SHA-256) for your PIN and recovery answer. Your records are <b>not</b> end-to-end encrypted, and the PIN is a convenience lock: someone with access to your unlocked device may see your data. <b>Optional biometric unlock:</b> if you turn it on, your device's operating system checks your face or fingerprint through the browser's WebAuthn feature; the App never receives, stores or transmits your face or fingerprint data, and keeps only an on-device credential reference in this browser. Your PIN always still works. No system is perfectly secure; use a device passcode and keep backups.`],
 ['Your Rights as a Data Subject',`Under Section 16 of the Data Privacy Act you may: be informed; object to processing; access your data; correct it; request erasure or blocking; withdraw consent; receive your data in a portable format; and claim damages for violations. In-app: edit any entry, download a JSON/CSV backup, or permanently delete your account and cloud data in Settings. Otherwise email ${LEGAL_EMAIL}; we aim to respond within 30 days. You may also complain to the National Privacy Commission (privacy.gov.ph). Withdrawing consent or deleting your account means we can no longer provide cloud sync.`],
 ['Data Breach Notification',`If a personal data breach that puts you at risk occurs, we will notify the NPC and affected users within 72 hours of knowledge or reasonable belief, as required by NPC rules, and tell you what happened and what to do.`],
@@ -7295,6 +7346,13 @@ function acceptTermsAndContinue(){
 }
 /* Right to erasure: delete cloud data, the account, and the local copy */
 async function deleteAccountAndData(){
+  if(!cloudUser&&isLocalGuest()){
+    const okL=await mtConfirm('This permanently deletes all FinLed data stored on this device. Guest data is not saved anywhere else. Download a backup first if you want to keep a copy.','🗑️','Delete Everything','var(--red)');
+    if(!okL)return;
+    sessionStorage.removeItem('mtUnlocked');stateLoadedForUid=null;Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,defaultState());
+    ['kwentadoV1','mtTutDone','mtGuestBannerDismissAt','mtGuestNudge3Shown','mtGuestRemindAt','mtMoneyTab','finCloudLinked','finBioCred','finPinLock','finLocalGuest','finPushPending'].forEach(k=>localStorage.removeItem(k));
+    toast('Your FinLed data was deleted');handleAuthState(null);return;
+  }
   if(!cloudUser){toast('Not signed in','error');return;}
   const ok=await mtConfirm('This permanently deletes your FinLed data from the cloud and this device. Your Supabase login account itself must be removed from Supabase separately. Download a backup first if you want to keep a copy.','🗑️','Delete Everything','var(--red)');
   if(!ok)return;
@@ -7304,7 +7362,7 @@ async function deleteAccountAndData(){
     await supabaseClient.from('profiles').delete().eq('id',uid);
   }catch(e){console.error(e);toast('Could not delete your cloud data: '+(e?.message||'Unknown error'),'error');return;}
   sessionStorage.removeItem('mtUnlocked');stateLoadedForUid=null;Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,defaultState());
-  ['kwentadoV1','mtTutDone','mtGuestBannerDismissAt','mtGuestNudge3Shown','mtGuestRemindAt','mtMoneyTab','finCloudLinked','finBioCred','finPinLock'].forEach(k=>localStorage.removeItem(k));
+  ['kwentadoV1','mtTutDone','mtGuestBannerDismissAt','mtGuestNudge3Shown','mtGuestRemindAt','mtMoneyTab','finCloudLinked','finBioCred','finPinLock','finLocalGuest','finPushPending'].forEach(k=>localStorage.removeItem(k));
   await supabaseClient.auth.signOut();toast('Your FinLed data was deleted');
 }
 
@@ -7527,11 +7585,11 @@ window.logRecurring = function(templateId){
 <div id="guest-signout-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:3000;align-items:safe center;justify-content:safe center;padding:20px;overflow-y:auto">
   <div style="background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:30px 28px 24px;max-width:360px;width:100%;box-shadow:var(--shadow-lg)">
     <div style="font-size:32px;margin-bottom:12px;text-align:center">⚠️</div>
-    <div style="font-size:15px;font-weight:700;color:var(--text);text-align:center;margin-bottom:8px">You're signed in as a Guest</div>
-    <div style="font-size:13px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:20px">This account has no email or password. If you sign out without linking first, there is no way to sign back in - all your data here will be permanently unreachable.</div>
-    <button class="btn btn-primary" style="width:100%;padding:12px;margin-bottom:12px" onclick="closeGuestSignoutWarning();authLinkToGoogle()">Link to Google (Keep My Data)</button>
+    <div id="gso-title" style="font-size:15px;font-weight:700;color:var(--text);text-align:center;margin-bottom:8px">You're signed in as a Guest</div>
+    <div id="gso-body" style="font-size:13px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:20px">This account has no email or password. If you sign out without linking first, there is no way to sign back in - all your data here will be permanently unreachable.</div>
+    <button id="gso-keep" class="btn btn-primary" style="width:100%;padding:12px;margin-bottom:12px" onclick="closeGuestSignoutWarning();authLinkToGoogle()">Link to Google (Keep My Data)</button>
     <div style="text-align:center">
-      <span onclick="confirmGuestSignoutAnyway()" style="font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer">Sign Out Anyway</span>
+      <span id="gso-out" onclick="confirmGuestSignoutAnyway()" style="font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer">Sign Out Anyway</span>
     </div>
     <div style="text-align:center;margin-top:14px">
       <span onclick="closeGuestSignoutWarning()" style="font-size:12px;color:var(--muted2);cursor:pointer">Cancel</span>
