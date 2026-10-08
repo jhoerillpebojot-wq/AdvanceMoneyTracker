@@ -1608,6 +1608,47 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
 <style id="finled-toast-rm">
 @media (prefers-reduced-motion:reduce){.toast,html body.finled .toast{transition:none !important}.toast{transform:none}}
 </style>
+<style id="finled-money">
+/* Money section: Activity | Accounts | Loans | Reports */
+.mpanel[hidden],.act-form[hidden],#act-recurring[hidden],#act-inc-summary[hidden],#act-sub[hidden]{display:none!important}
+.money-tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;border-bottom:1.5px solid var(--border);margin:0 0 16px;background:var(--bg)}
+.money-tabs::-webkit-scrollbar{display:none}
+#money-tabs .mt-tab{flex:1 0 auto;min-height:48px;padding:0 18px;font:inherit;font-size:16px;font-weight:600;white-space:nowrap}
+@media(max-width:900px){#money-tabs{margin:-4px -16px 14px;padding:0 8px}#money-tabs .mt-tab{border-radius:0;flex:1 1 auto;padding:0 10px}}
+html body.finled #money-tabs .mt-tab:focus-visible{outline:3px solid var(--focus)!important;outline-offset:-3px!important}
+html body.finled #money-tabs .mt-tab{border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;background:transparent!important;color:var(--muted)!important;font-weight:600!important;min-height:48px!important}
+html body.finled #money-tabs .mt-tab[aria-selected="true"]{border-bottom-color:var(--accent)!important;color:var(--text)!important}
+@media(min-width:901px){#money-tabs .mt-tab{flex:0 0 auto;padding:0 24px}}
+#money-tabs .mt-tab:focus-visible,.act-add:focus-visible,#act-filter-bar .pill:focus-visible,#act-search:focus-visible,#act-sub:focus-visible,.act-row .btn:focus-visible,.rp-row:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.act-actions{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}
+.act-add{min-height:48px;padding:0 20px;font-size:16px;flex:1 1 150px}
+.act-actions .act-add:first-child{flex:2 1 200px}
+.act-total{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:14px;color:var(--muted)}
+.act-pills{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+html body.finled .act-pills .pill,.act-pills .pill{min-height:48px!important;min-width:48px;padding:0 20px;font-size:16px}
+.act-tools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+.act-tools #act-search{flex:2 1 180px;min-height:48px;font-size:16px}
+.act-tools #act-sub{flex:1 1 150px;min-height:48px;font-size:16px}
+.act-mh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:16px 0 4px;padding:8px 0;border-bottom:1px solid var(--border);font:600 14px var(--font-b);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.act-mh-sum{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:14px;text-transform:none;letter-spacing:0;color:var(--text)}
+.act-row{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:start;padding:12px 0}
+.act-row .name{font-size:16px;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+.act-row .meta{font-size:14px}
+.act-kind{font-weight:600;color:var(--text)}
+.act-amt{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:16px;font-weight:600;white-space:nowrap;text-align:right}
+.act-btns{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.act-row .btn{min-height:48px;min-width:48px;padding:0 16px;font-size:16px}
+.act-note{overflow-wrap:anywhere}
+.rp-sub{margin:0 0 8px;font-size:16px;color:var(--muted)}
+.rp-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--border)}
+.rp-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:56px;padding:8px 4px;background:none;border:0;border-bottom:1px solid var(--border);color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.rp-t b{display:block;font-size:16px}.rp-t span{display:block;font-size:14px;color:var(--muted)}
+.rp-tag{flex:none;font:500 13px "IBM Plex Mono",ui-monospace,monospace;color:var(--muted)}
+#balances .page-hd,#loans .page-hd{margin-top:0}
+#act-form-exp .fx-h::after,#act-form-inc .fx-h::after{display:none}
+#act-form-exp .fx-h,#act-form-inc .fx-h{cursor:default}
+@media(prefers-reduced-motion:reduce){#money,#money *{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body class="finled">
 <script>(function(){var t=null;try{t=localStorage.getItem('mtTheme')}catch(e){}var l=t?t==='light':!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);document.body.className='finled'+(l?' light':'')})();</script>
@@ -2063,7 +2104,7 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
     <div class="card">
       <div class="card-hd">
         <h2 class="card-title">Income vs Expenses - by Month</h2>
-        <span class="card-link" onclick="show('income')">View income →</span>
+        <span class="card-link" onclick="show('money',{tab:'activity',filter:'income'})">View income →</span>
       </div>
       <div id="dash-chart"></div>
     </div>
@@ -2082,7 +2123,7 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
         <div class="card">
           <div class="card-hd">
             <h2 class="card-title">Recent Expenses</h2>
-            <span class="card-link" onclick="show('expenses')">View all →</span>
+            <span class="card-link" onclick="show('money',{tab:'activity',filter:'expense'})">View all →</span>
           </div>
           <div id="dash-recent-exp"></div>
           <div id="dash-spend-progress"></div>
@@ -2091,84 +2132,27 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
     </div>
   </div>
 
-  <!-- ══ INCOME ══ -->
-  <div id="income" class="section">
+  <!-- ══ MONEY (Activity | Accounts | Loans | Reports) ══ -->
+  <div id="money" class="section">
     <div class="page-hd">
-      <h1 class="page-title">Income</h1>
-      <div class="page-sub">Track your salary, bonuses, and other earnings</div>
+      <h1 class="page-title">Money</h1>
+      <div class="page-sub">What you earn, spend, hold and owe</div>
     </div>
-    <div class="card" data-tour="income-form">
-      <div class="card-hd"><h2 class="card-title">Add Entry</h2></div>
-      <div class="form-row">
-        <div class="form-group"><label>Month</label>
-        <select id="inc-month"><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select>
-        </div>
-        <div class="form-group"><label>Year</label><select id="inc-year"></select></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Type</label>
-          <select id="inc-type"><option>Salary</option><option>Bonus</option><option>Loan Repayment</option><option>Other</option></select>
-        </div>
-        <div class="form-group"><label>Amount (<span class="cur-sym">₱</span>)</label><input type="number" id="inc-amount" placeholder="0.00" min="0" step="0.01"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Deposit to Wallet</label><select id="inc-wallet"></select></div>
-        <div class="form-group"><label>Note (optional)</label><input type="text" id="inc-note" placeholder="e.g. from employer, freelance..."></div>
-      </div>
-      <button class="btn btn-primary" onclick="addIncome()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Entry
-      </button>
+    <div class="money-tabs" id="money-tabs" role="tablist" aria-label="Money sections">
+      <button type="button" class="mt-tab active" role="tab" id="mt-activity" data-mtab="activity" aria-controls="mp-activity" aria-selected="true" onclick="moneyTab('activity')">Activity</button>
+      <button type="button" class="mt-tab" role="tab" id="mt-accounts" data-mtab="accounts" data-tour="nav-balances" aria-controls="mp-accounts" aria-selected="false" tabindex="-1" onclick="moneyTab('accounts')">Accounts</button>
+      <button type="button" class="mt-tab" role="tab" id="mt-loans" data-mtab="loans" aria-controls="mp-loans" aria-selected="false" tabindex="-1" onclick="moneyTab('loans')">Loans</button>
+      <button type="button" class="mt-tab" role="tab" id="mt-reports" data-mtab="reports" aria-controls="mp-reports" aria-selected="false" tabindex="-1" onclick="moneyTab('reports')">Reports</button>
     </div>
-    <div class="card" id="inc-breakdown-card" style="display:none">
-      <div class="card-hd"><h2 class="card-title">Total by Type</h2><span id="inc-breakdown-badge" style="font-size:11px;color:var(--muted)">all time</span></div>
-      <div id="inc-breakdown" style="display:flex;gap:10px;flex-wrap:wrap"></div>
-    </div>
-    <div class="card">
-      <div class="card-hd">
-        <h2 class="card-title">All Income Entries</h2>
-        <span id="inc-total-badge" style="font-family:var(--font-d);font-size:14px;color:var(--accent)"></span>
-      </div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-        <input type="search" id="inc-search" placeholder="Search income..." oninput="setIncFilter()" style="flex:2;min-width:140px">
-        <select id="inc-filter-type" onchange="setIncFilter()" style="flex:1;min-width:110px"><option value="">All types</option></select>
-      </div>
-      <div id="income-list"></div>
-    </div>
-  </div>
 
-  <!-- ══ LEARN ══ -->
-  <div id="learn" class="section">
-    <div class="page-hd"><h1 class="page-title">Learn</h1><div class="page-sub">Short lessons. Real money habits.</div></div>
-    <div id="learn-root"></div>
-  </div>
-
-  <!-- ══ BALANCES ══ -->
-  <div id="balances" class="section">
-    <div class="page-hd">
-      <div class="bal-hd">
-        <h1 class="page-title">Balances</h1>
-        <button type="button" class="eye-btn" id="eye-balpage" onclick="toggleHideBalances()" title="Show/hide balances" aria-label="Show or hide balances"></button>
+    <!-- Activity -->
+    <div id="mp-activity" class="mpanel" role="tabpanel" aria-labelledby="mt-activity">
+      <div class="act-actions">
+        <button type="button" class="btn btn-primary act-add" id="act-add-exp" aria-expanded="false" aria-controls="act-form-exp" onclick="actForm('expense')">Add expense</button>
+        <button type="button" class="btn btn-ghost act-add" id="act-add-inc" aria-expanded="false" aria-controls="act-form-inc" onclick="actForm('income')">Add income</button>
       </div>
-      <div class="page-sub">Manage your wallets and update balances anytime</div>
-    </div>
-    <div class="wc-grid" id="balance-cards"></div>
-    <div class="card">
-      <div class="card-hd"><h2 class="card-title">Net Worth</h2></div>
-      <div id="nw-rows"></div>
-      <div class="total-bar" style="margin-top:12px">
-        <span class="lbl">Total across all wallets</span>
-        <span class="val" id="nw-total"></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ EXPENSES ══ -->
-  <div id="expenses" class="section">
-    <div class="page-hd">
-      <h1 class="page-title">Expenses</h1>
-      <div class="page-sub">Log what you spend, categorise it, and track your sources</div>
-    </div>
+      <div id="act-form-exp" class="act-form" hidden>
+        <div id="expenses">
     <div class="card" data-tour="expense-form">
       <div class="card-hd"><h2 class="card-title">Add Expense</h2><button class="btn btn-ghost btn-sm" id="scan-receipt-btn" data-tour="scan-receipt" onclick="scanReceiptStart()">📷 Scan Receipt</button></div>
       <input type="file" id="receipt-file" accept="image/*" style="display:none" onchange="scanReceiptFile(this)">
@@ -2211,33 +2195,88 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
         Log Expense
       </button>
     </div>
-    <div id="recurring-panel" style="display:none"></div>
+        </div>
+      </div>
+      <div id="act-form-inc" class="act-form" hidden>
+        <div id="income">
+    <div class="card" data-tour="income-form">
+      <div class="card-hd"><h2 class="card-title">Add Entry</h2></div>
+      <div class="form-row">
+        <div class="form-group"><label>Month</label>
+        <select id="inc-month"><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select>
+        </div>
+        <div class="form-group"><label>Year</label><select id="inc-year"></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Type</label>
+          <select id="inc-type"><option>Salary</option><option>Bonus</option><option>Loan Repayment</option><option>Other</option></select>
+        </div>
+        <div class="form-group"><label>Amount (<span class="cur-sym">₱</span>)</label><input type="number" id="inc-amount" placeholder="0.00" min="0" step="0.01"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Deposit to Wallet</label><select id="inc-wallet"></select></div>
+        <div class="form-group"><label>Note (optional)</label><input type="text" id="inc-note" placeholder="e.g. from employer, freelance..."></div>
+      </div>
+      <button class="btn btn-primary" onclick="addIncome()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Entry
+      </button>
+    </div>
+        </div>
+      </div>
+      <div id="act-recurring"><div id="recurring-panel" style="display:none"></div></div>
+      <div id="act-inc-summary" hidden>
+    <div class="card" id="inc-breakdown-card" style="display:none">
+      <div class="card-hd"><h2 class="card-title">Total by Type</h2><span id="inc-breakdown-badge" style="font-size:11px;color:var(--muted)">all time</span></div>
+      <div id="inc-breakdown" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+    </div>
+      </div>
+      <div class="card" id="act-list-card">
+        <div class="card-hd">
+          <h2 class="card-title">Activity</h2>
+          <span id="act-total" class="act-total"></span>
+        </div>
+        <div class="act-pills" id="act-filter-bar" role="group" aria-label="Show">
+          <button type="button" class="pill active" data-f="all" aria-pressed="true" onclick="setActFilter('all')">All</button>
+          <button type="button" class="pill" data-f="income" data-tour="nav-income" aria-pressed="false" onclick="setActFilter('income')">Income</button>
+          <button type="button" class="pill" data-f="expense" data-tour="nav-expenses" aria-pressed="false" onclick="setActFilter('expense')">Expenses</button>
+        </div>
+        <div class="act-tools">
+          <input type="search" id="act-search" aria-label="Search activity" placeholder="Search activity" autocomplete="off" oninput="renderActivity()">
+          <select id="act-sub" aria-label="Narrow down" onchange="setActSub(this.value)" hidden></select>
+        </div>
+        <div id="activity-list" aria-live="polite"></div>
+        <div id="act-legacy" hidden><div id="income-list"></div><div id="expense-list"></div><span id="exp-total-badge"></span><span id="inc-total-badge"></span></div>
+      </div>
+    </div>
+
+    <!-- Accounts -->
+    <div id="mp-accounts" class="mpanel" role="tabpanel" aria-labelledby="mt-accounts" hidden>
+<div id="balances">
+    <div class="page-hd">
+      <div class="bal-hd">
+        <h2 class="page-title">Balances</h2>
+        <button type="button" class="eye-btn" id="eye-balpage" onclick="toggleHideBalances()" title="Show/hide balances" aria-label="Show or hide balances"></button>
+      </div>
+      <div class="page-sub">Manage your wallets and update balances anytime</div>
+    </div>
+    <div class="wc-grid" id="balance-cards"></div>
     <div class="card">
-      <div class="card-hd">
-        <h2 class="card-title">Expense Log</h2>
-        <span id="exp-total-badge" style="font-family:var(--font-d);font-size:14px;color:var(--red)"></span>
+      <div class="card-hd"><h2 class="card-title">Net Worth</h2></div>
+      <div id="nw-rows"></div>
+      <div class="total-bar" style="margin-top:12px">
+        <span class="lbl">Total across all wallets</span>
+        <span class="val" id="nw-total"></span>
       </div>
-      <div class="search-bar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="exp-search" placeholder="Search expenses..." oninput="renderExpenses()">
-      </div>
-      <div class="filter-bar" id="exp-filter-bar">
-        <button class="pill active" onclick="setExpFilter('all',this)">All</button>
-        <button class="pill" onclick="setExpFilter('food',this)">🍜 Food</button>
-        <button class="pill" onclick="setExpFilter('transport',this)">🚌 Transport</button>
-        <button class="pill" onclick="setExpFilter('shopping',this)">🛍️ Shopping</button>
-        <button class="pill" onclick="setExpFilter('utilities',this)">💡 Utilities</button>
-        <button class="pill" onclick="setExpFilter('health',this)">💊 Health</button>
-        <button class="pill" onclick="setExpFilter('entertainment',this)">🎮 Entertainment</button>
-        <button class="pill" onclick="setExpFilter('other-exp',this)">📦 Other</button>
-      </div>
-      <div id="expense-list"></div>
     </div>
   </div>
-  <!-- ══ LOANS ══ -->
-  <div id="loans" class="section">
+    </div>
+
+    <!-- Loans -->
+    <div id="mp-loans" class="mpanel" role="tabpanel" aria-labelledby="mt-loans" hidden>
+<div id="loans">
     <div class="page-hd">
-      <h1 class="page-title">Loans</h1>
+      <h2 class="page-title">Loans</h2>
       <div class="page-sub">Track who owes you and who you owe</div>
     </div>
     <div class="two-col" style="margin-bottom:0">
@@ -2283,6 +2322,28 @@ html body.finled .hero-card .hero-wallets .hw{background:var(--surface2)!importa
       </div>
       <div id="loan-list"></div>
     </div>
+  </div>
+    </div>
+
+    <!-- Reports -->
+    <div id="mp-reports" class="mpanel" role="tabpanel" aria-labelledby="mt-reports" hidden>
+      <div class="card">
+        <div class="card-hd"><h2 class="card-title">Reports</h2></div>
+        <p class="rp-sub">Open a report or tool. Tools marked Plus or Pro need that plan.</p>
+        <ul class="rp-list">
+        <li><button type="button" class="rp-row" data-k="compare" onclick="FLX.compare()"><span class="rp-t"><b>Compare months</b><span>Income, expenses and savings side by side.</span></span><span class="rp-tag" id="rp-tag-compare"></span></button></li>
+        <li><button type="button" class="rp-row" data-k="summary" onclick="FLX.summary()"><span class="rp-t"><b>Monthly summary</b><span>A one-page recap of the month.</span></span><span class="rp-tag" id="rp-tag-summary"></span></button></li>
+        <li><button type="button" class="rp-row" data-k="reports" onclick="FLX.reports()"><span class="rp-t"><b>Reports</b><span>Breakdowns by category, wallet and period.</span></span><span class="rp-tag" id="rp-tag-reports"></span></button></li>
+        <li><button type="button" class="rp-row" data-k="subs" onclick="FLX.subs()"><span class="rp-t"><b>Find subscriptions</b><span>Charges that repeat every month.</span></span><span class="rp-tag" id="rp-tag-subs"></span></button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LEARN ══ -->
+  <div id="learn" class="section">
+    <div class="page-hd"><h1 class="page-title">Learn</h1><div class="page-sub">Short lessons. Real money habits.</div></div>
+    <div id="learn-root"></div>
   </div>
 
   <!-- ══ GOALS ══ -->
@@ -2906,7 +2967,7 @@ function showSplash(){
 }
 
 const MONTH_ORDER=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const PAGE_TITLES={dashboard:'Home',income:'Income',balances:'Balances',expenses:'Expenses',loans:'Loans',goals:'Goals & Budget',learn:'Learn',settings:'Settings',export:'Export'};
+const PAGE_TITLES={money:'Money',dashboard:'Home',income:'Income',balances:'Balances',expenses:'Expenses',loans:'Loans',goals:'Goals & Budget',learn:'Learn',settings:'Settings',export:'Export'};
 const CAT_LABELS={food:'🍜 Food',transport:'🚌 Transport',shopping:'🛍️ Shopping',utilities:'💡 Utilities',health:'💊 Health',entertainment:'🎮 Entertainment','loan-payment':'💸 Loan Payment','other-exp':'📦 Other'};
 let expFilter='all';
 
@@ -3585,22 +3646,180 @@ function updateSettingsHome(){
 
 const MONEY_PAGES=['income','expenses','loans','balances','goals'];
 const MONEY_ONLY=['income','expenses','loans','balances'];
-function openMoney(){let p='expenses';try{const v=localStorage.getItem('mtMoneyTab');if(MONEY_ONLY.includes(v))p=v;}catch(e){}show(p);}
-function show(id){
+/* Money is ONE section (#money) with four tabs. The old ids (income, expenses, loans, balances) still work in show(). */
+const MONEY_TABS=['activity','accounts','loans','reports'];
+const MONEY_LEGACY={income:'activity',expenses:'activity',loans:'loans',balances:'accounts'};
+function moneyLastTab(){let v='activity';try{v=localStorage.getItem('mtMoneyTab')||v;}catch(e){}return MONEY_TABS.includes(v)?v:(MONEY_LEGACY[v]||'activity');}
+function openMoney(){show('money');}
+function show(id,opts){
+  let mTab=null,mFilter=null,mForm=null;
+  if(id==='money'||MONEY_ONLY.includes(id)){
+    mTab=id==='money'?((opts&&opts.tab)||moneyLastTab()):MONEY_LEGACY[id];
+    if(id==='income'){mFilter='income';mForm='income';}
+    if(id==='expenses'){mFilter='expense';mForm='expense';}
+    if(opts&&opts.filter)mFilter=opts.filter;
+    if(opts&&opts.form)mForm=opts.form;
+    id='money';
+  }
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-item,.bnav-item,.tb-gear,.mt-tab').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll(`[data-page="${id}"]`).forEach(el=>el.classList.add('active'));
-  if(MONEY_ONLY.includes(id)){try{localStorage.setItem('mtMoneyTab',id);}catch(e){}}
-  {const grp=MONEY_ONLY.includes(id)?'money':id==='goals'?'plan':(id==='settings'||id==='export'||id==='learn')?'more':'';if(grp)document.querySelectorAll('[data-group="'+grp+'"]').forEach(el=>el.classList.add('active'));}
+  if(id==='money'){try{localStorage.setItem('mtMoneyTab',mTab);}catch(e){}}
+  {const grp=id==='money'?'money':id==='goals'?'plan':(id==='settings'||id==='export'||id==='learn')?'more':'';if(grp)document.querySelectorAll('[data-group="'+grp+'"]').forEach(el=>el.classList.add('active'));}
   closeMoreSheet();
   if(id==='export')document.querySelectorAll('[data-page="settings"]').forEach(el=>el.classList.add('active'));
   document.getElementById('topbar-title').textContent=PAGE_TITLES[id]||id;
   document.body.dataset.page=id;
+  if(id==='money')moneySetTab(mTab,mFilter,mForm);
   document.querySelectorAll('.mt-tab.active').forEach(t=>{const bar=t.parentElement;if(bar&&bar.clientWidth)bar.scrollLeft=t.offsetLeft-(bar.clientWidth-t.offsetWidth)/2;});
   if(id==='settings')openSetPanel(null);
   render();
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+
+/* ── Money: Activity (income + expenses in one list), tabs, filters ── */
+let actFilter='all';
+function moneySetTab(tab,filter,form){
+  if(!MONEY_TABS.includes(tab))tab='activity';
+  MONEY_TABS.forEach(t=>{
+    const p=document.getElementById('mp-'+t);if(p)p.hidden=(t!==tab);
+    const b=document.getElementById('mt-'+t);
+    if(b){b.classList.toggle('active',t===tab);b.setAttribute('aria-selected',t===tab?'true':'false');b.tabIndex=(t===tab)?0:-1;}
+  });
+  document.body.dataset.moneyTab=tab;
+  if(filter)setActFilter(filter,true);
+  if(form)actForm(form,true);
+  if(tab==='reports')renderReportTags();
+}
+function moneyTab(t){
+  try{localStorage.setItem('mtMoneyTab',t);}catch(e){}
+  moneySetTab(t);
+  const b=document.getElementById('mt-'+t);if(b)b.scrollIntoView({block:'nearest',inline:'center'});
+}
+document.addEventListener('keydown',function(e){
+  const tab=e.target&&e.target.closest&&e.target.closest('#money-tabs .mt-tab');if(!tab)return;
+  const i=MONEY_TABS.indexOf(tab.dataset.mtab);let n=-1;
+  if(e.key==='ArrowRight')n=(i+1)%MONEY_TABS.length;else if(e.key==='ArrowLeft')n=(i+MONEY_TABS.length-1)%MONEY_TABS.length;
+  else if(e.key==='Home')n=0;else if(e.key==='End')n=MONEY_TABS.length-1;
+  if(n<0)return;e.preventDefault();moneyTab(MONEY_TABS[n]);document.getElementById('mt-'+MONEY_TABS[n]).focus();
+});
+function _actSetForm(kind,open){
+  const f=document.getElementById(kind==='expense'?'act-form-exp':'act-form-inc');
+  const b=document.getElementById(kind==='expense'?'act-add-exp':'act-add-inc');
+  if(f){f.hidden=!open;if(open)f.querySelectorAll('.card.fx-c').forEach(c=>c.classList.remove('fx-c'));}
+  if(b)b.setAttribute('aria-expanded',open?'true':'false');
+}
+/* The phone collapse script folds every card titled "Add ...". Here the Add buttons already open/close the form, so the card header must not fold it a second time. */
+['act-form-exp','act-form-inc'].forEach(id=>{const f=document.getElementById(id);if(f)f.addEventListener('click',e=>{if(e.target.closest('.card-hd')&&!e.target.closest('button,input,select,a'))e.stopPropagation();},true);});
+/* actForm('expense'|'income') toggles the add form; actForm(kind,true) opens it without moving focus (used by show()). */
+function actForm(kind,open){
+  const f=document.getElementById(kind==='expense'?'act-form-exp':'act-form-inc');if(!f)return;
+  const willOpen=open===true?true:f.hidden;
+  _actSetForm(kind==='expense'?'income':'expense',false);
+  _actSetForm(kind,willOpen);
+  if(willOpen&&open!==true){
+    const first=document.getElementById(kind==='expense'?'exp-desc':'inc-amount');
+    if(first){f.scrollIntoView({block:'nearest'});first.focus({preventScroll:true});}
+  }
+}
+window.addEventListener('fin:income-added',()=>_actSetForm('income',false));
+window.addEventListener('fin:expense-logged',()=>{const a=document.getElementById('exp-amount');if(a&&!a.value)_actSetForm('expense',false);});
+
+function setActFilter(f,silent){
+  actFilter=(f==='income'||f==='expense')?f:'all';
+  if(actFilter!=='expense')expFilter='all';
+  if(actFilter!=='income')incType='';
+  document.querySelectorAll('#act-filter-bar .pill').forEach(b=>{const on=b.dataset.f===actFilter;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false');});
+  const sub=document.getElementById('act-sub');
+  if(sub){
+    if(actFilter==='expense'){
+      sub.innerHTML='<option value="all">All categories</option>'+Object.keys(CAT_LABELS).map(k=>'<option value="'+esc(k)+'">'+esc(String(CAT_LABELS[k]).replace(/^[^A-Za-z]+/,''))+'</option>').join('');
+      sub.setAttribute('aria-label','Category');sub.hidden=false;sub.value='all';
+    }else if(actFilter==='income'){
+      const ts=[...new Set((state.income||[]).map(e=>e.type||'Other'))];
+      sub.innerHTML='<option value="">All types</option>'+ts.map(t=>'<option>'+esc(t)+'</option>').join('');
+      sub.setAttribute('aria-label','Income type');sub.hidden=false;sub.value='';
+    }else{sub.hidden=true;}
+  }
+  const rc=document.getElementById('act-recurring');if(rc)rc.hidden=(actFilter==='income');
+  const sm=document.getElementById('act-inc-summary');if(sm)sm.hidden=(actFilter!=='income');
+  if(!silent)renderActivity();
+}
+function setActSub(v){if(actFilter==='expense')expFilter=v||'all';else if(actFilter==='income')incType=v||'';renderActivity();}
+
+function renderActivity(){
+  const box=document.getElementById('activity-list');if(!box)return;
+  const q=((document.getElementById('act-search')||{}).value||'').toLowerCase().trim();
+  const nowY=new Date().getFullYear(),rows=[];
+  const catName=c=>String((CAT_LABELS&&CAT_LABELS[c])||c||'Other').replace(/^[^A-Za-z]+/,'');
+  if(actFilter!=='expense'){
+    (state.income||[]).forEach((e,ord)=>{
+      if(incType&&(e.type||'Other')!==incType)return;
+      if(q&&![e.month,e.year,e.type,e.note,e.amount].join(' ').toLowerCase().includes(q))return;
+      const y=e.year||nowY;let m=MONTH_ORDER.indexOf(e.month);if(m<0)m=0;
+      const start=new Date(y,m,1).getTime(),end=new Date(y,m+1,1).getTime()-1;
+      let ts=e.dateAdded?ldate(e.dateAdded).getTime():end;if(isNaN(ts))ts=end;
+      rows.push({k:'i',e,y,m,ts:Math.min(Math.max(ts,start),end),ord});
+    });
+  }
+  if(actFilter!=='income'){
+    (state.expenses||[]).forEach((e,ord)=>{
+      if(expFilter!=='all'&&(e.cat||'other-exp')!==expFilter)return;
+      if(q&&!(String(e.desc||'').toLowerCase().includes(q)||String(e.source||'').toLowerCase().includes(q)||(e.note||'').toLowerCase().includes(q)||String(e.amount).includes(q)))return;
+      const d=ldate(e.date);if(isNaN(d))return;
+      rows.push({k:'e',e,y:d.getFullYear(),m:d.getMonth(),ts:d.getTime(),ord});
+    });
+  }
+  rows.sort((a,b)=>(b.y-a.y)||(b.m-a.m)||(b.ts-a.ts)||(b.ord-a.ord));
+  const tin=rows.filter(r=>r.k==='i').reduce((a,r)=>a+r.e.amount,0),tout=rows.filter(r=>r.k==='e').reduce((a,r)=>a+r.e.amount,0);
+  const tb=document.getElementById('act-total');
+  if(tb)tb.textContent=!rows.length?'':actFilter==='income'?fmt(tin):actFilter==='expense'?fmt(tout):'In '+fmt(tin)+' / Out '+fmt(tout);
+  if(!rows.length){
+    const any=(state.income||[]).length||(state.expenses||[]).length;
+    box.innerHTML='<div class="empty"><div class="empty-title">'+(any?'Nothing matches':'No activity yet')+'</div><div class="empty-sub">'+(any?'Try a different search or filter.':'Use Add expense or Add income to log your first entry.')+'</div></div>';
+    return;
+  }
+  let html='',cur='';
+  rows.forEach((r,idx)=>{
+    const key=r.y+'-'+r.m;
+    if(key!==cur){
+      if(cur)html+='</section>';
+      cur=key;
+      const grp=rows.filter(x=>x.y===r.y&&x.m===r.m);
+      const gi=grp.filter(x=>x.k==='i').reduce((a,x)=>a+x.e.amount,0),go=grp.filter(x=>x.k==='e').reduce((a,x)=>a+x.e.amount,0);
+      const sum=(actFilter==='income')?fmt(gi):(actFilter==='expense')?fmt(go):'In '+fmt(gi)+' / Out '+fmt(go);
+      html+='<section class="act-month" aria-label="'+esc(MONTH_ORDER[r.m]+' '+r.y)+'"><h3 class="act-mh"><span>'+esc(MONTH_ORDER[r.m])+' '+r.y+'</span><span class="act-mh-sum">'+sum+'</span></h3>';
+    }
+    const e=r.e;
+    if(r.k==='i'){
+      const w=(state.wallets||[]).find(x=>x.id===e.wallet);
+      html+='<div class="entry act-row act-i"><div class="info"><div class="name">'+esc(e.type||'Income')+(e.note?' - '+esc(e.note):'')+'</div>'
+        +'<div class="meta"><span class="act-kind">Income</span>'+(w?'<span>'+esc(w.label)+'</span>':'')+(e.dateAdded?'<span>Added '+fmtDate(e.dateAdded)+'</span>':'')+'</div></div>'
+        +'<span class="amt ap act-amt">+'+fmt(e.amount)+'</span>'
+        +'<div class="act-btns"><button type="button" class="btn btn-ghost btn-sm" onclick="openEditIncome('+e.id+')" aria-label="Edit income '+esc(e.type||'')+'">Edit</button>'
+        +'<button type="button" class="btn btn-danger btn-sm" onclick="del(\'income\','+e.id+')" aria-label="Remove income '+esc(e.type||'')+'">Remove</button></div></div>';
+    }else{
+      const wl=(state.wallets||[]).find(x=>x.id===e.source);const src=wl?wl.label:e.source;const c=e.cat||'other-exp';
+      html+='<div class="entry act-row act-e"><div class="info"><div class="name">'+esc(e.desc)+(e.recurring?'<span class="badge badge-recurring" style="margin-left:6px">Recurring</span>':'')+'</div>'
+        +'<div class="meta"><span class="act-kind">Expense</span><span>'+fmtDate(e.date)+'</span>'+(src?'<span>'+esc(src)+'</span>':'')+'<span class="badge badge-'+esc(c)+'">'+esc(catName(c))+'</span>'+(e.note?'<span class="act-note">'+esc(e.note)+'</span>':'')+'</div></div>'
+        +'<span class="amt an act-amt">\u2212'+fmt(e.amount)+'</span>'
+        +'<div class="act-btns"><button type="button" class="btn btn-ghost btn-sm" onclick="autoRepeat('+e.id+')" aria-label="Log '+esc(e.desc)+' again today">Repeat</button>'
+        +'<button type="button" class="btn btn-ghost btn-sm" onclick="openEditExpense('+e.id+')" aria-label="Edit '+esc(e.desc)+'">Edit</button>'
+        +'<button type="button" class="btn btn-danger btn-sm" onclick="del(\'expenses\','+e.id+')" aria-label="Remove '+esc(e.desc)+'">Remove</button></div></div>';
+    }
+  });
+  box.innerHTML=html+'</section>';
+}
+function renderReportTags(){
+  const D=window.FLPlanData;
+  document.querySelectorAll('#mp-reports .rp-row').forEach(b=>{
+    const k=b.dataset.k,t=document.getElementById('rp-tag-'+k);if(!t)return;
+    let txt='';
+    try{const need=(D&&D.NEED&&D.NEED[k])||'free';txt=(window.FLPlan&&FLPlan.can&&FLPlan.can(k))?'Unlocked':(need==='pro'?'Pro':'Plus');}catch(e){}
+    t.textContent=txt;
+  });
 }
 
 let gPressed=false,gTimer;
@@ -3673,7 +3892,7 @@ function populateReportYears(){
   [...ys].sort((a,b)=>b-a).forEach(y=>{const o=document.createElement('option');o.value='year-'+y;o.textContent='Year '+y;o.setAttribute('data-yr','1');sel.insertBefore(o,anchor);});
   if([...sel.options].some(o=>o.value===prev))sel.value=prev;
 }
-function render(){renderBalances();renderDash();renderIncome();renderExpenses();renderLoans();renderGoals();renderSettings();updateBadges();syncEyeButtons();renderGuestBanner();populateReportYears();try{if(window.FinLearn)FinLearn.render();}catch(e){}}
+function render(){renderBalances();renderDash();renderIncome();renderExpenses();renderActivity();renderLoans();renderGoals();renderSettings();updateBadges();syncEyeButtons();renderGuestBanner();populateReportYears();try{if(window.FinLearn)FinLearn.render();}catch(e){}}
 function updateBadges(){
   document.getElementById('nav-badge-income').textContent=state.income.length;
   document.getElementById('nav-badge-expenses').textContent=state.expenses.length;
@@ -7755,7 +7974,7 @@ function logFrom(t,date){
   window.dispatchEvent(new CustomEvent('fin:expense-logged',{detail:{desc:t.desc,amount:t.amount,cat:t.cat,source:t.source}}));}
 function chipsHTML(){return freq().map(e=>'<button class="fa-chip" data-id="'+e.id+'">'+esc(e.desc)+' · '+fmt(e.amount)+'</button>').join('');}
 function bindChips(box){box.onclick=ev=>{const b=ev.target.closest('.fa-chip');if(!b)return;const t=state.expenses.find(e=>e.id==b.dataset.id);if(t){const q=document.getElementById('fa-quick');if(q)q.style.display='none';logFrom(t);}};}
-function chipBar(){const card=document.querySelector('#expenses .card');if(!card)return;
+function chipBar(){const card=document.getElementById('act-list-card')||document.querySelector('#expenses .card');if(!card)return;
   let box=document.getElementById('fa-chipbar');
   if(!box){box=document.createElement('div');box.id='fa-chipbar';card.parentNode.insertBefore(box,card);bindChips(box);}
   const h=chipsHTML();box.innerHTML=h?'<div class="fa-h" style="margin-top:0">⚡ One-tap repeat</div><div class="fa-chips">'+h+'</div>':'';}
@@ -8105,18 +8324,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </div>
 
 <script>
-/* Money sub-tabs (phones): Income / Spend / Loans / Wallets / Goals share one bar on top of each page */
-(function(){
-  var T=[['income','Income','nav-income'],['expenses','Spend','nav-expenses'],['loans','Loans',''],['balances','Wallets','nav-balances']];
-  T.forEach(function(t){
-    var sec=document.getElementById(t[0]);if(!sec)return;
-    var bar=document.createElement('div');bar.className='money-tabs';bar.setAttribute('role','tablist');bar.setAttribute('aria-label','Money');
-    bar.innerHTML=T.map(function(x){
-      return '<button type="button" class="mt-tab'+(x[0]===t[0]?' active':'')+'" role="tab" data-page="'+x[0]+'"'+(x[2]?' data-tour="'+x[2]+'"':'')+' onclick="show(\''+x[0]+'\')">'+x[1]+'</button>';
-    }).join('');
-    sec.insertBefore(bar,sec.firstChild);
-  });
-})();
+/* Money tabs now live in #money (see moneySetTab) */
 function openMoreSheet(){var e=document.getElementById('more-sheet');if(e){e.classList.add('show');e.setAttribute('aria-hidden','false');}}
 function closeMoreSheet(){var e=document.getElementById('more-sheet');if(e){e.classList.remove('show');e.setAttribute('aria-hidden','true');}}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMoreSheet();closeGuestSheet();}});
