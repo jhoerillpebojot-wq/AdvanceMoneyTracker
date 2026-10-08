@@ -142,7 +142,7 @@ function claimsView(){
   return `<div class="bar"><select class="in" id="cf" aria-label="Filter">${['pending','approved','rejected','all'].map(v=>`<option value="${v}"${v===cFilter?' selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></div>
   <div class="panel">${L.length?`<table><thead><tr><th>Submitted</th><th>User</th><th>Plan</th><th>Amount</th><th>GCash reference</th><th>Status</th><th></th></tr></thead><tbody>${L.map(c=>`<tr>
    <td>${fdt(c.created_at)}</td><td>${esc(c.email||c.user_id)}</td><td>${tagP(c.tier)}</td><td>${c.amount_php!=null?'PHP '+esc(c.amount_php):'-'}</td>
-   <td class="mono">${esc(c.reference)}${c.name?`<div class="mu">${esc(c.name)}</div>`:''}</td><td><span class="tag ${esc(c.status)}">${esc(c.status)}</span>${c.note?`<div class="mu">${esc(c.note)}</div>`:''}</td>
+   <td class="mono">${esc(c.reference)}${c.payer_name?`<div class="mu">${esc(c.payer_name)}</div>`:''}</td><td><span class="tag ${esc(c.status)}">${esc(c.status)}</span>${c.note?`<div class="mu">${esc(c.note)}</div>`:''}</td>
    <td>${c.status==='pending'?`<button class="btn sm pri" data-c="${c.id}">Review</button>`:''}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">No payments here.</div>'}</div>`}
 
 function userRows(){
@@ -169,12 +169,11 @@ function reviewDlg(id){const c=claims.find(x=>x.id==id);if(!c)return;
   <div class="kv"><span>Plan paid for</span><span>${tagP(c.tier)}</span></div>
   <div class="kv"><span>Amount claimed</span><span>${c.amount_php!=null?'PHP '+esc(c.amount_php):'-'}</span></div>
   <div class="kv"><span>Reference</span><span class="mono">${esc(c.reference)}</span></div>
-  <p class="mu">Check this reference and amount in your GCash history before approving.</p>
-  <label for="dd">Days to grant</label><input class="in" id="dd" type="number" min="1" max="3650" value="30">
+  <p class="mu">Check this reference, amount and sender name in your GCash history first. Approving gives one month (adds a month if the same plan is still active).</p>
   <label for="dn">Note to user (shown if rejected)</label><input class="in" id="dn" maxlength="140">
   <div class="err" id="de" role="alert"></div>
   <div class="row"><button class="btn pri" id="ap">Approve and grant</button><button class="btn bad" id="rj">Reject</button><button class="btn" id="dx">Cancel</button></div>`);
-  $('ap').onclick=e=>run(e.target,()=>rpc('admin_approve_claim',{p_claim:c.id,p_days:+$('dd').value}),'Approved. Plan granted.');
+  $('ap').onclick=e=>run(e.target,()=>rpc('admin_approve_claim',{p_claim:c.id}),'Approved. Plan granted.');
   $('rj').onclick=e=>run(e.target,()=>rpc('admin_reject_claim',{p_claim:c.id,p_note:$('dn').value.trim()||null}),'Rejected.')}
 
 function userDlg(id){const u=users.find(x=>x.id===id);if(!u)return;const e=eff(u),mine=claims.filter(c=>c.user_id===id).slice(0,3);
