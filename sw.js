@@ -11,7 +11,7 @@
    CACHE_NAME — so an unchanged cache name means old, stale assets (icons
    included) can keep being served indefinitely even after you replace the
    underlying files. */
-const CACHE_NAME = 'finled-shell-v31';
+const CACHE_NAME = 'finled-shell-v39';
 
 const APP_SHELL = [
   './',
@@ -26,6 +26,11 @@ const APP_SHELL = [
   './Photos/finled-logo.png',
   './learn.css',
   './learn.js',
+  './fonts/IBMPlexSans-Regular.woff2',
+  './fonts/IBMPlexSans-Medium.woff2',
+  './fonts/IBMPlexSans-SemiBold.woff2',
+  './fonts/IBMPlexMono-Regular.woff2',
+  './fonts/IBMPlexMono-Medium.woff2',
   './virtual-pet/pet.css',
   './virtual-pet/pet.js',
   './virtual-pet/pet-dialogue.js',
