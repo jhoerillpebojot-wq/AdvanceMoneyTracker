@@ -96,7 +96,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fd = v => v ? new Date(v).toLocaleDateString('en-PH',{year:'numeric',month:'short',day:'numeric'}) : '-';
 const fdt = v => v ? new Date(v).toLocaleString('en-PH',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}) : '-';
-let users=[], claims=[], actions=[], tab='claims', cFilter='pending', q='';
+let users=[], claims=[], actions=[], tab='claims', cFilter='pending', q='', cq='';
 const TABS=[['claims','Payments'],['users','Users'],['log','Activity']];
 
 /* same rule as the app's eff(): what plan does this row give right now */
@@ -104,9 +104,10 @@ function eff(u){const n=Date.now(),pe=u.current_period_end?Date.parse(u.current_
   if(u.status==='trialing'&&te>n)return{plan:'pro',why:'trial',end:u.trial_end};
   if(['active','canceled','past_due'].includes(u.status)&&pe>n&&(u.plan==='plus'||u.plan==='pro'))return{plan:u.plan,why:u.status==='active'?'paid':u.status,end:u.current_period_end};
   return{plan:'free',why:'',end:null}}
+const sentAt = t => { const m=/^(\d{1,2}):(\d{2})$/.exec(t||''); if(!m)return ''; let h=+m[1]; const ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m[2]+' '+ap };
 const tagP = p => `<span class="tag ${p}">${p==='free'?'Free':p==='plus'?'Plus':'Pro'}</span>`;
 let tt; function toast(m,bad){const t=$('toast');t.textContent=m;t.style.borderColor=bad?'var(--red)':'var(--bd2)';t.style.display='block';clearTimeout(tt);tt=setTimeout(()=>t.style.display='none',4000)}
-const msg = e => /not allowed/i.test(e.message)?'This account is not an admin.':/already reviewed/i.test(e.message)?'That payment was already reviewed. Refresh.':/violates check/i.test(e.message)?"The claims table does not allow this status. See the note in admin-setup.sql.":(e.message||'Something went wrong.');
+const msg = e => /not allowed/i.test(e.message)?'This account is not an admin.':/best candidate function/i.test(e.message)?'The database has two versions of this function. Drop the old one (see the note from Claude), then refresh.':/already reviewed/i.test(e.message)?'That payment was already reviewed. Refresh.':/violates check/i.test(e.message)?"The claims table does not allow this status. See the note in admin-setup.sql.":(e.message||'Something went wrong.');
 async function rpc(fn,args){const r=await sb.rpc(fn,args);if(r.error)throw r.error;return r.data}
 
 /* ---------- auth ---------- */
@@ -134,16 +135,22 @@ function render(){
   $('tabs').innerHTML=TABS.map(([k,l])=>`<button class="tab" role="tab" aria-selected="${tab===k}" data-t="${k}">${l}${k==='claims'&&pend?`<span class="cnt">${pend}</span>`:''}</button>`).join('');
   document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render()});
   $('view').innerHTML=tab==='claims'?claimsView():tab==='users'?usersView():logView();
-  if(tab==='claims'){$('cf').onchange=e=>{cFilter=e.target.value;render()};document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>reviewDlg(+b.dataset.c))}
+  if(tab==='claims'){$('cf').onchange=e=>{cFilter=e.target.value;render()};$('cq').oninput=e=>{cq=e.target.value;$('cb').innerHTML=claimRows()};$('cb').onclick=e=>{const b=e.target.closest('[data-c]');if(b)reviewDlg(+b.dataset.c)}}
   if(tab==='users'){const s=$('uq');s.oninput=e=>{q=e.target.value;$('ub').innerHTML=userRows()};$('ub').onclick=rowClick}}
 
-function claimsView(){
-  const L=claims.filter(c=>cFilter==='all'||c.status===cFilter);
-  return `<div class="bar"><select class="in" id="cf" aria-label="Filter">${['pending','approved','rejected','all'].map(v=>`<option value="${v}"${v===cFilter?' selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></div>
-  <div class="panel">${L.length?`<table><thead><tr><th>Submitted</th><th>User</th><th>Plan</th><th>Amount</th><th>GCash reference</th><th>Status</th><th></th></tr></thead><tbody>${L.map(c=>`<tr>
+function claimRows(){
+  const t=cq.trim().toLowerCase();
+  const L=claims.filter(c=>(cFilter==='all'||c.status===cFilter)&&(!t||[c.email,c.reference,c.payer_name].some(v=>String(v||'').toLowerCase().includes(t))))
+    .sort((a,b)=>cFilter==='pending'?Date.parse(a.created_at)-Date.parse(b.created_at):Date.parse(b.created_at)-Date.parse(a.created_at));
+  return L.length?L.map(c=>`<tr>
    <td>${fdt(c.created_at)}</td><td>${esc(c.email||c.user_id)}</td><td>${tagP(c.tier)}</td><td>${c.amount_php!=null?'PHP '+esc(c.amount_php):'-'}</td>
-   <td class="mono">${esc(c.reference)}${c.payer_name?`<div class="mu">${esc(c.payer_name)}</div>`:''}</td><td><span class="tag ${esc(c.status)}">${esc(c.status)}</span>${c.note?`<div class="mu">${esc(c.note)}</div>`:''}</td>
-   <td>${c.status==='pending'?`<button class="btn sm pri" data-c="${c.id}">Review</button>`:''}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">No payments here.</div>'}</div>`}
+   <td class="mono">${esc(c.reference)}${c.payer_name?`<div class="mu">${esc(c.payer_name)}${sentAt(c.sent_time)?' &middot; sent '+esc(sentAt(c.sent_time)):''}</div>`:''}</td><td><span class="tag ${esc(c.status)}">${esc(c.status)}</span>${c.note?`<div class="mu">${esc(c.note)}</div>`:''}</td>
+   <td>${c.status==='pending'?`<button class="btn sm pri" data-c="${c.id}">Review</button>`:''}</td></tr>`).join(''):'<tr><td colspan="7" class="empty">No payments here.</td></tr>'}
+function claimsView(){
+  return `<div class="bar"><select class="in" id="cf" aria-label="Filter" style="flex:0 0 auto;min-width:140px">${['pending','approved','rejected','all'].map(v=>`<option value="${v}"${v===cFilter?' selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select>
+  <input class="in" id="cq" type="search" placeholder="Search name, reference or email" value="${esc(cq)}" aria-label="Search payments"></div>
+  <div class="panel"><table><thead><tr><th>Submitted</th><th>User</th><th>Plan</th><th>Amount</th><th>GCash reference</th><th>Status</th><th></th></tr></thead><tbody id="cb">${claimRows()}</tbody></table></div>
+  <p class="mu">Pending payments are listed oldest first.</p>`}
 
 function userRows(){
   const s=q.trim().toLowerCase();
@@ -169,6 +176,8 @@ function reviewDlg(id){const c=claims.find(x=>x.id==id);if(!c)return;
   <div class="kv"><span>Plan paid for</span><span>${tagP(c.tier)}</span></div>
   <div class="kv"><span>Amount claimed</span><span>${c.amount_php!=null?'PHP '+esc(c.amount_php):'-'}</span></div>
   <div class="kv"><span>Reference</span><span class="mono">${esc(c.reference)}</span></div>
+  <div class="kv"><span>Sender name</span><span>${esc(c.payer_name||'not given')}</span></div>
+  <div class="kv"><span>Time sent</span><span>${esc(sentAt(c.sent_time)||'not given')}</span></div>
   <p class="mu">Check this reference, amount and sender name in your GCash history first. Approving gives one month (adds a month if the same plan is still active).</p>
   <label for="dn">Note to user (shown if rejected)</label><input class="in" id="dn" maxlength="140">
   <div class="err" id="de" role="alert"></div>
